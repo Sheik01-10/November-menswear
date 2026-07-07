@@ -1,0 +1,73 @@
+export const BESTSELLERS = [
+  {
+    id: "shirt-001",
+    name: "Classic Black Shirt",
+    category: "shirts",
+    price: "₹1,280",
+    compare: "₹1,506",
+    pct: "-15%",
+    front: "https://images.unsplash.com/photo-1603252109303-2751441dd157?w=1200",
+    back: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=1200",
+    href: "/products?category=shirts",
+  },
+
+  {
+    id: "shirt-002",
+    name: "Premium White Shirt",
+    category: "shirts",
+    price: "₹1,450",
+    compare: "₹1,780",
+    pct: "-18%",
+    front: "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=1200",
+    back: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=1200",
+    href: "/products?category=shirts",
+  },
+
+  {
+    id: "trouser-001",
+    name: "Luxury Navy Trouser",
+    category: "trousers",
+    price: "₹1,680",
+    compare: "₹1,950",
+    pct: "-14%",
+    front: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=1200",
+    back: "https://images.unsplash.com/photo-1506629905607-d9c297d6d5f4?w=1200",
+    href: "/products?category=trousers",
+  },
+
+  {
+    id: "tshirt-001",
+    name: "Premium Polo T-Shirt",
+    category: "tshirts",
+    price: "₹980",
+    compare: "₹1,250",
+    pct: "-12%",
+    front: "https://images.unsplash.com/photo-1589310243389-96a5483213a8?w=1200",
+    back: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1200",
+    href: "/products?category=tshirts",
+  },
+
+  {
+    id: "shirt-003",
+    name: "Luxury Overshirt",
+    category: "shirts",
+    price: "₹1,720",
+    compare: "₹2,050",
+    pct: "-20%",
+    front: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200",
+    back: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=1200",
+    href: "/products?category=shirts",
+  },
+
+  {
+    id: "trouser-002",
+    name: "Classic Trouser",
+    category: "trousers",
+    price: "₹1,350",
+    compare: "₹1,590",
+    pct: "-10%",
+    front: "https://images.unsplash.com/photo-1514996937319-344454492b37?w=1200",
+    back: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1200",
+    href: "/products?category=trousers",
+  },
+];

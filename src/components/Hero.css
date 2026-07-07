@@ -1,0 +1,333 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Jost:wght@300;400;500;600;700&display=swap');
+
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Header spacing */
+  padding-top: 134px;
+  box-sizing: border-box;
+
+  /* Silk / Satin background */
+  background: var(--bg-primary);;
+  background-size: cover;
+
+  isolation: isolate;
+}
+
+/* Subtlest luxury overlay */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.4),
+    transparent 80%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.15)
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ==========================
+   HERO BRAND EMBLEM
+========================== */
+
+.hero-brand {
+  position: absolute;
+  top: 150px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  width: clamp(160px, 12vw, 280px);
+  height: clamp(160px, 12vw, 280px);
+}
+
+.hero-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: 
+    drop-shadow(0 4px 12px rgba(0, 0, 0, 0.04))
+    drop-shadow(0 2px 4px rgba(201, 169, 106, 0.15));
+}
+
+/* ==========================
+   NOVEMBER TEXT (METALLIC 3D)
+========================== */
+
+.hero-bg-text {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(140px, 12vw, 260px);
+  font-weight: 500;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 2    ;
+
+  /* Premium gold metallic gradient */
+  background: linear-gradient(
+    135deg,
+    #a67c37 0%,
+    #e8d197 25%,
+    #b28946 50%,
+    #f4e5c3 75%,
+    #9c722f 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent; /* Fallback */
+
+  /* Realistic metal drop shadow */
+  filter: 
+    drop-shadow(0px 8px 16px rgba(0, 0, 0, 0.08)) 
+    drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.04))
+    drop-shadow(0px 0px 1px rgba(201, 169, 106, 0.2));
+
+  opacity: 0.95;
+  will-change: transform, top;
+}
+
+body.drawer-open .hero-bg-text {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+/* ==========================
+   CONTENT CONTAINER
+========================== */
+
+.hero-content {
+  position: absolute;
+  left: 50%;
+  bottom: 80px;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 5;
+  width: 100%;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+/* DIAMOND DECORATOR */
+.hero-divider-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 24px;
+}
+
+.hero-divider-line {
+  height: 1px;
+  width: 80px;
+  background: rgba(201, 169, 106, 0.45);
+}
+
+.hero-divider-diamond {
+  color: #c9a96a;
+  font-size: 10px;
+  line-height: 1;
+  transform: rotate(0deg);
+  opacity: 0.9;
+}
+
+/* SUBTITLE & TAGLINE */
+.hero-subtitle {
+  font-family: "Jost", sans-serif;
+  font-size: clamp(13px, 1.2vw, 16px);
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  color: #111111;
+  text-transform: uppercase;
+  margin: 0 0 12px 0;
+  opacity: 0.95;
+}
+
+.hero-tagline {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(18px, 1.6vw, 22px);
+  font-weight: 400;
+  color: #111111;
+  margin: 0 0 36px 0;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================
+   BUTTONS
+========================== */
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.primary-btn,
+.secondary-btn {
+  width: 190px;
+  height: 56px;
+  border-radius: 0px;
+  cursor: pointer;
+  font-family: "Jost", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.primary-btn {
+  border: 1px solid #c9a96a;
+  background: #0b0b0b;
+  color: #ffffff;
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.btn-arrow {
+  margin-left: 8px;
+  font-size: 14px;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.primary-btn:hover {
+  transform: translateY(-4px);
+  background: #181818;
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.25),
+    0 0 12px rgba(201, 169, 106, 0.25);
+}
+
+.primary-btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+.secondary-btn {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(201, 169, 106, 0.45);
+  color: #a38144;
+}
+
+.secondary-btn:hover {
+  background: #ffffff;
+  border-color: #c9a96a;
+  color: #8c6a32;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(201, 169, 106, 0.15);
+}
+
+/* ==========================
+   RESPONSIVE (TABLET)
+========================== */
+
+@media (max-width: 992px) {
+  .hero-bg-text {
+    top: 40%;
+    font-size: clamp(80px, 10vw, 150px);
+  }
+
+  .hero-brand {
+    top: 120px;
+    width: 140px;
+    height: 140px;
+  }
+
+  .hero-content {
+    bottom: 60px;
+  }
+}
+
+/* ==========================
+   RESPONSIVE (MOBILE)
+========================== */
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: 100svh;
+    padding-top: 120px;
+    bottom: 20px;
+  }
+
+  .hero-brand {
+    top: 135px;
+    width: 180px;
+    height: 180px;
+    z-index: 5;
+  }
+
+  /* NOVEMBER TEXT override for scroll */
+  .hero-bg-text {
+    font-size: clamp(54px, 12vw, 60px);
+    letter-spacing: 3px;
+    top: 38%;
+  }
+
+  .hero-divider-container {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .hero-divider-line {
+    width: 50px;
+  }
+
+  .hero-subtitle {
+    font-size: 12px;
+    letter-spacing: 0.25em;
+  }
+
+  .hero-tagline {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    width: 100%;
+    max-width: 280px;
+    height: 52px;
+  }
+}

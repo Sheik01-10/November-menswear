@@ -1,0 +1,47 @@
+:root {
+  /* Colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #fafafa;
+  --bg-tertiary: #f4f4f4;
+  --bg-dark: #000000;
+  
+  --text-primary: #000000;
+  --text-secondary: #333333;
+  --text-muted: #777777;
+  --text-light: #ffffff;
+  
+  --accent-gold: #000000;
+  --accent-gold-soft: #222222;
+  --accent-hover: #333333;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-color-light: rgba(0, 0, 0, 0.04);
+  
+  /* Buttons */
+  --btn-bg: #000000;
+  --btn-text: #ffffff;
+  --btn-border: #000000;
+  --btn-hover-bg: #ffffff;
+  --btn-hover-text: #000000;
+  
+  --btn-sec-bg: transparent;
+  --btn-sec-text: #000000;
+  --btn-sec-border: rgba(0, 0, 0, 0.2);
+  --btn-sec-hover-bg: rgba(0, 0, 0, 0.05);
+  
+  /* Inputs */
+  --input-bg: #ffffff;
+  --input-border: #dddddd;
+  --input-text: #000000;
+  --input-focus-border: #000000;
+  
+  /* Overlays & Shadows */
+  --overlay-light: rgba(255, 255, 255, 0.82);
+  --overlay-dark: rgba(0, 0, 0, 0.7);
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 15px 35px rgba(0, 0, 0, 0.06);
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}

@@ -1,0 +1,150 @@
+.luxury-section {
+  background: var(--bg-primary);
+  padding: 90px 5%;
+}
+
+/* HEADER */
+.luxury-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.luxury-tag {
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.luxury-header h2 {
+  color: var(--text-primary);
+  font-size: 34px;
+  margin-top: 12px;
+  font-weight: 500;
+}
+
+/* GRID */
+.luxury-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+/* CARD */
+.luxury-card {
+  position: relative;
+  height: 620px;
+
+  border-radius: 24px;
+  overflow: hidden;
+
+  display: flex;
+  align-items: flex-end;
+
+  text-decoration: none;
+  color: inherit;
+
+  cursor: pointer;
+
+  transition:
+    transform .35s ease;
+
+  background-size: cover;
+  background-position: center;
+}
+
+.luxury-card:hover {
+  transform:
+    translateY(-6px);
+}
+
+/* WORK MODE IMAGE */
+.work-mode {
+  background-image:
+    url("https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=1600");
+}
+
+/* QUIET LUXURY IMAGE */
+.quiet-luxury {
+  background-image:
+    url("https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=1600");
+}
+
+/* DARK OVERLAY */
+.overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(0,0,0,.78),
+      rgba(0,0,0,.15)
+    );
+}
+
+/* CONTENT */
+.luxury-content {
+  position: relative;
+  z-index: 2;
+
+  padding: 36px;
+}
+
+.luxury-content span {
+  color: #fff;
+  font-size: 34px;
+  letter-spacing: 2px;
+  font-weight: 500;
+}
+
+.luxury-content p {
+  color:
+    rgba(255,255,255,.75);
+
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.luxury-content small {
+  display: inline-block;
+  margin-top: 18px;
+
+  color: var(--text-light);
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+  .luxury-section {
+    padding: 70px 16px;
+  }
+
+  .luxury-header h2 {
+    font-size: 28px;
+  }
+
+  .luxury-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .luxury-card {
+    height: 430px;
+  }
+
+  .luxury-content {
+    padding: 28px;
+  }
+
+  .luxury-content span {
+    font-size: 28px;
+  }
+
+  .luxury-content p {
+    font-size: 14px;
+  }
+}

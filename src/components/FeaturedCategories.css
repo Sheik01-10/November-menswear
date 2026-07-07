@@ -1,0 +1,169 @@
+/* ==========================
+   FEATURED SECTION
+========================== */
+
+.curate-section{
+  background: var(--bg-primary);
+   padding:80px 5% 40px;
+  overflow:hidden;
+}
+
+/* heading */
+.curate-section-title{
+  text-align:center;
+  color: var(--text-primary);
+
+  font-size:18px;
+  font-weight:400;
+  letter-spacing:6px;
+  text-transform:uppercase;
+
+  margin-bottom:60px;
+
+  opacity:0;
+  transform:
+  translateY(40px);
+
+  transition:1s ease;
+}
+
+/* grid */
+.curate-categories{
+  display:grid;
+  grid-template-columns:
+  repeat(4,1fr);
+
+  gap:24px;
+}
+
+/* cards */
+.curate-cat-card{
+  text-decoration:none;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+
+  opacity:0;
+  transform:
+  translateY(70px);
+
+  transition:
+  transform .9s ease,
+  opacity .9s ease;
+}
+
+/* smooth section enter */
+.show-section
+.curate-section-title{
+  opacity:1;
+  transform:
+  translateY(0);
+}
+
+.show-section
+.curate-cat-card{
+  opacity:1;
+  transform:
+  translateY(0);
+}
+
+/* image */
+.curate-cat-card img{
+  width:100%;
+  aspect-ratio:4/5.5;
+
+  object-fit:cover;
+  background: var(--bg-tertiary);
+
+  transition:
+  transform 1s ease,
+  filter .5s ease;
+}
+
+/* luxury hover */
+.curate-cat-card:hover img{
+  transform:scale(1.06);
+  filter:brightness(.88);
+}
+
+/* label */
+.curate-cat-label{
+  margin-top:18px;
+  color: var(--text-secondary);
+
+  font-size:15px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+
+  transition:.35s ease;
+}
+
+.curate-cat-card:hover
+.curate-cat-label{
+  color: var(--text-primary);
+  transform:
+  translateY(-3px);
+}
+
+/* underline */
+.curate-cat-card::after{
+  content:"";
+  width:0;
+  height:1px;
+  background: var(--text-primary);
+  margin-top:8px;
+
+  transition:.4s ease;
+}
+
+.curate-cat-card:hover::after{
+  width:65px;
+}
+
+/* ==========================
+   TABLET
+========================== */
+
+@media(max-width:992px){
+
+  .curate-section{
+    padding:90px 28px;
+  }
+
+  .curate-categories{
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:18px;
+  }
+
+  .curate-section-title{
+    font-size:16px;
+    margin-bottom:40px;
+  }
+}
+
+/* ==========================
+   MOBILE
+========================== */
+
+@media(max-width:600px){
+
+  .curate-section{
+    padding:70px 16px;
+  }
+
+  .curate-categories{
+    gap:14px;
+  }
+
+  .curate-cat-card img{
+    aspect-ratio:3/4.2;
+  }
+
+  .curate-cat-label{
+    font-size:13px;
+    text-align:center;
+  }
+}

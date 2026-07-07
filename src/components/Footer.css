@@ -1,0 +1,101 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap");
+
+.footer {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding-top: 100px;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-container {
+  width: 100%;
+  max-width: 1500px;
+  margin: auto;
+  padding: 0 8%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 60px;
+}
+
+.footer-column h3 {
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  letter-spacing: 3px;
+  margin-bottom: 35px;
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+}
+
+.footer-column ul {
+  list-style: none;
+}
+
+.footer-column ul li {
+  margin-bottom: 18px;
+}
+
+.footer-column a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: .3s;
+  position: relative;
+}
+
+.footer-column a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 1px;
+  background: var(--text-primary);
+  left: 0;
+  bottom: -4px;
+  transition: .3s;
+}
+
+.footer-column a:hover {
+  color: var(--text-primary);
+}
+
+.footer-column a:hover::after {
+  width: 100%;
+}
+
+.support h4 {
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+}
+
+.support p {
+  color: var(--text-secondary);
+  line-height: 1.9;
+  margin-bottom: 12px;
+}
+
+.footer-bottom {
+  margin-top: 80px;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.footer-bottom p {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* MOBILE */
+@media (max-width: 992px) {
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .footer {
+    padding-top: 70px;
+  }
+
+  .footer-column {
+    text-align: center;
+  }
+}

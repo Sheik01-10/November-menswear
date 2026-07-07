@@ -1,0 +1,262 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.about-page {
+  width: 100%;
+  overflow-x: hidden;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: "Jost", sans-serif;
+}
+
+/* HERO */
+
+.about-hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.about-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(0,0,0,.02),
+      transparent 70%
+    );
+}
+
+.about-center {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 850px;
+  margin: auto;
+}
+
+.about-small {
+  color: var(--text-muted);
+  letter-spacing: 6px;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.about-title {
+  font-size: clamp(
+    60px,
+    8vw,
+    120px
+  );
+  line-height: 1;
+  font-family:
+    "Cormorant Garamond",
+    serif;
+  margin-bottom: 30px;
+}
+
+.about-title span {
+  color: var(--text-primary);
+}
+
+.about-desc {
+  max-width: 700px;
+  margin: auto;
+  color: var(--text-secondary);
+  line-height: 2;
+  font-size: 18px;
+}
+
+.bg-word {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform:
+    translate(-50%, -50%);
+  font-size:
+    clamp(120px,18vw,300px);
+  color: rgba(0,0,0,.02);
+  font-family:
+    "Cormorant Garamond",
+    serif;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ABOUT */
+
+.about-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 80px;
+  padding: 120px 8%;
+}
+
+.about-image,
+.about-content {
+  flex: 1;
+}
+
+.about-image img {
+  width: 100%;
+  max-width: 520px;
+  border-radius: 25px;
+  transition: .5s;
+}
+
+.about-image img:hover {
+  transform: scale(1.03);
+}
+
+.section-tag {
+  color: var(--text-muted);
+  letter-spacing: 4px;
+}
+
+.about-content h2 {
+  font-size: 3rem;
+  margin: 20px 0;
+  font-family:
+    "Cormorant Garamond",
+    serif;
+}
+
+.about-content h2 span {
+  color: var(--text-primary);
+}
+
+.about-content p {
+  color: var(--text-secondary);
+  line-height: 2;
+  margin-bottom: 15px;
+}
+
+.luxury-btn {
+  margin-top: 20px;
+  border: none;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  padding: 16px 38px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .4s;
+}
+
+.luxury-btn:hover {
+  transform: translateY(-5px);
+  background: var(--btn-hover-bg);
+  color: var(--btn-hover-text);
+  box-shadow: 0 0 0 1px var(--btn-border);
+}
+
+/* VALUES */
+
+.values-section {
+  display: flex;
+  gap: 30px;
+  padding: 80px 8%;
+}
+
+.value-card {
+  flex: 1;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 25px;
+  padding: 40px;
+  backdrop-filter: blur(15px);
+  box-shadow: var(--shadow-sm);
+}
+
+.value-card h3 {
+  color: var(--text-primary);
+  font-size: 2rem;
+}
+
+.value-card h4 {
+  margin: 20px 0;
+}
+
+.value-card p {
+  color: var(--text-secondary);
+}
+
+/* CTA */
+
+.about-cta {
+  text-align: center;
+  padding: 140px 20px;
+}
+
+.about-cta h2 {
+  font-size: 4rem;
+  font-family:
+    "Cormorant Garamond",
+    serif;
+}
+
+.about-cta p {
+  margin: 20px 0;
+  color: var(--text-secondary);
+}
+
+/* MOBILE */
+
+@media (max-width: 992px) {
+  .about-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 60px 16px;
+    gap: 40px;
+  }
+
+  .about-hero {
+    min-height: auto;
+    padding: 140px 16px 60px;
+  }
+
+  .about-title {
+    font-size: clamp(36px, 8vw, 60px);
+  }
+
+  .about-desc {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  .values-section {
+    flex-direction: column;
+    padding: 40px 16px;
+    gap: 20px;
+  }
+
+  .value-card {
+    padding: 24px;
+  }
+
+  .value-card h3 {
+    font-size: 1.6rem;
+  }
+
+  .about-cta {
+    padding: 80px 16px;
+  }
+
+  .about-cta h2 {
+    font-size: 2.2rem;
+  }
+}

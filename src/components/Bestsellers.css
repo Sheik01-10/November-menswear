@@ -1,0 +1,274 @@
+/* ==========================
+   SECTION
+========================== */
+
+.bestseller-section {
+  background: var(--bg-primary);
+  padding: 100px 5%;
+  overflow: hidden;
+}
+
+/* ==========================
+   HEADER
+========================== */
+
+.bestseller-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 65px;
+}
+
+.bestseller-title {
+  color: var(--text-primary);
+  font-size: 20px;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+/* ==========================
+   ARROWS
+========================== */
+
+.custom-prev,
+.custom-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+
+  border: 1px solid var(--border-color);
+
+  background: rgba(0,0,0,0.04);
+  backdrop-filter: blur(12px);
+
+  color: var(--text-primary);
+  cursor: pointer;
+  z-index: 20;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all .35s ease;
+}
+
+.custom-prev {
+  left: 0;
+}
+
+.custom-next {
+  right: 0;
+}
+
+.custom-prev:hover,
+.custom-next:hover {
+  background: var(--bg-dark);
+  color: var(--text-light);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.hide-arrow {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ==========================
+   PRODUCT CARD
+========================== */
+
+.product-card {
+  display: block;
+  text-decoration: none;
+  transition: transform .4s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+}
+
+/* image container */
+.product-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  background: var(--bg-tertiary);
+
+  box-shadow:
+    var(--shadow-md);
+}
+
+.front-img,
+.back-img {
+  width: 100%;
+  height: 520px;
+  object-fit: cover;
+  display: block;
+
+  transition:
+    transform .8s ease,
+    opacity .7s ease;
+}
+
+.back-img {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.product-card:hover .front-img {
+  opacity: 0;
+}
+
+.product-card:hover .back-img {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+/* badge */
+.discount-badge {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+
+  background: var(--bg-dark);
+  color: var(--text-light);
+
+  padding: 10px 16px;
+  border-radius: 50px;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ==========================
+   PRODUCT INFO
+========================== */
+
+.product-info {
+  text-align: center;
+  padding-top: 24px;
+}
+
+.brand-name {
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.product-info h3 {
+  color: var(--text-primary);
+  margin-top: 10px;
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.price-wrap {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 14px;
+  align-items: center;
+}
+
+.price {
+  color: var(--text-primary);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.compare-price {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  font-size: 18px;
+}
+
+/* ==========================
+   VIEW ALL BUTTON
+========================== */
+
+.view-all-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 70px;
+}
+
+.view-all-btn {
+  text-decoration: none;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+
+  padding: 18px 42px;
+  border-radius: 60px;
+
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 500;
+
+  background: rgba(0,0,0,0.02);
+  backdrop-filter: blur(12px);
+
+  transition: all .35s ease;
+}
+
+.view-all-btn:hover {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  transform: translateY(-4px);
+}
+
+.swiper {
+  overflow: visible !important;
+}
+
+/* ==========================
+   MOBILE
+========================== */
+
+@media (max-width: 768px) {
+
+  .bestseller-section {
+    padding: 70px 18px;
+  }
+
+  .custom-prev,
+  .custom-next {
+    width: 44px;
+    height: 44px;
+  }
+
+  .bestseller-title {
+    font-size: 15px;
+    letter-spacing: 4px;
+  }
+
+  .front-img,
+  .back-img {
+    height: 280px;
+  }
+
+  .product-info h3 {
+    font-size: 15px;
+  }
+
+  .price {
+    font-size: 18px;
+  }
+
+  .compare-price {
+    font-size: 14px;
+  }
+
+  .view-all-btn {
+    padding: 14px 28px;
+    font-size: 12px;
+  }
+}

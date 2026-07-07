@@ -1,0 +1,133 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap");
+
+.privacy-page {
+  width: 100%;
+  overflow-x: hidden;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: "Jost", sans-serif;
+  padding-bottom: 100px;
+}
+
+/* HERO SECTION */
+.privacy-hero {
+  position: relative;
+  width: 100%;
+  padding: 180px 20px 80px;
+  background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.privacy-small {
+  color: var(--text-muted);
+  letter-spacing: 6px;
+  font-size: 13px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.privacy-title {
+  font-size: clamp(44px, 6vw, 80px);
+  line-height: 1.1;
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 500;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.privacy-updated {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-style: italic;
+  letter-spacing: 1px;
+}
+
+/* CONTENT CONTAINER */
+.privacy-content {
+  max-width: 850px;
+  margin: 80px auto 0;
+  padding: 0 40px;
+}
+
+.privacy-section {
+  margin-bottom: 60px;
+}
+
+.privacy-section h2 {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.privacy-section h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50px;
+  height: 1px;
+  background: var(--text-primary);
+}
+
+.privacy-section p {
+  font-size: 16px;
+  line-height: 2;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  font-weight: 300;
+}
+
+.privacy-section ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 24px;
+}
+
+.privacy-section ul li {
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--text-secondary);
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 14px;
+  font-weight: 300;
+}
+
+.privacy-section ul li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 992px) {
+  .privacy-hero {
+    padding: 140px 20px 60px;
+  }
+  
+  .privacy-content {
+    padding: 0 24px;
+    margin-top: 50px;
+  }
+  
+  .privacy-section {
+    margin-bottom: 45px;
+  }
+  
+  .privacy-section h2 {
+    font-size: 1.8rem;
+  }
+}

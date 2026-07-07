@@ -1,0 +1,98 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500&display=swap");
+
+.brand-story {
+  width: 100%;
+  min-height: 75vh;
+  background: var(--bg-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 8%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* subtle glow */
+.brand-story::before {
+  content: "";
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,0,0,.02),
+      transparent 70%
+    );
+  top: 50%;
+  left: 50%;
+  transform:
+    translate(-50%, -50%);
+}
+
+.brand-content {
+  max-width: 1100px;
+  text-align: center;
+  z-index: 2;
+}
+
+.brand-content h2 {
+  font-size: 5rem;
+  font-family:
+    "Cormorant Garamond",
+    serif;
+  color: var(--text-primary);
+  letter-spacing: 4px;
+  margin-bottom: 50px;
+}
+
+.brand-content p {
+  font-size: 2.1rem;
+  line-height: 1.8;
+  color:
+    var(--text-secondary);
+  max-width: 1200px;
+  margin: auto;
+  transition: .5s ease;
+}
+
+.story-dots {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background:
+    rgba(0,0,0,.15);
+  cursor: pointer;
+  transition: .3s;
+}
+
+.dot.active {
+  background: var(--bg-dark);
+  transform: scale(1.2);
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+  .brand-story {
+    min-height: 55vh;
+    padding: 80px 20px;
+  }
+
+  .brand-content h2 {
+    font-size: 3rem;
+  }
+
+  .brand-content p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+  }
+}
