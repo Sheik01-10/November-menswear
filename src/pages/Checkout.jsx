@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import axios from "axios";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase/firebase";
+import toast from "react-hot-toast";
 import "./Checkout.css";
 
 const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
@@ -48,9 +49,18 @@ export default function Checkout() {
   const [orderSuccess, setOrderSuccess] = useState(null); // Stores successful order data
   const [paymentMethod, setPaymentMethod] = useState("online");
 
+  const [authLoading, setAuthLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [savedAddresses, setSavedAddresses] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState("");
+
+  // Guard route for authenticated users
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated && !orderSuccess) {
+      toast.error("Please log in first to proceed to checkout.");
+      navigate("/login?redirect=checkout");
+    }
+  }, [authLoading, isAuthenticated, orderSuccess, navigate]);
 
   // Load user data if logged in
   useEffect(() => {
@@ -94,11 +104,15 @@ export default function Checkout() {
           })
           .catch((err) => {
             console.error("Failed to fetch user profile at checkout:", err);
+          })
+          .finally(() => {
+            setAuthLoading(false);
           });
       } else {
         setIsAuthenticated(false);
         setSavedAddresses([]);
         setSelectedAddressId("");
+        setAuthLoading(false);
       }
     });
 
@@ -136,6 +150,13 @@ export default function Checkout() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const currentUser = auth.currentUser || JSON.parse(localStorage.getItem("user") || "null");
+    if (!currentUser) {
+      toast.error("Please log in first to place your order.");
+      navigate("/login?redirect=checkout");
+      return;
+    }
+
     const validationError = validateForm();
     if (validationError) {
       setError(validationError);
@@ -210,7 +231,8 @@ export default function Checkout() {
     try {
       // 1. Create order on backend to get Razorpay Order ID (calculated securely)
       const orderRes = await axios.post(`${BACKEND}/api/payments/create-order`, {
-        items: paymentItems
+        items: paymentItems,
+        email: formData.email
       });
 
       const { id: rzpOrderId, amount: rzpAmount, currency, keyId } = orderRes.data;
@@ -304,6 +326,24 @@ export default function Checkout() {
       setLoading(false);
     }
   };
+
+  if (authLoading) {
+    return (
+      <div className="checkout-loading" style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        background: "#fcfaf7",
+        color: "#111",
+        letterSpacing: "2px",
+        fontWeight: "500",
+        fontFamily: "Jost, sans-serif"
+      }}>
+        <p>AUTHENTICATING...</p>
+      </div>
+    );
+  }
 
   if (orderSuccess) {
     return (

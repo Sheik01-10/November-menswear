@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useProducts } from "../context/ProductContext";
 import { useCart } from "../context/CartContext";
 import Header from "../components/Header";
@@ -9,12 +9,14 @@ import FloatingWhatsApp from "../components/FloatingWhatsApp";
 import { ChevronRight, ShieldCheck, Truck, RefreshCw } from "lucide-react";
 import toast from "react-hot-toast";
 import ShareButton from "../components/ShareButton";
+import { auth } from "../firebase/firebase";
 import "./ProductDetails.css";
 
 export default function ProductDetails() {
   const { id } = useParams();
   const { products, loading } = useProducts();
   const { addToCart, cart } = useCart();
+  const navigate = useNavigate();
   
   const [product, setProduct] = useState(null);
   const [selectedSize, setSelectedSize] = useState("");
@@ -85,6 +87,30 @@ export default function ProductDetails() {
 
     addToCart(product, selectedSize);
     toast.success(`${product.name} (${selectedSize || "Standard"}) added to cart!`);
+  };
+
+  const handleBuyNow = () => {
+    if (isOutOfStock) return;
+
+    if (product.sizes && product.sizes.length > 0 && !selectedSize) {
+      toast.error("Please select a size");
+      return;
+    }
+
+    if (qtyInCart >= stock) {
+      toast.error(`Cannot add more. Only ${stock} items available in stock.`);
+      return;
+    }
+
+    addToCart(product, selectedSize);
+
+    const currentUser = auth.currentUser || JSON.parse(localStorage.getItem("user") || "null");
+    if (!currentUser) {
+      toast.error("Please log in first to purchase.");
+      navigate(`/login?redirect=checkout`);
+    } else {
+      navigate("/checkout");
+    }
   };
 
   const relatedProducts = product
@@ -187,16 +213,28 @@ export default function ProductDetails() {
               )}
 
               {/* Action Buttons */}
-              <div className="action-section" style={{ display: "flex", gap: "12px" }}>
-                <button 
-                  className={`btn-add-to-bag ${isOutOfStock || remainingStock <= 0 ? "disabled" : ""}`}
-                  disabled={isOutOfStock || remainingStock <= 0}
-                  onClick={handleAddToBag}
-                  style={{ flex: 1 }}
-                >
-                  {isOutOfStock ? "SOLD OUT" : remainingStock <= 0 ? "MAX QUANTITY ADDED" : "ADD TO SHOPPING BAG"}
-                </button>
-                <ShareButton product={product} variant="detail" />
+              <div className="action-section" style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <div style={{ display: "flex", gap: "12px", width: "100%" }}>
+                  <button 
+                    className={`btn-add-to-bag ${isOutOfStock || remainingStock <= 0 ? "disabled" : ""}`}
+                    disabled={isOutOfStock || remainingStock <= 0}
+                    onClick={handleAddToBag}
+                    style={{ flex: 1 }}
+                  >
+                    {isOutOfStock ? "SOLD OUT" : remainingStock <= 0 ? "MAX QUANTITY ADDED" : "ADD TO BAG"}
+                  </button>
+                  <button 
+                    className={`btn-buy-now ${isOutOfStock || remainingStock <= 0 ? "disabled" : ""}`}
+                    disabled={isOutOfStock || remainingStock <= 0}
+                    onClick={handleBuyNow}
+                    style={{ flex: 1 }}
+                  >
+                    {isOutOfStock ? "SOLD OUT" : remainingStock <= 0 ? "MAX QUANTITY ADDED" : "BUY NOW"}
+                  </button>
+                </div>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <ShareButton product={product} variant="detail" />
+                </div>
               </div>
 
               {/* Luxury Guarantee Strips */}

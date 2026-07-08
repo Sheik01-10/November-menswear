@@ -1,12 +1,15 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Trash2, Plus, Minus, ArrowRight } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { auth } from "../firebase/firebase";
+import toast from "react-hot-toast";
 
 import "./Cart.css";
 
 export default function Cart() {
+  const navigate = useNavigate();
 
   const {
     cart,
@@ -16,6 +19,17 @@ export default function Cart() {
     totalItems,
     totalPrice,
   } = useCart();
+
+  const handleCheckoutClick = (e) => {
+    e.preventDefault();
+    const currentUser = auth.currentUser || JSON.parse(localStorage.getItem("user") || "null");
+    if (!currentUser) {
+      toast.error("Please log in first to proceed to checkout.");
+      navigate("/login?redirect=checkout");
+    } else {
+      navigate("/checkout");
+    }
+  };
 
   return (
     <>
@@ -145,13 +159,13 @@ export default function Cart() {
                 <span>₹{totalPrice}</span>
               </div>
 
-              <Link to="/checkout" className="checkout-btn" style={{ textDecoration: "none" }}>
+              <button onClick={handleCheckoutClick} className="checkout-btn" style={{ textDecoration: "none" }}>
 
                 Checkout
 
                 <ArrowRight size={18} />
 
-              </Link>
+              </button>
 
             </div>
 

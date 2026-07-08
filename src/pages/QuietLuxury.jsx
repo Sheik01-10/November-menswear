@@ -25,21 +25,19 @@ export default function QuietLuxury() {
     <>
       {/* HEADER */}
       <Header />
+      <BackButton />
 
       {/* COLLECTION HERO */}
-<section className="collection-hero quiet-luxury-hero">
+<section className="collection-hero work-mode-hero">
   <div className="collection-overlay"></div>
 
   <div className="collection-content">
-    <span>Quiet Luxury</span>
-    <h1>Timeless Collection</h1>
-    <p>Refined Polos & Premium Fits crafted for comfort and elegance.</p>
-    <BackButton />
+    <h1>QUIET LUXURY</h1>
   </div>
 </section>
 
       {/* PRODUCTS CATALOG SECTION */}
-      <div className="products-page" style={{ paddingTop: "80px" }}>
+      <div className="products-page" style={{ paddingTop: "0px" }}>
         {loading ? (
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "30vh" }}>
             <p style={{ letterSpacing: "2px", fontWeight: "500", fontFamily: "Jost, sans-serif" }}>LOADING COLLECTION...</p>

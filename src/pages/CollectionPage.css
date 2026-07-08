@@ -9,34 +9,12 @@
   overflow: hidden;
 }
 
-.work-mode-hero {
-  background:
-    linear-gradient(
-      var(--overlay-light),
-      var(--overlay-light)
-    ),
-    url("https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=1600");
-  background-size: cover;
-  background-position: center;
-}
-
-.quiet-luxury-hero {
-  background:
-    linear-gradient(
-      var(--overlay-light),
-      var(--overlay-light)
-    ),
-    url("https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=1600");
-  background-size: cover;
-  background-position: center;
-}
-
 .collection-content {
   position: relative;
   z-index: 5;
   width: 100%;
   max-width: 1200px;
-  padding-top: 50px;
+  text-align: center;
 }
 
 .collection-hero span {

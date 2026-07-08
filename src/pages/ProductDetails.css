@@ -343,6 +343,35 @@
   box-shadow: none;
 }
 
+.btn-buy-now {
+  width: 100%;
+  height: 56px;
+  background-color: #c9a96a;
+  color: #ffffff;
+  border: 1px solid #c9a96a;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 4px 12px rgba(201, 169, 106, 0.15);
+}
+
+.btn-buy-now:hover:not(.disabled) {
+  background-color: transparent;
+  color: #c9a96a;
+  box-shadow: 0 8px 20px rgba(201, 169, 106, 0.25);
+}
+
+.btn-buy-now.disabled {
+  background-color: #ececec;
+  border-color: #ececec;
+  color: #888888;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
 /* Guarantee list */
 .luxury-guarantees {
   border-top: 1px solid #ececec;
@@ -483,6 +512,11 @@
   }
 
   .btn-add-to-bag {
+    height: 50px;
+    font-size: 12px;
+  }
+
+  .btn-buy-now {
     height: 50px;
     font-size: 12px;
   }

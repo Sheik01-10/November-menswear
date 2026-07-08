@@ -25,20 +25,18 @@ export default function WorkMode() {
     <>
       {/* HEADER */}
       <Header />
+      <BackButton/>
       {/* COLLECTION HERO */}
 <section className="collection-hero work-mode-hero">
   <div className="collection-overlay"></div>
 
   <div className="collection-content">
-    <span>Work Mode</span>
-    <h1>Formal Collection</h1>
-    <p>Tailored Shirts & Formal Wear designed for the modern workplace.</p>
-    <BackButton />
+    <h1>WORK MODE</h1>
   </div>
 </section>
 
       {/* PRODUCTS CATALOG SECTION */}
-      <div className="products-page" style={{ paddingTop: "80px" }}>
+      <div className="products-page" style={{ paddingTop: "0px" }}>
         {loading ? (
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "30vh" }}>
             <p style={{ letterSpacing: "2px", fontWeight: "500", fontFamily: "Jost, sans-serif" }}>LOADING COLLECTION...</p>
