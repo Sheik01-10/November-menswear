@@ -50,3 +50,16 @@
     }
 
 }
+
+@media (max-width: 768px) {
+    .wishlist-btn {
+        width: 38px;
+        height: 38px;
+        top: 15px;
+        left: 15px;
+    }
+    .wishlist-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+}
