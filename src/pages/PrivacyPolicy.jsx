@@ -59,7 +59,7 @@ export default function PrivacyPolicy() {
           >
             <h2>2. INFORMATION WE COLLECT</h2>
             <p>
-              To offer a bespoke shopping experience, we collect specific information, including:
+              To offer a premium shopping experience, we collect specific information, including:
             </p>
             <ul>
               <li><strong>Personal details</strong>: Your name, email address, phone number, and account credentials when you register or order.</li>
