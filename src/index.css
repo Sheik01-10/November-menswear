@@ -45,3 +45,39 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
 }
+
+/* ==========================================================================
+   GLOBAL RENDERING OPTIMIZATIONS (GPU & Offscreen Rendering)
+   ========================================================================== */
+
+/* Skip rendering of offscreen below-the-fold sections to maximize scroll FPS */
+.featured-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+.bestseller-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+
+.luxury-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
+}
+
+.brand-story {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}
+
+.footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
+}
+
+/* Smooth scrolling setup */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}

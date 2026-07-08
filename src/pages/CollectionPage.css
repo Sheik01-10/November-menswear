@@ -1,56 +1,72 @@
-.collection-page {
-  min-height: 100vh;
-
+.collection-hero {
+  position: relative;
+  min-height: 50vh;
   display: flex;
   align-items: center;
-
   padding: 0 8%;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
 
+.work-mode-hero {
   background:
     linear-gradient(
       var(--overlay-light),
       var(--overlay-light)
     ),
     url("https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=1600");
-
   background-size: cover;
   background-position: center;
 }
 
-.quiet-bg {
+.quiet-luxury-hero {
   background:
     linear-gradient(
       var(--overlay-light),
       var(--overlay-light)
     ),
     url("https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=1600");
-
   background-size: cover;
   background-position: center;
+}
+
+.collection-content {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1200px;
+  padding-top: 50px;
 }
 
 .collection-hero span {
   color: var(--text-muted);
   letter-spacing: 4px;
   font-weight: 500;
+  text-transform: uppercase;
+  font-size: 14px;
 }
 
 .collection-hero h1 {
   color: var(--text-primary);
-  font-size: 5rem;
+  font-size: clamp(3rem, 6vw, 5rem);
   margin-top: 15px;
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
 }
 
 .collection-hero p {
   color: var(--text-secondary);
   margin-top: 20px;
-  max-width: 450px;
+  max-width: 500px;
   line-height: 1.8;
+  font-size: 16px;
 }
 
 @media (max-width: 768px) {
-  .collection-page {
-    padding: 0 16px;
+  .collection-hero {
+    min-height: 45vh;
+    padding: 100px 24px 40px;
   }
   .collection-hero h1 {
     font-size: 2.2rem;

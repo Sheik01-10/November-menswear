@@ -109,16 +109,18 @@
 /* underline */
 .curate-cat-card::after{
   content:"";
-  width:0;
+  width:65px;
   height:1px;
   background: var(--text-primary);
   margin-top:8px;
 
-  transition:.4s ease;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform .4s ease;
 }
 
 .curate-cat-card:hover::after{
-  width:65px;
+  transform: scaleX(1);
 }
 
 /* ==========================

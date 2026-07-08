@@ -48,6 +48,7 @@
 
   transition:
     transform .35s ease;
+  will-change: transform;
 
   background-size: cover;
   background-position: center;

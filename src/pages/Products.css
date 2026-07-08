@@ -91,6 +91,7 @@
 
 .product-card {
   transition: transform .4s ease;
+  will-change: transform;
 }
 
 .product-card:hover {
@@ -119,6 +120,7 @@
   transition:
     transform .7s ease,
     opacity .6s ease;
+  will-change: transform, opacity;
 }
 
 .back-img {

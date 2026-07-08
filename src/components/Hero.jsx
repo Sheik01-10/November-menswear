@@ -35,12 +35,38 @@ export default function Hero() {
   };
 
   useEffect(() => {
+    // Cache DOM selections
+    const hero = document.querySelector(".hero");
+    const heroContent = document.querySelector(".hero-content");
+    const heroText = document.querySelector(".hero-bg-text");
+    const heroModel = document.querySelector(".hero-model");
+    const logoContainer = document.querySelector(".hero-brand");
+    const headerInner = document.querySelector(".lux-header-inner");
+
     let logoBottom = 260;
+    let heroHeight = 700;
+    let targetY = 44;
+    let unscaledWidth = 477;
 
     const updateDimensions = () => {
-      const logoContainer = document.querySelector(".hero-brand");
       if (logoContainer) {
         logoBottom = logoContainer.offsetTop + logoContainer.offsetHeight;
+      }
+      if (hero) {
+        heroHeight = hero.offsetHeight;
+      }
+      if (heroText) {
+        unscaledWidth = heroText.scrollWidth || 477;
+      }
+      if (headerInner) {
+        const rect = headerInner.getBoundingClientRect();
+        targetY = rect.top + rect.height / 2;
+      } else {
+        if (window.innerWidth <= 480) {
+          targetY = 37;
+        } else if (window.innerWidth <= 992) {
+          targetY = 40;
+        }
       }
     };
 
@@ -49,16 +75,18 @@ export default function Hero() {
     // Run after a short delay to ensure assets are rendered
     const timer = setTimeout(updateDimensions, 100);
 
+    // Position heroText at top 0 statically so we only animate translate3d
+    if (heroText) {
+      heroText.style.position = "fixed";
+      heroText.style.left = "50%";
+      heroText.style.top = "0";
+    }
+
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      const hero = document.querySelector(".hero");
-      const heroContent = document.querySelector(".hero-content");
-      const heroText = document.querySelector(".hero-bg-text");
-      const heroModel = document.querySelector(".hero-model");
 
       if (!hero) return;
 
-      const heroHeight = hero.offsetHeight;
       const progress = Math.min(scrollY / heroHeight, 1);
 
       /* ====================
@@ -66,7 +94,7 @@ export default function Hero() {
       ==================== */
       if (heroContent) {
         const moveY = scrollY * -0.08;
-        heroContent.style.transform = `translate(-50%, ${moveY}px)`;
+        heroContent.style.transform = `translate3d(-50%, ${moveY}px, 0)`;
         heroContent.style.opacity = Math.max(0, 1 - progress * 1.2);
       }
 
@@ -75,27 +103,12 @@ export default function Hero() {
       ==================== */
       if (heroText) {
         /* START: position precisely below the logo bottom with responsive spacing */
-        const spacing = window.innerWidth <= 768 ? 16 : 32;
         let startY;
 
-if (window.innerWidth <= 768) {
-  startY = logoBottom + 30;
-} else {
-  startY = logoBottom + 70;
-}
-
-        /* HEADER CENTER TARGET (dynamic computation based on the actual header rect) */
-        let targetY = 44;
-        const headerInner = document.querySelector(".lux-header-inner");
-        if (headerInner) {
-          const rect = headerInner.getBoundingClientRect();
-          targetY = rect.top + rect.height / 2;
+        if (window.innerWidth <= 768) {
+          startY = logoBottom + 30;
         } else {
-          if (window.innerWidth <= 480) {
-            targetY = 37;
-          } else if (window.innerWidth <= 992) {
-            targetY = 40;
-          }
+          startY = logoBottom + 70;
         }
 
         /* SCROLL PROGRESS */
@@ -115,15 +128,10 @@ if (window.innerWidth <= 768) {
           targetWidth = 82;
         }
 
-        const unscaledWidth = heroText.scrollWidth || 477;
-        const targetScale = targetWidth / unscaledWidth;
+        const scale = 1 - (1 - targetWidth / unscaledWidth) * eased;
 
-        const scale = 1 - (1 - targetScale) * eased;
-
-        heroText.style.position = "fixed";
-        heroText.style.left = "50%";
-        heroText.style.top = `${currentY}px`;
-        heroText.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        // Position using hardware-accelerated translate3d
+        heroText.style.transform = `translate3d(-50%, ${currentY}px, 0) translateY(-50%) scale(${scale})`;
 
         // Hide hero text only when we scroll past the Hero section completely so the header logo takes over
         if (scrollY >= heroHeight) {
@@ -149,7 +157,7 @@ if (window.innerWidth <= 768) {
          MODEL PARALLAX
       ==================== */
       if (heroModel) {
-        heroModel.style.transform = `translateX(-50%) translateY(${scrollY * 0.06}px)`;
+        heroModel.style.transform = `translate3d(-50%, ${scrollY * 0.06}px, 0)`;
       }
     };
 
@@ -158,7 +166,7 @@ if (window.innerWidth <= 768) {
       handleScroll();
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleResize);
 
     // Initial positioning

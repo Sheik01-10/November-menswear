@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap");
 
 :root{
   --bg:#ffffff;
@@ -79,6 +78,7 @@
   overflow:hidden;
   box-shadow:0 12px 35px rgba(0,0,0,.06);
   transition:all .4s cubic-bezier(.22,1,.36,1);
+  will-change: transform, box-shadow;
 }
 
 .wishlist-card:hover{
@@ -97,6 +97,7 @@
   object-fit:cover;
   transition:transform .5s ease;
   background:#f8f8f8;
+  will-change: transform;
 }
 
 .wishlist-card:hover .wishlist-image{

@@ -155,6 +155,21 @@ const handleLogout =
     showBarRef.current = showBar;
     showCenterRef.current = showCenterLogo;
 
+    // Cache elements and measurements
+    let hero = document.querySelector(".hero");
+    let heroHeight = hero ? hero.offsetHeight : 700;
+
+    const handleResize = () => {
+      if (!hero) {
+        hero = document.querySelector(".hero");
+      }
+      if (hero) {
+        heroHeight = hero.offsetHeight;
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
     const onScroll = () => {
       if (ticking.current) return;
       ticking.current = true;
@@ -165,30 +180,24 @@ const handleLogout =
         const isHomePage =
   pathname === "/";
 
-const hero =
-  document.querySelector(".hero");
+        /* CENTER LOGO */
 
-const heroHeight =
-  hero?.offsetHeight || 700;
-
-/* CENTER LOGO */
-
-const shouldShowCenter =
+        const shouldShowCenter =
   !isHomePage ||
   currentScrollY >
     heroHeight;
 
-if (
-  shouldShowCenter !==
-  showCenterRef.current
-) {
-  showCenterRef.current =
-    shouldShowCenter;
+        if (
+          shouldShowCenter !==
+          showCenterRef.current
+        ) {
+          showCenterRef.current =
+            shouldShowCenter;
 
-  setShowCenterLogo(
-    shouldShowCenter
-  );
-}
+          setShowCenterLogo(
+            shouldShowCenter
+          );
+        }
 
         // BAR: only visible at the very top
         const isTop = currentScrollY < 50;
@@ -200,9 +209,9 @@ if (
         // HEADER hide/show on scroll direction with small hysteresis
         // Force header to remain visible when on the home page and within the Hero section
         if (
-  pathname === "/" &&
-  currentScrollY <= heroHeight
-) {
+          pathname === "/" &&
+          currentScrollY <= heroHeight
+        ) {
           if (!showHeaderRef.current) {
             showHeaderRef.current = true;
             setShowHeader(true);
@@ -234,6 +243,7 @@ if (
 
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", handleResize);
     };
 
   }, [pathname]);

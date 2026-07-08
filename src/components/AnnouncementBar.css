@@ -9,19 +9,20 @@
   overflow:hidden;
 
   transition:
-    max-height .35s ease,
+    transform .35s ease,
     opacity .35s ease;
+  will-change: transform, opacity;
 }
 
 /* SHOW */
 .bar-show{
-  max-height:42px;
+  transform: translateY(0);
   opacity:1;
 }
 
 /* HIDE */
 .bar-hide{
-  max-height:0;
+  transform: translateY(-100%);
   opacity:0;
 }
 

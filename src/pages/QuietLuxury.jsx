@@ -31,6 +31,9 @@ export default function QuietLuxury() {
   <div className="collection-overlay"></div>
 
   <div className="collection-content">
+    <span>Quiet Luxury</span>
+    <h1>Timeless Collection</h1>
+    <p>Refined Polos & Premium Fits crafted for comfort and elegance.</p>
     <BackButton />
   </div>
 </section>

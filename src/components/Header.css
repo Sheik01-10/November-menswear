@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap");
 
 *{
   margin:0;
@@ -22,6 +21,7 @@ body{
 .lux-header{
   position:fixed;
 
+  top:0;
   left:0;
   width:100%;
 
@@ -32,7 +32,7 @@ body{
   backdrop-filter: none;
   border-bottom: 0;
 
-  transition: transform .45s ease, top .35s ease, background-color .35s ease, backdrop-filter .45s ease, box-shadow .35s ease, opacity .35s ease;
+  transition: transform .45s ease, background-color .35s ease, backdrop-filter .45s ease, box-shadow .35s ease, opacity .35s ease;
 
   will-change: transform, background-color, backdrop-filter, opacity;
 }
@@ -42,23 +42,23 @@ body.drawer-open .lux-header {
   pointer-events: none;
 }
 
-/* BAR VISIBLE */
-.header-with-bar{
-  top:42px;
+/* BAR VISIBLE & HEADER SHOW */
+.header-with-bar.header-show {
+  transform: translateY(42px);
+}
+@media (max-width: 768px) {
+  .header-with-bar.header-show {
+    transform: translateY(36px);
+  }
 }
 
-/* BAR HIDDEN */
-.header-no-bar{
-  top:0;
-}
-
-/* HEADER SHOW */
-.header-show{
+/* BAR HIDDEN & HEADER SHOW */
+.header-no-bar.header-show {
   transform: translateY(0);
 }
 
 /* HEADER HIDE - move fully out of view smoothly */
-.header-hide{
+.lux-header.header-hide {
   transform: translateY(-120px);
 }
 
@@ -289,12 +289,14 @@ body.drawer-open .lux-header {
   left:0;
   bottom:-8px;
 
-  width:0;
+  width:100%;
   height:1px;
 
   background: var(--text-primary);
 
-  transition:.3s ease;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s ease;
 }
 
 .lux-nav a:hover{
@@ -302,7 +304,7 @@ body.drawer-open .lux-header {
 }
 
 .lux-nav a:hover::after{
-  width:100%;
+  transform: scaleX(1);
 }
 
 /* ==========================

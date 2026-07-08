@@ -25,9 +25,17 @@ export default function WorkMode() {
     <>
       {/* HEADER */}
       <Header />
-        <div style={{ paddingTop: "90px", paddingLeft: "30px" }}>
+      {/* COLLECTION HERO */}
+<section className="collection-hero work-mode-hero">
+  <div className="collection-overlay"></div>
+
+  <div className="collection-content">
+    <span>Work Mode</span>
+    <h1>Formal Collection</h1>
+    <p>Tailored Shirts & Formal Wear designed for the modern workplace.</p>
     <BackButton />
   </div>
+</section>
 
       {/* PRODUCTS CATALOG SECTION */}
       <div className="products-page" style={{ paddingTop: "80px" }}>
