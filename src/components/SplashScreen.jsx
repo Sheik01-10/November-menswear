@@ -31,6 +31,7 @@ const SplashScreen = ({ onComplete }) => {
     gsap.set(wordmark, { x: 0, scale: 1 });
     gsap.set(letters, { x: 0, opacity: 1, scale: 1 });
     gsap.set(emblem, { scale: 1 });
+    gsap.set(logoImg, { scale: 1, opacity: 1 });
 
     // 2. Measure layout positions in natural state
     const wordmarkRect = wordmark.getBoundingClientRect();
@@ -59,13 +60,13 @@ const SplashScreen = ({ onComplete }) => {
 
     // 3. Set initial states for animation (emblem centered and scaled large, letters hidden behind emblem)
     gsap.set(wordmark, { x: initialWordmarkShift, scale: 0.95 });
-    gsap.set(emblem, { scale: scaleFactor });
+    gsap.set(emblem, { scale: 1 });
 
     lettersData.forEach((item) => {
       gsap.set(item.el, { x: item.dx, opacity: 0, scale: 0.4 });
     });
 
-    gsap.set(logoImg, { opacity: 0 });
+    gsap.set(logoImg, { scale: 1, opacity: 0 });
     gsap.set(tagline, { opacity: 0, y: 15 });
     gsap.set(shine, { xPercent: -150 });
 
@@ -97,11 +98,12 @@ const SplashScreen = ({ onComplete }) => {
       "morph"
     );
 
-    // 2. Scale the emblem container from scaleFactor down to 1
+    // 2. Scale the emblem image from 1 down to finalScale
+    const finalScale = 1 / scaleFactor;
     tl.to(
-      emblem,
+      logoImg,
       {
-        scale: 1,
+        scale: finalScale,
         duration: 0.9,
         ease: "power3.inOut",
       },

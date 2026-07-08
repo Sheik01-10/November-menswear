@@ -73,17 +73,18 @@
   height: var(--final-emblem-size);
   
   margin: 0 clamp(4px, 0.4vw, 10px);
-  will-change: transform;
 }
 
 .logo-emblem {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  width: var(--initial-emblem-size);
+  height: var(--initial-emblem-size);
   object-fit: contain;
   z-index: 10;
   pointer-events: none;
   filter: drop-shadow(0 4px 10px rgba(184, 151, 83, 0.15));
-  will-change: opacity;
+  opacity: 0;
+  will-change: transform, opacity;
 }
 
 .char {
