@@ -21,13 +21,20 @@ export function ProductProvider({ children }) {
         axios.get(`${BACKEND}/api/settings`)
       ]);
 
-      const normalizedProducts = prodRes.data.map(p => ({
-        ...p,
-        id: p._id,
-        compare: p.comparePrice ? `₹${Number(p.comparePrice).toLocaleString("en-IN")}` : "",
-        price: `₹${Number(p.price).toLocaleString("en-IN")}`,
-        pct: p.pct || ""
-      }));
+      const normalizedProducts = prodRes.data.map(p => {
+        let pct = p.pct || "";
+        if (p.comparePrice && p.comparePrice > p.price) {
+          const discount = Math.round(((p.comparePrice - p.price) / p.comparePrice) * 100);
+          pct = `-${discount}%`;
+        }
+        return {
+          ...p,
+          id: p._id,
+          compare: p.comparePrice ? `₹${Number(p.comparePrice).toLocaleString("en-IN")}` : "",
+          price: `₹${Number(p.price).toLocaleString("en-IN")}`,
+          pct
+        };
+      });
 
       setProducts(normalizedProducts);
       setCategories(catRes.data);
@@ -51,12 +58,17 @@ export function ProductProvider({ children }) {
           return prev.filter(p => p._id !== data._id);
         }
         
+        let pct = data.pct || "";
+        if (data.comparePrice && data.comparePrice > data.price) {
+          const discount = Math.round(((data.comparePrice - data.price) / data.comparePrice) * 100);
+          pct = `-${discount}%`;
+        }
         const normalized = {
           ...data,
           id: data._id,
           compare: data.comparePrice ? `₹${Number(data.comparePrice).toLocaleString("en-IN")}` : "",
           price: `₹${Number(data.price).toLocaleString("en-IN")}`,
-          pct: data.pct || ""
+          pct
         };
 
         if (action === "create") {

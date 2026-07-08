@@ -456,6 +456,13 @@
     aspect-ratio: 4 / 5;
   }
 
+  .detail-discount-badge {
+    top: 10px;
+    left: 10px;
+    padding: 4px 8px;
+    font-size: 9px;
+  }
+
   .thumbnails-wrapper {
     overflow-x: auto;
     flex-wrap: nowrap;
