@@ -94,7 +94,7 @@ export default function Signup() {
 
     try {
       // Prevent registering with duplicate email
-      const BACKEND = `http://${window.location.hostname}:5000`;
+      const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
       const emailCheckRes = await axios.get(`${BACKEND}/api/users/check-email?email=${encodeURIComponent(email)}`);
       if (emailCheckRes.data.exists) {
         toast.error("This email address is already registered. Please login instead.");

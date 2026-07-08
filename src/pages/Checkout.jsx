@@ -8,7 +8,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 import "./Checkout.css";
 
-const BACKEND = `http://${window.location.hostname}:5000`;
+const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
 
 // Helper function to load Razorpay Script
 const loadRazorpayScript = () => {

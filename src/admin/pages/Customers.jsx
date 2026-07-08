@@ -4,7 +4,7 @@ import { Search, Mail, Phone, Calendar, Trash2 } from "lucide-react";
 import { io } from "socket.io-client";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const BACKEND = `http://${window.location.hostname}:5000`;
+const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
 
 export default function AdminCustomers() {
   const location = useLocation();

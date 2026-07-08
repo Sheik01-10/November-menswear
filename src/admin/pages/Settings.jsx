@@ -3,7 +3,7 @@ import axios from "axios";
 import { Save, Store, Bell, CheckCircle, ArrowUp, ArrowDown, Plus, Trash2, Edit2, Check, X } from "lucide-react";
 import { io } from "socket.io-client";
 
-const BACKEND = `http://${window.location.hostname}:5000`;
+const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
 
 export default function AdminSettings() {
   const [form, setForm] = useState({

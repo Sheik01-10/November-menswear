@@ -4,7 +4,7 @@ import { Search, X, Check, Trash2, Mail, User, Clock, MessageSquare } from "luci
 import { io } from "socket.io-client";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const BACKEND = `http://${window.location.hostname}:5000`;
+const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
 const STATUSES = ["All", "Unread", "Read"];
 
 export default function AdminSupport() {

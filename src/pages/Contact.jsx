@@ -7,7 +7,7 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const BACKEND = `http://${window.location.hostname}:5000`;
+const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
 
 export default function Contact() {
   const [name, setName] = useState("");

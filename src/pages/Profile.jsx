@@ -27,7 +27,7 @@ import "./Profile.css";
 import BackButton from "../components/BackButton";
 import toast from "react-hot-toast";
 
-const BACKEND = `http://${window.location.hostname}:5000`;
+const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
 
 function FaqAccordionItem({ question, answer }) {
   const [isOpen, setIsOpen] = useState(false);

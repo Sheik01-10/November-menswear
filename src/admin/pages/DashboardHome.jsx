@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { io } from "socket.io-client";
 
-const BACKEND = `http://${window.location.hostname}:5000`;
+const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
 
 function StatCard({ title, value, icon, growth, label = "vs last month" }) {
   const isUp = parseFloat(growth) > 0;

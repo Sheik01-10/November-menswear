@@ -39,7 +39,7 @@ export default function useVisitorTracker() {
       console.error("Error reading user from localStorage:", e);
     }
 
-    const BACKEND = `http://${window.location.hostname}:5000`;
+    const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
 
     // 4. Tracking function
     const trackPageview = async (actionText = null) => {

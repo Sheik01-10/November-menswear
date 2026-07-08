@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BACKEND = `http://${window.location.hostname}:5000`;
+const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
 
 /* Add Product */
 export async function addToWishlist(uid, product) {

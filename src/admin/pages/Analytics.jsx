@@ -12,7 +12,7 @@ import {
 import { io } from "socket.io-client";
 import toast from "react-hot-toast";
 
-const BACKEND = `http://${window.location.hostname}:5000`;
+const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
 
 function KPIAnalyticsCard({ title, value, sub, icon, color, subColor = "#22c55e", pulse = false }) {
   return (

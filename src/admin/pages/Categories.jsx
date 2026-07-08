@@ -3,7 +3,7 @@ import axios from "axios";
 import { Plus, Pencil, Trash2, X } from "lucide-react";
 import { io } from "socket.io-client";
 
-const BACKEND = `http://${window.location.hostname}:5000`;
+const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
 const EMPTY = { label: "", img: "", href: "" };
 
 export default function AdminCategories() {
