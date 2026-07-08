@@ -362,7 +362,7 @@ export default function ProductDetails() {
           )}
         </div>
       </div>
-      <FloatingWhatsApp />
+      <FloatingWhatsApp product={product} selectedSize={selectedSize} />
       <Footer />
     </>
   );

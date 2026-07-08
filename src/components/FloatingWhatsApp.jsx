@@ -1,11 +1,24 @@
 import { FaWhatsapp } from "react-icons/fa";
 import "./FloatingWhatsApp.css";
 
-export default function FloatingWhatsApp() {
+export default function FloatingWhatsApp({ product, selectedSize, selectedColor, quantity = 1 }) {
   const phone = "917604801743";
 
-  const message =
-    "Hi, I'm interested in your products.";
+  let message = "Hi, I'm interested in your products.";
+
+  if (product) {
+    const lines = [
+      "Hi, I would like to inquire about this product:\n",
+      `*Product:* ${product.name}`,
+      `*Price:* ${product.price}`,
+      selectedSize ? `*Size:* ${selectedSize}` : `*Size:* Not selected`,
+      selectedColor ? `*Color:* ${selectedColor}` : null,
+      `*Quantity:* ${quantity}`,
+      `*Link:* ${window.location.href}`
+    ].filter(Boolean);
+
+    message = lines.join("\n");
+  }
 
   return (
     <a
