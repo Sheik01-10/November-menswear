@@ -56,10 +56,7 @@
 
 @media (max-width: 768px) {
     .share-btn {
-        width: 32px;
-        height: 32px;
-        top: 10px;
-        left: 48px;
+        display: none;
     }
     .share-btn svg {
         width: 14px;
@@ -258,10 +255,7 @@
 /* Mobile responsive bottom drawer */
 @media (max-width: 768px) {
     .share-btn {
-        width: 38px;
-        height: 38px;
-        top: 15px;
-        left: 61px;
+        display: none;
     }
     
     .btn-share-detail {
