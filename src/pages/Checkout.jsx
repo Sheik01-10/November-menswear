@@ -29,7 +29,7 @@ const loadRazorpayScript = () => {
 
 export default function Checkout() {
   const navigate = useNavigate();
-  const { cart, totalPrice, clearCart } = useCart();
+  const { cart, totalPrice, shippingTotal, grandTotal, clearCart } = useCart();
 
   // Form State
   const [formData, setFormData] = useState({
@@ -190,7 +190,8 @@ export default function Checkout() {
           state: formData.state,
           pincode: formData.pincode,
           landmark: formData.landmark,
-          amount: totalPrice,
+          amount: grandTotal,
+          shippingCharge: shippingTotal,
           items: orderItems,
           status: "Pending", // COD order starts as Pending
           paymentMethod: "Cash on Delivery",
@@ -278,7 +279,8 @@ export default function Checkout() {
                 pincode: formData.pincode,
                 landmark: formData.landmark,
                 items: orderItems,
-                amount: totalPrice
+                amount: grandTotal,
+                shippingCharge: shippingTotal
               }
             };
 
@@ -858,11 +860,15 @@ export default function Checkout() {
                 </div>
                 <div className="total-row">
                   <span>Shipping</span>
-                  <span className="free-shipping">FREE</span>
+                  {shippingTotal > 0 ? (
+                    <span>₹{shippingTotal.toLocaleString("en-IN")}</span>
+                  ) : (
+                    <span className="free-shipping">FREE</span>
+                  )}
                 </div>
                 <div className="total-row grand-total">
                   <span>Total</span>
-                  <span>₹{totalPrice.toLocaleString("en-IN")}</span>
+                  <span>₹{grandTotal.toLocaleString("en-IN")}</span>
                 </div>
               </div>
             </div>

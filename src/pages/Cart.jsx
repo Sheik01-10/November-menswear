@@ -18,6 +18,8 @@ export default function Cart() {
     decreaseQty,
     totalItems,
     totalPrice,
+    shippingTotal,
+    grandTotal,
   } = useCart();
 
   const handleCheckoutClick = (e) => {
@@ -151,12 +153,12 @@ export default function Cart() {
 
               <div className="summary-row">
                 <span>Shipping</span>
-                <span>FREE</span>
+                <span>{shippingTotal > 0 ? `₹${shippingTotal.toLocaleString("en-IN")}` : "FREE"}</span>
               </div>
 
               <div className="summary-row total">
                 <span>Total</span>
-                <span>₹{totalPrice}</span>
+                <span>₹{grandTotal.toLocaleString("en-IN")}</span>
               </div>
 
               <button onClick={handleCheckoutClick} className="checkout-btn" style={{ textDecoration: "none" }}>

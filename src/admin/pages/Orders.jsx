@@ -321,13 +321,23 @@ export default function AdminOrders() {
               ))}
             </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 16, borderTop: "1px solid #ececec" }}>
-              <span style={{ fontSize: 14, color: "#888" }}>
-                {new Date(selectedOrder.date).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
-              </span>
-              <span style={{ fontSize: 22, fontWeight: 800 }}>
-                ₹{Number(selectedOrder.amount).toLocaleString("en-IN")}
-              </span>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, paddingTop: 16, borderTop: "1px solid #ececec" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "#666" }}>
+                <span>Subtotal:</span>
+                <span>₹{Number(selectedOrder.amount - (selectedOrder.shippingCharge || 0)).toLocaleString("en-IN")}</span>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "#666" }}>
+                <span>Shipping Charge:</span>
+                <span>{selectedOrder.shippingCharge > 0 ? `₹${Number(selectedOrder.shippingCharge).toLocaleString("en-IN")}` : "FREE"}</span>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #eee", paddingTop: 10 }}>
+                <span style={{ fontSize: 13, color: "#888" }}>
+                  {new Date(selectedOrder.date).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
+                </span>
+                <span style={{ fontSize: 20, fontWeight: 800 }}>
+                  ₹{Number(selectedOrder.amount).toLocaleString("en-IN")}
+                </span>
+              </div>
             </div>
           </div>
         </div>

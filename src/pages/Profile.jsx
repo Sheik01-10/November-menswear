@@ -644,11 +644,15 @@ export default function Profile() {
                                   <div className="payment-receipt-summary">
                                     <div className="payment-receipt-row">
                                       <span>Subtotal</span>
-                                      <span>₹{Number(order.amount).toLocaleString("en-IN")}</span>
+                                      <span>₹{Number(order.amount - (order.shippingCharge || 0)).toLocaleString("en-IN")}</span>
                                     </div>
                                     <div className="payment-receipt-row">
                                       <span>Shipping</span>
-                                      <span className="free-badge">FREE</span>
+                                      {order.shippingCharge > 0 ? (
+                                        <span>₹{Number(order.shippingCharge).toLocaleString("en-IN")}</span>
+                                      ) : (
+                                        <span className="free-badge">FREE</span>
+                                      )}
                                     </div>
                                     <div className="payment-receipt-row grand-total-row">
                                       <span>Total Paid</span>

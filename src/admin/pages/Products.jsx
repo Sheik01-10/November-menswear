@@ -9,7 +9,7 @@ const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostna
 const EMPTY_FORM = {
   name: "", category: "shirts", price: "", comparePrice: "",
   pct: "", front: "", back: "", description: "", inStock: true, isBestseller: false,
-  sizes: [], stockQuantity: 0
+  sizes: [], stockQuantity: 0, deliveryCharge: 0
 };
 
 export default function AdminProducts() {
@@ -206,7 +206,8 @@ export default function AdminProducts() {
       name: p.name, category: p.category, price: p.price, comparePrice: p.comparePrice || "",
       pct: p.pct || "", front: p.front, back: p.back, description: p.description || "",
       inStock: p.inStock, isBestseller: p.isBestseller,
-      sizes: p.sizes || [], stockQuantity: p.stockQuantity || 0
+      sizes: p.sizes || [], stockQuantity: p.stockQuantity || 0,
+      deliveryCharge: p.deliveryCharge || 0
     });
     setModal(true);
   };
@@ -224,7 +225,8 @@ export default function AdminProducts() {
         price: Number(form.price),
         comparePrice: Number(form.comparePrice),
         stockQuantity: Number(form.stockQuantity || 0),
-        inStock: Number(form.stockQuantity || 0) > 0
+        inStock: Number(form.stockQuantity || 0) > 0,
+        deliveryCharge: Number(form.deliveryCharge || 0)
       };
       if (editing) {
         await axios.put(`${BACKEND}/api/products/${editing._id}`, payload);
@@ -400,6 +402,16 @@ export default function AdminProducts() {
                       setForm({ ...form, stockQuantity: val, inStock: val > 0 });
                     }}
                     placeholder="e.g. 10"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Delivery Charge (₹)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={form.deliveryCharge}
+                    onChange={e => setForm({...form, deliveryCharge: e.target.value})}
+                    placeholder="e.g. 150"
                   />
                 </div>
                 <div className="form-group full">
