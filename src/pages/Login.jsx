@@ -88,6 +88,19 @@ export default function Login() {
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
+        // Robust fallback: if localStorage is missing user details (e.g. on mobile redirect landing),
+        // populate it and sync to database.
+        const localUser = localStorage.getItem("user");
+        if (!localUser) {
+          const userData = {
+            uid: user.uid,
+            name: user.displayName || "November User",
+            email: user.email,
+            photo: user.photoURL || "",
+          };
+          localStorage.setItem("user", JSON.stringify(userData));
+          syncUserToMongoDB(userData);
+        }
         navigate(redirect);
       }
     });
@@ -163,15 +176,10 @@ export default function Login() {
   const handleGoogleLogin = async () => {
     try {
       const provider = new GoogleAuthProvider();
+      setLoading(true);
       
-      // Force redirect flow on mobile devices to prevent popup blockers
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      
-      if (isMobile) {
-        setLoading(true);
-        await signInWithRedirect(auth, provider);
-      } else {
-        setLoading(true);
+      // Try popup first (works on both mobile and desktop, preserves query parameters, no page reload)
+      try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
         const userData = {
@@ -187,6 +195,11 @@ export default function Login() {
 
         toast.success("Welcome back!");
         navigate(redirect);
+      } catch (popupError) {
+        console.warn("Popup sign-in failed, falling back to redirect:", popupError);
+        // Fallback to redirect if popup is blocked or fails on mobile/desktop
+        toast.loading("Redirecting to Google Sign-In...");
+        await signInWithRedirect(auth, provider);
       }
     } catch (error) {
       console.error("Google Auth Error:", error);
