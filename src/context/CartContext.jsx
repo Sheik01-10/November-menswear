@@ -164,7 +164,10 @@ export function CartProvider({ children }) {
 
   const shippingTotal = useMemo(() => {
     if (totalPrice >= 5000) return 0;
-    return cart.reduce((sum, item) => sum + (item.deliveryCharge || 0) * item.quantity, 0);
+    return cart.reduce((sum, item) => {
+      const charge = item.deliveryCharge !== undefined ? item.deliveryCharge : 150;
+      return sum + charge * item.quantity;
+    }, 0);
   }, [cart, totalPrice]);
 
   // ==========================
