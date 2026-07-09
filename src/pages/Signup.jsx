@@ -17,6 +17,7 @@ import {
   signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
+  onAuthStateChanged,
 } from "firebase/auth";
 
 import { auth } from "../firebase/firebase";
@@ -31,7 +32,10 @@ export default function Signup() {
   const navigate =
     useNavigate();
   const [searchParams] = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/";
+  const rawRedirect = searchParams.get("redirect") || "/";
+  const redirect = rawRedirect.startsWith("/") ? rawRedirect : `/${rawRedirect}`;
+
+  const [checkingRedirect, setCheckingRedirect] = useState(true);
 
   const [
     showPassword,
@@ -80,10 +84,25 @@ export default function Signup() {
       } catch (error) {
         console.error("Google redirect signup error:", error);
         toast.error(`Google Sign Up Failed: ${error.message}`);
+      } finally {
+        setCheckingRedirect(false);
       }
     };
     checkRedirect();
   }, [navigate, redirect]);
+
+  // Automatically redirect if user is already logged in
+  useEffect(() => {
+    if (checkingRedirect) return;
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate(redirect);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [checkingRedirect, navigate, redirect]);
 
   const handleSignup = async (
     e
