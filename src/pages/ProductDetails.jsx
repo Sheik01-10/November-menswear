@@ -23,6 +23,18 @@ export default function ProductDetails() {
   const [activeImage, setActiveImage] = useState("");
   const [activeTab, setActiveTab] = useState("description");
 
+  // Desktop Hover Zoom States
+  const [zoomStyle, setZoomStyle] = useState({ transformOrigin: "center", transform: "scale(1)" });
+  const [isZoomed, setIsZoomed] = useState(false);
+
+  // Fullscreen Modal States
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalImageIndex, setModalImageIndex] = useState(0);
+  const [modalScale, setModalScale] = useState(1);
+  const [startScale, setStartScale] = useState(1);
+  const [initialPinchDist, setInitialPinchDist] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
@@ -38,6 +50,111 @@ export default function ProductDetails() {
       }
     }
   }, [products, id]);
+
+  const images = product ? [product.front, product.back].filter(Boolean) : [];
+
+  const handleMainNext = () => {
+    if (images.length <= 1) return;
+    const nextIdx = (images.indexOf(activeImage) + 1) % images.length;
+    setActiveImage(images[nextIdx]);
+  };
+
+  const handleMainPrev = () => {
+    if (images.length <= 1) return;
+    const prevIdx = (images.indexOf(activeImage) - 1 + images.length) % images.length;
+    setActiveImage(images[prevIdx]);
+  };
+
+  const handleMouseMove = (e) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setZoomStyle({
+      transformOrigin: `${x}% ${y}%`,
+      transform: "scale(2.2)"
+    });
+  };
+
+  const handleMouseEnter = () => {
+    setIsZoomed(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsZoomed(false);
+    setZoomStyle({ transformOrigin: "center", transform: "scale(1)" });
+  };
+
+  const handleModalNext = () => {
+    if (images.length <= 1) return;
+    setModalImageIndex((prev) => (prev + 1) % images.length);
+    setModalScale(1);
+  };
+
+  const handleModalPrev = () => {
+    if (images.length <= 1) return;
+    setModalImageIndex((prev) => (prev - 1 + images.length) % images.length);
+    setModalScale(1);
+  };
+
+  useEffect(() => {
+    if (!isModalOpen) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setIsModalOpen(false);
+      } else if (e.key === "ArrowRight") {
+        handleModalNext();
+      } else if (e.key === "ArrowLeft") {
+        handleModalPrev();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isModalOpen, images.length, handleModalNext, handleModalPrev]);
+
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 1) {
+      setTouchStart(e.touches[0].clientX);
+    } else if (e.touches.length === 2) {
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      setInitialPinchDist(dist);
+      setStartScale(modalScale);
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (e.touches.length === 2 && initialPinchDist > 0) {
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      const factor = dist / initialPinchDist;
+      setModalScale(Math.min(Math.max(startScale * factor, 1), 3));
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (e.touches.length < 2) {
+      setInitialPinchDist(0);
+    }
+    if (e.changedTouches && e.changedTouches.length === 1 && touchStart !== 0) {
+      const diffX = e.changedTouches[0].clientX - touchStart;
+      if (diffX > 50) {
+        handleModalPrev();
+      } else if (diffX < -50) {
+        handleModalNext();
+      }
+      setTouchStart(0);
+    }
+  };
+
+  const handleDoubleTap = () => {
+    setModalScale((prev) => (prev > 1 ? 1 : 2));
+  };
 
   if (loading) {
     return (
@@ -139,26 +256,77 @@ export default function ProductDetails() {
           <div className="product-layout">
             {/* Left: Gallery */}
             <div className="product-gallery">
-              <div className="main-image-wrapper">
-                <img src={activeImage} alt={product.name} className="main-image" />
+              <div 
+                className="main-image-wrapper" 
+                onClick={() => {
+                  const idx = images.indexOf(activeImage);
+                  setModalImageIndex(idx >= 0 ? idx : 0);
+                  setModalScale(1);
+                  setIsModalOpen(true);
+                }} 
+                onMouseMove={handleMouseMove}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                style={{ cursor: "zoom-in", position: "relative" }}
+              >
+                <img 
+                  src={activeImage} 
+                  alt={product.name} 
+                  className={`main-image ${isZoomed ? "zoomed" : ""}`}
+                  style={{
+                    ...zoomStyle,
+                    pointerEvents: "none"
+                  }}
+                  loading="lazy"
+                />
                 {discountPct && <span className="detail-discount-badge">{discountPct}</span>}
+
+                {/* Navigation Arrows */}
+                {images.length > 1 && (
+                  <>
+                    <button 
+                      type="button"
+                      className="main-gallery-arrow prev"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMainPrev();
+                      }}
+                      aria-label="Previous image"
+                    >
+                      ‹
+                    </button>
+                    <button 
+                      type="button"
+                      className="main-gallery-arrow next"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMainNext();
+                      }}
+                      aria-label="Next image"
+                    >
+                      ›
+                    </button>
+                  </>
+                )}
+
+                {/* Image Index Display */}
+                {images.length > 1 && (
+                  <div className="main-gallery-index">
+                    {images.indexOf(activeImage) + 1} / {images.length}
+                  </div>
+                )}
               </div>
               
               <div className="thumbnails-wrapper">
-                <button 
-                  className={`thumb-btn ${activeImage === product.front ? "active" : ""}`}
-                  onClick={() => setActiveImage(product.front)}
-                >
-                  <img src={product.front} alt="Front View" />
-                </button>
-                {product.back && (
+                {images.map((img, idx) => (
                   <button 
-                    className={`thumb-btn ${activeImage === product.back ? "active" : ""}`}
-                    onClick={() => setActiveImage(product.back)}
+                    key={idx}
+                    className={`thumb-btn ${activeImage === img ? "active" : ""}`}
+                    onClick={() => setActiveImage(img)}
                   >
-                    <img src={product.back} alt="Back View" />
+                    <img src={img} alt={`View ${idx + 1}`} loading="lazy" />
                   </button>
-                )}
+                ))}
               </div>
             </div>
 
@@ -363,6 +531,82 @@ export default function ProductDetails() {
         </div>
       </div>
       <FloatingWhatsApp product={product} selectedSize={selectedSize} />
+      
+      {/* Fullscreen Gallery Modal */}
+      {isModalOpen && (
+        <div className="fullscreen-gallery-modal" onClick={() => setIsModalOpen(false)}>
+          <button className="gallery-modal-close" onClick={() => setIsModalOpen(false)} aria-label="Close modal">
+            &times;
+          </button>
+          
+          <div className="gallery-modal-content" onClick={(e) => e.stopPropagation()}>
+            {images.length > 1 && (
+              <button 
+                type="button" 
+                className="gallery-modal-arrow prev" 
+                onClick={handleModalPrev}
+                aria-label="Previous image"
+              >
+                &#8249;
+              </button>
+            )}
+            
+            <div 
+              className="gallery-modal-image-container"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              onDoubleClick={handleDoubleTap}
+            >
+              <img 
+                src={images[modalImageIndex]} 
+                alt={`${product.name} Fullscreen`} 
+                className="gallery-modal-image"
+                style={{
+                  transform: `scale(${modalScale})`,
+                  transition: initialPinchDist > 0 ? "none" : "transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
+                }}
+                loading="lazy"
+              />
+              
+              {/* Index Indicator */}
+              <div className="gallery-modal-index">
+                {modalImageIndex + 1} / {images.length}
+              </div>
+            </div>
+            
+            {images.length > 1 && (
+              <button 
+                type="button" 
+                className="gallery-modal-arrow next" 
+                onClick={handleModalNext}
+                aria-label="Next image"
+              >
+                &#8250;
+              </button>
+            )}
+          </div>
+          
+          {/* Gallery Modal Thumbnails */}
+          {images.length > 1 && (
+            <div className="gallery-modal-thumbnails-wrapper" onClick={(e) => e.stopPropagation()}>
+              {images.map((img, idx) => (
+                <button 
+                  key={idx}
+                  className={`gallery-modal-thumb-btn ${modalImageIndex === idx ? "active" : ""}`}
+                  onClick={() => {
+                    setModalImageIndex(idx);
+                    setModalScale(1);
+                  }}
+                >
+                  <img src={img} alt={`Thumb ${idx + 1}`} loading="lazy" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       <Footer />
     </>
   );

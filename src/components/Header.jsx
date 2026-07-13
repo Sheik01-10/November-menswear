@@ -637,96 +637,90 @@ const handleLogout =
       </header>
 
       {/* MOBILE DRAWER */}
-      {menuOpen && (
-        <>
-          <div
-            className="drawer-overlay"
-            onClick={() =>
-              setMenuOpen(false)
-            }
-          />
+      <div
+        className={`drawer-overlay ${menuOpen ? "open" : ""}`}
+        onClick={() => setMenuOpen(false)}
+      />
 
-          <div className="drawer">
+      <div className={`drawer ${menuOpen ? "open" : ""}`}>
 
-            <button
-              className="close-btn"
-              onClick={() =>
-                setMenuOpen(false)
-              }
-            >
-              <X size={28} />
-            </button>
+        <button
+          className="close-btn"
+          onClick={() =>
+            setMenuOpen(false)
+          }
+        >
+          <X size={28} />
+        </button>
 
-            <Link
-              to="/"
-              onClick={() =>
-                setMenuOpen(false)
-              }
-            >
-              Home
-            </Link>
+        <Link
+          to="/"
+          onClick={() =>
+            setMenuOpen(false)
+          }
+        >
+          Home
+        </Link>
 
-            <Link
-              to="/products"
-              onClick={() =>
-                setMenuOpen(false)
-              }
-            >
-              Products
-            </Link>
+        <Link
+          to="/products"
+          onClick={() =>
+            setMenuOpen(false)
+          }
+        >
+          Products
+        </Link>
 
-            <Link
-  to="/wishlist"
-  onClick={() =>
-    setMenuOpen(false)
-  }
->
-  Wishlist
-</Link>
+        <Link
+          to="/wishlist"
+          onClick={() =>
+            setMenuOpen(false)
+          }
+        >
+          Wishlist
+        </Link>
 
-            <Link
-              to="/about"
-              onClick={() =>
-                setMenuOpen(false)
-              }
-            >
-              About
-            </Link>
+        <Link
+          to="/about"
+          onClick={() =>
+            setMenuOpen(false)
+          }
+        >
+          About
+        </Link>
 
-            <Link
-              to="/contact"
-              onClick={() =>
-                setMenuOpen(false)
-              }
-            >
-              Contact
-            </Link>
+        <Link
+          to="/contact"
+          onClick={() =>
+            setMenuOpen(false)
+          }
+        >
+          Contact
+        </Link>
 
-            <div className="drawer-divider" />
+        <div className="drawer-divider" />
 
-            <Link
-              to="/login"
-              className="drawer-auth"
-              onClick={() =>
-                setMenuOpen(false)
-              }
-            >
-              Login
-            </Link>
+        <Link
+          to="/login"
+          className="drawer-auth"
+          onClick={() =>
+            setMenuOpen(false)
+          }
+        >
+          Login
+        </Link>
 
-            <Link
-              to="/signup"
-              className="drawer-auth"
-              onClick={() =>
-                setMenuOpen(false)
-              }
-            >
-              Signup
-            </Link>
+        <Link
+          to="/signup"
+          className="drawer-auth"
+          onClick={() =>
+            setMenuOpen(false)
+          }
+        >
+          Signup
+        </Link>
 
-          </div>
-        </>
-      )}
+      </div>
 
       {/* SEARCH OVERLAY */}
       {searchOpen && (

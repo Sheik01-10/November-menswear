@@ -3,6 +3,7 @@ import axios from "axios";
 import { Plus, Search, Pencil, Trash2, X, UploadCloud } from "lucide-react";
 import { io } from "socket.io-client";
 import { useLocation, useNavigate } from "react-router-dom";
+import ImageCropperModal from "../components/ImageCropperModal";
 
 const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
 
@@ -55,6 +56,12 @@ export default function AdminProducts() {
   const frontInputRef = useRef(null);
   const backInputRef = useRef(null);
 
+  // Cropper states
+  const [cropperOpen, setCropperOpen] = useState(false);
+  const [cropperImageSrc, setCropperImageSrc] = useState("");
+  const [cropperFilename, setCropperFilename] = useState("");
+  const [cropperType, setCropperType] = useState("");
+
   const uploadImage = async (file, type) => {
     if (type === "front") setUploadingFront(true);
     else setUploadingBack(true);
@@ -75,10 +82,31 @@ export default function AdminProducts() {
     }
   };
 
+  const handleFileSelect = (file, type) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      alert("Please upload an image file!");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setCropperImageSrc(reader.result);
+      setCropperFilename(file.name);
+      setCropperType(type);
+      setCropperOpen(true);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleCroppedImage = async (croppedFile) => {
+    setCropperOpen(false);
+    await uploadImage(croppedFile, cropperType);
+  };
+
   const handleFileChange = async (e, type) => {
     const file = e.target.files?.[0];
     if (file) {
-      await uploadImage(file, type);
+      handleFileSelect(file, type);
     }
   };
 
@@ -99,7 +127,7 @@ export default function AdminProducts() {
       setDragging(false);
       const file = e.dataTransfer.files?.[0];
       if (file) {
-        await uploadImage(file, type);
+        handleFileSelect(file, type);
       }
     };
 
@@ -468,6 +496,15 @@ export default function AdminProducts() {
           </div>
         </div>
       )}
+
+      {/* CROPPER MODAL */}
+      <ImageCropperModal
+        isOpen={cropperOpen}
+        onClose={() => setCropperOpen(false)}
+        imageSrc={cropperImageSrc}
+        filename={cropperFilename}
+        onCrop={handleCroppedImage}
+      />
     </div>
   );
 }
