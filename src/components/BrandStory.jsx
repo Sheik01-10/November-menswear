@@ -1,22 +1,21 @@
 import { useState, useEffect } from "react";
 import "./BrandStory.css";
 
+const QUOTES = [
+  {
+    title: "NOVEMBER",
+    text:
+      "NOVEMBER is built for men who believe style is more than appearance. Every piece is thoughtfully designed to elevate confidence, elegance and everyday luxury.",
+  },
+
+  {
+    title: "TIMELESS LUXURY",
+    text:
+      "Crafted with premium quality and refined details, our collections redefine modern menswear with sophistication and individuality.",
+  },
+];
+
 export default function BrandStory() {
-
-  const quotes = [
-    {
-      title: "NOVEMBER",
-      text:
-        "NOVEMBER is built for men who believe style is more than appearance. Every piece is thoughtfully designed to elevate confidence, elegance and everyday luxury.",
-    },
-
-    {
-      title: "TIMELESS LUXURY",
-      text:
-        "Crafted with premium quality and refined details, our collections redefine modern menswear with sophistication and individuality.",
-    },
-  ];
-
   const [current,
     setCurrent] =
     useState(0);
@@ -29,7 +28,7 @@ export default function BrandStory() {
         setCurrent(
           (prev) =>
             (prev + 1)
-            % quotes.length
+            % QUOTES.length
         );
 
       }, 5000);
@@ -46,7 +45,7 @@ export default function BrandStory() {
 
         <h2>
           {
-            quotes[current]
+            QUOTES[current]
               .title
           }
         </h2>
@@ -54,7 +53,7 @@ export default function BrandStory() {
         <p>
           "
           {
-            quotes[current]
+            QUOTES[current]
               .text
           }
           "
@@ -63,7 +62,7 @@ export default function BrandStory() {
         <div className="story-dots">
 
           {
-            quotes.map(
+            QUOTES.map(
               (_, index) => (
                 <span
                   key={index}

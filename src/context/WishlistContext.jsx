@@ -3,6 +3,8 @@ import {
   useContext,
   useEffect,
   useState,
+  useCallback,
+  useMemo,
 } from "react";
 
 import { auth } from "../firebase/firebase";
@@ -47,11 +49,11 @@ export function WishlistProvider({ children }) {
     };
   }, []);
 
-  const isWishlisted = (id) => {
+  const isWishlisted = useCallback((id) => {
     return wishlist.some((item) => item.id === id);
-  };
+  }, [wishlist]);
 
-  const toggleWishlist = async (product) => {
+  const toggleWishlist = useCallback(async (product) => {
     const user = auth.currentUser;
 
     if (!user) {
@@ -85,18 +87,18 @@ export function WishlistProvider({ children }) {
     }
 
     return true;
-  };
+  }, [wishlist, isWishlisted]);
+
+  const value = useMemo(() => ({
+    wishlist,
+    loading,
+    toggleWishlist,
+    isWishlisted,
+    wishlistCount: wishlist.length,
+  }), [wishlist, loading, toggleWishlist, isWishlisted]);
 
   return (
-    <WishlistContext.Provider
-      value={{
-        wishlist,
-        loading,
-        toggleWishlist,
-        isWishlisted,
-        wishlistCount: wishlist.length,
-      }}
-    >
+    <WishlistContext.Provider value={value}>
       {children}
     </WishlistContext.Provider>
   );

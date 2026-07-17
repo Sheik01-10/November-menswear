@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 
@@ -12,7 +12,7 @@ export function ProductProvider({ children }) {
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [prodRes, catRes, banRes, setRes] = await Promise.all([
         axios.get(`${BACKEND}/api/products`),
@@ -45,7 +45,7 @@ export function ProductProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -121,10 +121,19 @@ export function ProductProvider({ children }) {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [fetchData]);
+
+  const value = useMemo(() => ({
+    products,
+    categories,
+    banners,
+    settings,
+    loading,
+    refreshData: fetchData
+  }), [products, categories, banners, settings, loading, fetchData]);
 
   return (
-    <ProductContext.Provider value={{ products, categories, banners, settings, loading, refreshData: fetchData }}>
+    <ProductContext.Provider value={value}>
       {children}
     </ProductContext.Provider>
   );

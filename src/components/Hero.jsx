@@ -41,7 +41,6 @@ export default function Hero() {
     const heroText = document.querySelector(".hero-bg-text");
     const heroModel = document.querySelector(".hero-model");
     const logoContainer = document.querySelector(".hero-brand");
-    const headerInner = document.querySelector(".lux-header-inner");
 
     let logoBottom = 260;
     let heroHeight = 700;
@@ -58,15 +57,14 @@ export default function Hero() {
       if (heroText) {
         unscaledWidth = heroText.scrollWidth || 477;
       }
-      if (headerInner) {
-        const rect = headerInner.getBoundingClientRect();
-        targetY = rect.top + rect.height / 2;
+      
+      // Calculate targetY dynamically based on the final sticky header inner heights
+      if (window.innerWidth <= 480) {
+        targetY = 37; // 74px / 2
+      } else if (window.innerWidth <= 992) {
+        targetY = 40; // 80px / 2
       } else {
-        if (window.innerWidth <= 480) {
-          targetY = 37;
-        } else if (window.innerWidth <= 992) {
-          targetY = 40;
-        }
+        targetY = 44; // 88px / 2
       }
     };
 
@@ -82,83 +80,96 @@ export default function Hero() {
       heroText.style.top = "0";
     }
 
+    let ticking = false;
+
     const handleScroll = () => {
-      const scrollY = window.scrollY;
+      if (ticking) return;
+      ticking = true;
 
-      if (!hero) return;
+      window.requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
 
-      const progress = Math.min(scrollY / heroHeight, 1);
-
-      /* ====================
-         HERO CONTENT
-      ==================== */
-      if (heroContent) {
-        const moveY = scrollY * -0.08;
-        heroContent.style.transform = `translate3d(-50%, ${moveY}px, 0)`;
-        heroContent.style.opacity = Math.max(0, 1 - progress * 1.2);
-      }
-
-      /* ====================
-         NOVEMBER TEXT
-      ==================== */
-      if (heroText) {
-        /* START: position precisely below the logo bottom with responsive spacing */
-        let startY;
-
-        if (window.innerWidth <= 768) {
-          startY = logoBottom + 30;
-        } else {
-          startY = logoBottom + 70;
+        if (!hero) {
+          ticking = false;
+          return;
         }
 
-        /* SCROLL PROGRESS */
-        const trigger = Math.min(scrollY / (heroHeight * 0.65), 1);
+        const progress = Math.min(scrollY / heroHeight, 1);
 
-        /* SMOOTH EASING */
-        const eased = 1 - Math.pow(1 - trigger, 4);
-
-        /* MOVE TO HEADER */
-        const currentY = startY + (targetY - startY) * eased;
-
-        /* SHRINK */
-        let targetWidth = 150;
-        if (window.innerWidth <= 480) {
-          targetWidth = 110;
-        } else if (window.innerWidth <= 992) {
-          targetWidth = 82;
+        /* ====================
+           HERO CONTENT
+        ==================== */
+        if (heroContent) {
+          const moveY = scrollY * -0.08;
+          heroContent.style.transform = `translate3d(-50%, ${moveY}px, 0)`;
+          heroContent.style.opacity = Math.max(0, 1 - progress * 1.2);
         }
 
-        const scale = 1 - (1 - targetWidth / unscaledWidth) * eased;
+        /* ====================
+           NOVEMBER TEXT
+        ==================== */
+        if (heroText) {
+          /* START: position precisely below the logo bottom with responsive spacing */
+          let startY;
 
-        // Position using hardware-accelerated translate3d
-        heroText.style.transform = `translate3d(-50%, ${currentY}px, 0) translateY(-50%) scale(${scale})`;
+          if (window.innerWidth <= 768) {
+            startY = logoBottom + 30;
+          } else {
+            startY = logoBottom + 70;
+          }
 
-        // Hide hero text only when we scroll past the Hero section completely so the header logo takes over
-        if (scrollY >= heroHeight) {
-          heroText.style.opacity = "0";
-          heroText.style.visibility = "hidden";
-        } else {
-          heroText.style.opacity = "1";
-          heroText.style.visibility = "visible";
+          /* SCROLL PROGRESS */
+          const trigger = Math.min(scrollY / (heroHeight * 0.65), 1);
+
+          /* SMOOTH EASING AND SCROLL SYNC INTERPOLATION */
+          const eased = 3 * trigger * trigger - 2 * trigger * trigger * trigger; // smoothstep
+          const scrollCorrection = (heroHeight * 0.65) * (trigger * trigger * trigger - 2 * trigger * trigger + trigger);
+
+          /* MOVE TO HEADER */
+          const currentY = startY + (targetY - startY) * eased - scrollCorrection;
+
+          /* SHRINK */
+          let targetWidth = 150;
+          if (window.innerWidth <= 480) {
+            targetWidth = 110;
+          } else if (window.innerWidth <= 992) {
+            targetWidth = 82;
+          }
+
+          const scale = 1 - (1 - targetWidth / unscaledWidth) * eased;
+
+          // Position using hardware-accelerated translate3d
+          heroText.style.transform = `translate3d(-50%, ${currentY}px, 0) translateY(-50%) scale(${scale})`;
+
+          // Hide hero text only when we scroll past the Hero section completely so the header logo takes over
+          if (scrollY >= heroHeight) {
+            heroText.style.opacity = "0";
+            heroText.style.visibility = "hidden";
+          } else {
+            heroText.style.opacity = "1";
+            heroText.style.visibility = "visible";
+          }
+
+          // Dynamic layering: behind the model when in the Hero, in front of the header when scrolled
+          if (eased > 0.95) {
+            heroText.style.zIndex = "1001";
+          } else {
+            heroText.style.zIndex = "2";
+          }
+
+          // Keep the color of the NOVEMBER text matching the gold logo color
+          heroText.style.color = "#c9a96a";
         }
 
-        // Dynamic layering: behind the model when in the Hero, in front of the header when scrolled
-        if (eased > 0.95) {
-          heroText.style.zIndex = "1001";
-        } else {
-          heroText.style.zIndex = "2";
+        /* ====================
+           MODEL PARALLAX
+        ==================== */
+        if (heroModel) {
+          heroModel.style.transform = `translate3d(-50%, ${scrollY * 0.06}px, 0)`;
         }
 
-        // Keep the color of the NOVEMBER text matching the gold logo color
-        heroText.style.color = "#c9a96a";
-      }
-
-      /* ====================
-         MODEL PARALLAX
-      ==================== */
-      if (heroModel) {
-        heroModel.style.transform = `translate3d(-50%, ${scrollY * 0.06}px, 0)`;
-      }
+        ticking = false;
+      });
     };
 
     const handleResize = () => {
