@@ -19,6 +19,7 @@ import {
   User,
   Menu,
   X,
+  ChevronDown,
 } from "lucide-react";
 
 import { Link, useLocation } from "react-router-dom";
@@ -30,6 +31,10 @@ export default function Header() {
 
   const [menuOpen,
     setMenuOpen] =
+    useState(false);
+
+  const [productsSubmenuOpen,
+    setProductsSubmenuOpen] =
     useState(false);
 
   const [profileOpen,
@@ -147,7 +152,14 @@ const handleLogout =
     setMenuOpen(false);
     setSearchOpen(false);
     setSearchQuery("");
+    setProductsSubmenuOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    if (!menuOpen) {
+      setProductsSubmenuOpen(false);
+    }
+  }, [menuOpen]);
 
   useEffect(() => {
     // sync refs to latest state on mount
@@ -662,14 +674,43 @@ const handleLogout =
           Home
         </Link>
 
-        <Link
-          to="/products"
-          onClick={() =>
-            setMenuOpen(false)
-          }
-        >
-          Products
-        </Link>
+        <div className="drawer-accordion">
+          <button
+            className={`drawer-accordion-btn ${productsSubmenuOpen ? "active" : ""}`}
+            onClick={() => setProductsSubmenuOpen(!productsSubmenuOpen)}
+          >
+            <span>Products</span>
+            <ChevronDown size={18} className="accordion-chevron" />
+          </button>
+          <div className={`drawer-submenu ${productsSubmenuOpen ? "open" : ""}`}>
+            <div className="drawer-submenu-inner">
+              <Link
+                to="/products"
+                onClick={() => setMenuOpen(false)}
+              >
+                New Arrivals
+              </Link>
+              <Link
+                to="/products?category=shirts"
+                onClick={() => setMenuOpen(false)}
+              >
+                Shirts
+              </Link>
+              <Link
+                to="/products?category=trousers"
+                onClick={() => setMenuOpen(false)}
+              >
+                Pants
+              </Link>
+              <Link
+                to="/products?category=tshirts"
+                onClick={() => setMenuOpen(false)}
+              >
+                T-Shirts
+              </Link>
+            </div>
+          </div>
+        </div>
 
         <Link
           to="/wishlist"

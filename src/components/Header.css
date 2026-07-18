@@ -1260,3 +1260,93 @@ body.drawer-open .lux-header {
     font-size: 14px;
   }
 }
+
+/* ==========================================
+   MOBILE DRAWER ACCORDION SUBMENU
+   ========================================== */
+.drawer-accordion {
+  width: 100%;
+}
+
+.drawer-accordion-btn {
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #111 !important;
+  font-family: "Jost", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 0;
+  cursor: pointer;
+  outline: none;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.drawer-accordion-btn:hover {
+  color: #c9a96a !important;
+  transform: translateX(6px);
+}
+
+.drawer-accordion-btn .accordion-chevron {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s ease;
+  color: #111;
+}
+
+.drawer-accordion-btn:hover .accordion-chevron {
+  color: #c9a96a;
+}
+
+.drawer-accordion-btn.active .accordion-chevron {
+  transform: rotate(180deg);
+}
+
+.drawer-submenu {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.drawer-submenu.open {
+  grid-template-rows: 1fr;
+}
+
+.drawer-submenu-inner {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-submenu-inner a {
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: #555 !important;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 10px 0 10px 24px !important;
+  border-bottom: none !important;
+  transition: color 0.25s ease, transform 0.25s ease !important;
+}
+
+.drawer-submenu-inner a:hover {
+  color: #c9a96a !important;
+  transform: translateX(6px) !important;
+}
+
+@media(max-width:480px){
+  .drawer-accordion-btn {
+    font-size: 16px;
+    padding: 12px 0;
+  }
+
+  .drawer-submenu-inner a {
+    font-size: 14px !important;
+    padding: 8px 0 8px 20px !important;
+  }
+}

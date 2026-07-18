@@ -98,3 +98,75 @@
     text-align: center;
   }
 }
+
+/* ==========================================
+   SERVICE HIGHLIGHTS SECTION
+   ========================================== */
+.service-highlights {
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
+  padding: 60px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.highlights-container {
+  width: 100%;
+  max-width: 1500px;
+  margin: auto;
+  padding: 0 8%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.highlight-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.highlight-icon {
+  color: var(--text-primary);
+  opacity: 0.85;
+}
+
+.highlight-title {
+  font-family: "Jost", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  color: var(--text-primary);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.highlight-desc {
+  font-family: "Jost", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  letter-spacing: 0.8px;
+  margin: 0;
+  line-height: 1.5;
+  max-width: 280px;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  .highlights-container {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  
+  .service-highlights {
+    padding: 50px 0;
+  }
+  
+  .highlight-item {
+    padding: 10px 0;
+  }
+}

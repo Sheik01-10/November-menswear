@@ -139,55 +139,6 @@ export default function About() {
           </motion.div>
         </section>
 
-        {/* VALUES */}
-        <section className="values-section">
-
-          <motion.div
-            className="value-card"
-            whileHover={{
-              y: -10,
-            }}
-          >
-            <h3>01</h3>
-            <h4>Premium Quality</h4>
-
-            <p>
-              Exceptional fabrics
-              crafted with luxury finishing.
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="value-card"
-            whileHover={{
-              y: -10,
-            }}
-          >
-            <h3>02</h3>
-            <h4>Timeless Fashion</h4>
-
-            <p>
-              Luxury styles beyond
-              temporary trends.
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="value-card"
-            whileHover={{
-              y: -10,
-            }}
-          >
-            <h3>03</h3>
-            <h4>Confidence</h4>
-
-            <p>
-              Designed for elegance
-              and individuality.
-            </p>
-          </motion.div>
-        </section>
-
         {/* CTA */}
         <section className="about-cta">
 

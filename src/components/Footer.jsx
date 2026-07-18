@@ -1,10 +1,31 @@
 import { memo } from "react";
 import "./Footer.css";
 import { Link } from "react-router-dom";
+import { CreditCard, Clock, Truck } from "lucide-react";
 
 function Footer() {
   return (
-    <footer className="footer">
+    <>
+      <section className="service-highlights">
+        <div className="highlights-container">
+          <div className="highlight-item">
+            <CreditCard size={28} strokeWidth={1.2} className="highlight-icon" />
+            <h4 className="highlight-title">PAYMENT</h4>
+            <p className="highlight-desc">COD & Secure Online Payment</p>
+          </div>
+          <div className="highlight-item">
+            <Clock size={28} strokeWidth={1.2} className="highlight-icon" />
+            <h4 className="highlight-title">DELIVERY</h4>
+            <p className="highlight-desc">2–5 Working Days</p>
+          </div>
+          <div className="highlight-item">
+            <Truck size={28} strokeWidth={1.2} className="highlight-icon" />
+            <h4 className="highlight-title">SHIPPING</h4>
+            <p className="highlight-desc">Free Shipping on Orders Above ₹999</p>
+          </div>
+        </div>
+      </section>
+      <footer className="footer">
 
       <div className="footer-container">
 
@@ -78,10 +99,6 @@ function Footer() {
           <h4>NOVEMBER</h4>
 
           <p>
-            Owner : ABBAS
-          </p>
-
-          <p>
             291, Gandhiji Road,
             Surampattivalasu,
             Erode,
@@ -97,7 +114,7 @@ function Footer() {
           </p>
 
           <p>
-            novemberxix@gmail.com
+            www.novemberxix@gmail.com
           </p>
         </div>
 
@@ -111,6 +128,7 @@ function Footer() {
         </p>
       </div>
     </footer>
+    </>
   );
 }
 
