@@ -170,65 +170,6 @@ export default function Contact() {
             </form>
           </motion.div>
 
-          {/* DETAILS */}
-          <motion.div
-            className="contact-details"
-            initial={{
-              opacity: 0,
-              x: 100,
-            }}
-            whileInView={{
-              opacity: 1,
-              x: 0,
-            }}
-            transition={{
-              duration: 1,
-            }}
-            viewport={{
-              once: true,
-            }}
-          >
-            <h2>
-              NOVEMBER
-            </h2>
-
-            <div className="detail-box">
-              <h4>Owner</h4>
-              <p>ABBAS</p>
-            </div>
-
-            <div className="detail-box">
-              <h4>Address</h4>
-              <p>
-                291, Gandhiji Road,
-                Surampattivalasu,
-                Erode,
-                Tamil Nadu
-                638001
-              </p>
-            </div>
-
-            <div className="detail-box">
-              <h4>Phone</h4>
-
-              <p>
-                +91 7604801743
-              </p>
-
-              <p>
-                +91 7604901743
-              </p>
-            </div>
-
-            <div className="detail-box">
-              <h4>Email</h4>
-
-              <p>
-                www.novemberxix@gmail.com
-              </p>
-            </div>
-          </motion.div>
-
         </section>
       </div>
 
