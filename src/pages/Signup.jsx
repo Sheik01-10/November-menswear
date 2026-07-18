@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Link,
   useNavigate,
@@ -27,6 +27,7 @@ import axios from "axios";
 import "./Auth.css";
 import BackButton from "../components/BackButton";
 import toast from "react-hot-toast";
+import WelcomeScreen from "../components/WelcomeScreen";
 
 export default function Signup() {
   const navigate =
@@ -36,6 +37,8 @@ export default function Signup() {
   const redirect = rawRedirect.startsWith("/") ? rawRedirect : `/${rawRedirect}`;
 
   const [checkingRedirect, setCheckingRedirect] = useState(true);
+  const [welcomeUser, setWelcomeUser] = useState(null);
+  const isLoggingInRef = useRef(false);
 
   const [
     showPassword,
@@ -66,20 +69,22 @@ export default function Signup() {
         const result = await getRedirectResult(auth);
         if (result && result.user) {
           const user = result.user;
+          const name = user.displayName || "November User";
           const userData = {
             uid: user.uid,
-            name: user.displayName || "November User",
+            name,
             email: user.email,
             photo: user.photoURL || "",
             phone: ""
           };
           
+          isLoggingInRef.current = true;
           localStorage.setItem("user", JSON.stringify(userData));
           
           await syncUserToMongoDB(userData);
           
           toast.success("Google Sign Up Successful");
-          navigate(redirect);
+          setWelcomeUser({ name, isNew: true });
         }
       } catch (error) {
         console.error("Google redirect signup error:", error);
@@ -97,6 +102,8 @@ export default function Signup() {
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
+        if (isLoggingInRef.current) return;
+
         // Robust fallback: if localStorage is missing user details (e.g. on mobile redirect landing),
         // populate it and sync to database.
         const localUser = localStorage.getItem("user");
@@ -124,6 +131,7 @@ export default function Signup() {
     e.preventDefault();
 
     setLoading(true);
+    isLoggingInRef.current = true;
 
     try {
       // Prevent registering with duplicate email
@@ -131,6 +139,7 @@ export default function Signup() {
       const emailCheckRes = await axios.get(`${BACKEND}/api/users/check-email?email=${encodeURIComponent(email)}`);
       if (emailCheckRes.data.exists) {
         toast.error("This email address is already registered. Please login instead.");
+        isLoggingInRef.current = false;
         setLoading(false);
         return;
       }
@@ -175,8 +184,9 @@ export default function Signup() {
         "Account Created Successfully"
       );
 
-      navigate(redirect);
+      setWelcomeUser({ name, isNew: true });
     } catch (error) {
+      isLoggingInRef.current = false;
       console.error(error);
       let friendlyMessage = error.message;
       if (error.code === "auth/email-already-in-use") {
@@ -196,14 +206,16 @@ export default function Signup() {
     try {
       const provider = new GoogleAuthProvider();
       setLoading(true);
+      isLoggingInRef.current = true;
       
       // Try popup first (works on both mobile and desktop, preserves query parameters, no page reload)
       try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
+        const name = user.displayName || "November User";
         const userData = {
           uid: user.uid,
-          name: user.displayName || "November User",
+          name,
           email: user.email,
           photo: user.photoURL || "",
           phone: ""
@@ -214,7 +226,7 @@ export default function Signup() {
         await syncUserToMongoDB(userData);
 
         toast.success("Google Sign Up Successful");
-        navigate(redirect);
+        setWelcomeUser({ name, isNew: true });
       } catch (popupError) {
         console.warn("Popup sign-up failed, falling back to redirect:", popupError);
         // Fallback to redirect if popup is blocked or fails on mobile/desktop
@@ -222,12 +234,23 @@ export default function Signup() {
         await signInWithRedirect(auth, provider);
       }
     } catch (error) {
+      isLoggingInRef.current = false;
       console.error("Google Auth Error:", error);
       toast.error(error.message);
     } finally {
       setLoading(false);
     }
   };
+
+  if (welcomeUser) {
+    return (
+      <WelcomeScreen
+        name={welcomeUser.name}
+        isNew={welcomeUser.isNew}
+        onComplete={() => navigate(redirect)}
+      />
+    );
+  }
 
   return (
     <section className="auth-page">

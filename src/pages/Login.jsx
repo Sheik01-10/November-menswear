@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Link,
   useNavigate,
@@ -25,6 +25,7 @@ import { syncUserToMongoDB } from "../firebase/userSync";
 import "./Auth.css";
 import BackButton from "../components/BackButton";
 import toast from "react-hot-toast";
+import WelcomeScreen from "../components/WelcomeScreen";
 
 export default function Login() {
   const navigate =
@@ -34,6 +35,8 @@ export default function Login() {
   const redirect = rawRedirect.startsWith("/") ? rawRedirect : `/${rawRedirect}`;
 
   const [checkingRedirect, setCheckingRedirect] = useState(true);
+  const [welcomeUser, setWelcomeUser] = useState(null);
+  const isLoggingInRef = useRef(false);
 
   const [
     showPassword,
@@ -58,19 +61,21 @@ export default function Login() {
         const result = await getRedirectResult(auth);
         if (result && result.user) {
           const user = result.user;
+          const name = user.displayName || "November User";
           const userData = {
             uid: user.uid,
-            name: user.displayName || "November User",
+            name,
             email: user.email,
             photo: user.photoURL || "",
           };
           
+          isLoggingInRef.current = true;
           localStorage.setItem("user", JSON.stringify(userData));
           
           await syncUserToMongoDB(userData);
           
           toast.success("Welcome back!");
-          navigate(redirect);
+          setWelcomeUser({ name, isNew: false });
         }
       } catch (error) {
         console.error("Google redirect auth error:", error);
@@ -88,6 +93,8 @@ export default function Login() {
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
+        if (isLoggingInRef.current) return;
+
         // Robust fallback: if localStorage is missing user details (e.g. on mobile redirect landing),
         // populate it and sync to database.
         const localUser = localStorage.getItem("user");
@@ -114,6 +121,7 @@ export default function Login() {
     e.preventDefault();
 
     setLoading(true);
+    isLoggingInRef.current = true;
 
     try {
       const userCredential =
@@ -125,14 +133,13 @@ export default function Login() {
 
       const user =
         userCredential.user;
+      const name = user.displayName || "November User";
 
       localStorage.setItem(
         "user",
         JSON.stringify({
           uid: user.uid,
-          name:
-            user.displayName ||
-            "November User",
+          name,
           email: user.email,
           photo:
             user.photoURL || "",
@@ -141,7 +148,7 @@ export default function Login() {
 
       await syncUserToMongoDB({
         uid: user.uid,
-        name: user.displayName || "November User",
+        name,
         email: user.email,
         photo: user.photoURL || ""
       });
@@ -150,8 +157,9 @@ export default function Login() {
         "Welcome back!"
       );
 
-      navigate(redirect);
+      setWelcomeUser({ name, isNew: false });
     } catch (error) {
+      isLoggingInRef.current = false;
       console.error(error);
       let friendlyMessage = error.message;
       if (
@@ -177,14 +185,16 @@ export default function Login() {
     try {
       const provider = new GoogleAuthProvider();
       setLoading(true);
+      isLoggingInRef.current = true;
       
       // Try popup first (works on both mobile and desktop, preserves query parameters, no page reload)
       try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
+        const name = user.displayName || "November User";
         const userData = {
           uid: user.uid,
-          name: user.displayName || "November User",
+          name,
           email: user.email,
           photo: user.photoURL || "",
         };
@@ -194,7 +204,7 @@ export default function Login() {
         await syncUserToMongoDB(userData);
 
         toast.success("Welcome back!");
-        navigate(redirect);
+        setWelcomeUser({ name, isNew: false });
       } catch (popupError) {
         console.warn("Popup sign-in failed, falling back to redirect:", popupError);
         // Fallback to redirect if popup is blocked or fails on mobile/desktop
@@ -202,12 +212,23 @@ export default function Login() {
         await signInWithRedirect(auth, provider);
       }
     } catch (error) {
+      isLoggingInRef.current = false;
       console.error("Google Auth Error:", error);
       toast.error(error.message);
     } finally {
       setLoading(false);
     }
   };
+
+  if (welcomeUser) {
+    return (
+      <WelcomeScreen
+        name={welcomeUser.name}
+        isNew={welcomeUser.isNew}
+        onComplete={() => navigate(redirect)}
+      />
+    );
+  }
 
   return (
     <section className="auth-page">
