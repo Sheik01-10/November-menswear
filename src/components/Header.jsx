@@ -303,10 +303,6 @@ const handleLogout =
                 Home
               </Link>
 
-              <Link to="/products">
-                Products
-              </Link>
-
               <Link to="/about">
                 About
               </Link>
