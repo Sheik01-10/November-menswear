@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useProducts } from "../context/ProductContext";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 import "./FeaturedCategories.css";
 
 export default function FeaturedCategories() {
@@ -68,7 +69,7 @@ export default function FeaturedCategories() {
                 }}
               >
                 <img
-                  src={c.img}
+                  src={getOptimizedImageUrl(c.img, 400)}
                   alt={c.label}
                   loading="lazy"
                 />

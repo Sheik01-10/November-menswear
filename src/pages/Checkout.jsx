@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, CheckCircle2, Lock, ShieldCheck, Truck, CreditCard, Package, Sparkles } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useProducts } from "../context/ProductContext";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 import Header from "../components/Header";
 import axios from "axios";
 import { onAuthStateChanged } from "firebase/auth";
@@ -30,6 +32,7 @@ const loadRazorpayScript = () => {
 export default function Checkout() {
   const navigate = useNavigate();
   const { cart, totalPrice, shippingTotal, grandTotal, clearCart } = useCart();
+  const { settings } = useProducts();
 
   // Form State
   const [formData, setFormData] = useState({
@@ -425,7 +428,7 @@ export default function Checkout() {
               <div className="receipt-items-list">
                 {orderSuccess.items?.map((item, idx) => (
                   <div className="receipt-item-row" key={idx}>
-                    <img src={item.front} alt={item.name} className="receipt-item-img" />
+                    <img src={getOptimizedImageUrl(item.front, 200)} alt={item.name} className="receipt-item-img" loading="lazy" />
                     <div className="receipt-item-details">
                       <span className="receipt-item-name">{item.name}</span>
                       <span className="receipt-item-qty">Qty: {item.quantity} {item.size ? `| Size: ${item.size}` : ""}</span>
@@ -837,7 +840,7 @@ export default function Checkout() {
                 {cart.map((item) => (
                   <div className="summary-item-row" key={item.id}>
                     <div className="item-thumbnail-wrap">
-                      <img src={item.front} alt={item.name} />
+                      <img src={getOptimizedImageUrl(item.front, 200)} alt={item.name} loading="lazy" />
                       <span className="item-qty-badge">{item.quantity}</span>
                     </div>
                     <div className="item-details">
@@ -871,6 +874,27 @@ export default function Checkout() {
                   <span>₹{grandTotal.toLocaleString("en-IN")}</span>
                 </div>
               </div>
+
+              {/* Shipping Promo Message */}
+              {(() => {
+                const threshold = settings && settings.freeShippingThreshold !== undefined ? settings.freeShippingThreshold : 999;
+                const activeThreshold = threshold === 5000 ? 999 : threshold;
+                const isFree = totalPrice >= activeThreshold;
+                return (
+                  <div className="shipping-promo-message" style={{
+                    textAlign: "center",
+                    marginTop: "16px",
+                    fontSize: "13px",
+                    fontWeight: "500",
+                    color: isFree ? "#22c55e" : "#888888",
+                    letterSpacing: "0.5px"
+                  }}>
+                    {isFree 
+                      ? " Free Shipping Applied!" 
+                      : `Add ₹${(activeThreshold - totalPrice).toLocaleString("en-IN")} more to unlock FREE Shipping.`}
+                  </div>
+                );
+              })()}
             </div>
           </div>
         </div>

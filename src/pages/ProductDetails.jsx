@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useProducts } from "../context/ProductContext";
 import { useCart } from "../context/CartContext";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import BackButton from "../components/BackButton";
@@ -270,14 +271,14 @@ export default function ProductDetails() {
                 style={{ cursor: "zoom-in", position: "relative" }}
               >
                 <img 
-                  src={activeImage} 
+                  src={getOptimizedImageUrl(activeImage, 800)} 
                   alt={product.name} 
                   className={`main-image ${isZoomed ? "zoomed" : ""}`}
                   style={{
                     ...zoomStyle,
                     pointerEvents: "none"
                   }}
-                  loading="lazy"
+                  fetchpriority="high"
                 />
                 {discountPct && <span className="detail-discount-badge">{discountPct}</span>}
 
@@ -324,7 +325,7 @@ export default function ProductDetails() {
                     className={`thumb-btn ${activeImage === img ? "active" : ""}`}
                     onClick={() => setActiveImage(img)}
                   >
-                    <img src={img} alt={`View ${idx + 1}`} loading="lazy" />
+                    <img src={getOptimizedImageUrl(img, 200)} alt={`View ${idx + 1}`} loading="lazy" />
                   </button>
                 ))}
               </div>
@@ -411,7 +412,7 @@ export default function ProductDetails() {
                   <Truck size={18} />
                   <div>
                     <h4>Free Premium Shipping</h4>
-                    <p>Complimentary shipping on orders above ₹5,000.</p>
+                    <p>Complimentary shipping on orders above ₹999.</p>
                   </div>
                 </div>
                 <div className="guarantee-item">
@@ -491,15 +492,17 @@ export default function ProductDetails() {
                     {/* IMAGE */}
                     <div className="product-image">
                       <img
-                        src={item.front}
+                        src={getOptimizedImageUrl(item.front, 600)}
                         alt={item.name}
                         className="front-img"
+                        loading="lazy"
                       />
                       {item.back && (
                         <img
-                          src={item.back}
+                          src={getOptimizedImageUrl(item.back, 600)}
                           alt={item.name}
                           className="back-img"
+                          loading="lazy"
                         />
                       )}
                       {/* Share Button */}

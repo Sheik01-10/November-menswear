@@ -41,9 +41,35 @@
   --shadow-md: 0 15px 35px rgba(0, 0, 0, 0.06);
 }
 
+@font-face {
+  font-family: 'Ethnocentric';
+  src: url('/fonts/ethnocentric.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
+}
+
+/* Hardware acceleration for key animating/fixed/scaling elements to keep solid 60 FPS */
+.lux-header,
+.hero-bg-text,
+.hero-content,
+.hero-logo,
+.splash-screen,
+.logo-emblem,
+.char,
+.shine-sweep,
+.product-card,
+.curate-cat-card,
+.luxury-card,
+.announcement-track {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 /* ==========================================================================

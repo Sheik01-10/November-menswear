@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -8,7 +8,6 @@ import {
 import { ProductProvider } from "./context/ProductContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import { CartProvider } from "./context/CartContext";
-import Cart from "./pages/Cart";
 
 // Splash
 import SplashScreen from "./components/SplashScreen";
@@ -21,27 +20,28 @@ import Bestsellers from "./components/Bestsellers";
 import LuxuryCollections from "./components/LuxuryCollections";
 import BrandStory from "./components/BrandStory";
 import Footer from "./components/Footer";
-import About from "./components/About";
 
-// Pages
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import ForgotPassword from "./pages/ForgotPassword";
-import Products from "./pages/Products";
-import ProductDetails from "./pages/ProductDetails";
-import WorkMode from "./pages/WorkMode";
-import QuietLuxury from "./pages/QuietLuxury";
-import Contact from "./pages/Contact";
-import Wishlist from "./pages/Wishlist";
-import Checkout from "./pages/Checkout";
-import Profile from "./pages/Profile";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
+// Lazy Pages
+const About = lazy(() => import("./components/About"));
+const Cart = lazy(() => import("./pages/Cart"));
+const Login = lazy(() => import("./pages/Login"));
+const Signup = lazy(() => import("./pages/Signup"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const Products = lazy(() => import("./pages/Products"));
+const ProductDetails = lazy(() => import("./pages/ProductDetails"));
+const WorkMode = lazy(() => import("./pages/WorkMode"));
+const QuietLuxury = lazy(() => import("./pages/QuietLuxury"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Wishlist = lazy(() => import("./pages/Wishlist"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const Profile = lazy(() => import("./pages/Profile"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 import { Toaster } from "react-hot-toast";
 
 
 // Admin Pages
-import AdminLogin from "./admin/AdminLogin";
-import AdminDashboard from "./admin/AdminDashboard";
+const AdminLogin = lazy(() => import("./admin/AdminLogin"));
+const AdminDashboard = lazy(() => import("./admin/AdminDashboard"));
 import useVisitorTracker from "./hooks/useVisitorTracker";
 
 function AnalyticsTracker() {
@@ -52,7 +52,7 @@ function AnalyticsTracker() {
 
 /* ==========================
    HOME
-========================== */
+/* ========================== */
 
 function Home() {
   return (
@@ -70,6 +70,24 @@ function Home() {
     </>
   );
 }
+
+const LoadingFallback = () => (
+  <div style={{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+    background: "#ffffff",
+    color: "#000000",
+    fontFamily: "'Jost', sans-serif",
+    letterSpacing: "3px",
+    textTransform: "uppercase",
+    fontSize: "12px",
+    fontWeight: "500"
+  }}>
+    Loading...
+  </div>
+);
 
 /* ==========================
    APP
@@ -98,111 +116,116 @@ function App() {
 
   const [showSplash, setShowSplash] =
     useState(shouldShowSplash);
+  const [splashUnmounted, setSplashUnmounted] =
+    useState(!shouldShowSplash());
 
   const handleSplashComplete = () => {
     setShowSplash(false);
     sessionStorage.setItem("appLoaded", "true");
+    setSplashUnmounted(true);
   };
 
-  if (showSplash) {
-    return <SplashScreen onComplete={handleSplashComplete} />;
-  }
+  return (
+    <ProductProvider>
+    <CartProvider>
+    <WishlistProvider>
+      <BrowserRouter>
+        <AnalyticsTracker />
+        <Toaster position="bottom-right" reverseOrder={false} />
 
- return (
-  <ProductProvider>
-  <CartProvider>
-  <WishlistProvider>
-    <BrowserRouter>
-      <AnalyticsTracker />
-      <Toaster position="bottom-right" reverseOrder={false} />
+        {!splashUnmounted && (
+          <SplashScreen onComplete={handleSplashComplete} />
+        )}
 
-      <Routes>
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
 
-        {/* HOME */}
-        <Route
-          path="/"
-          element={
-            <Home
+            {/* HOME */}
+            <Route
+              path="/"
+              element={
+                <Home
+                />
+              }
             />
-          }
-        />
 
-        {/* PRODUCTS */}
-        <Route
-          path="/products"
-          element={<Products />}
-        />
+            {/* PRODUCTS */}
+            <Route
+              path="/products"
+              element={<Products />}
+            />
 
-        <Route
-          path="/product/:id"
-          element={<ProductDetails />}
-        />
+            <Route
+              path="/product/:id"
+              element={<ProductDetails />}
+            />
 
-        {/* COLLECTIONS */}
-        <Route
-          path="/work-mode"
-          element={<WorkMode />}
-        />
+            {/* COLLECTIONS */}
+            <Route
+              path="/work-mode"
+              element={<WorkMode />}
+            />
 
-        <Route
-          path="/quiet-luxury"
-          element={<QuietLuxury />}
-        />
+            <Route
+              path="/quiet-luxury"
+              element={<QuietLuxury />}
+            />
 
-        {/* ABOUT */}
-        <Route
-          path="/about"
-          element={<About />}
-        />
+            {/* ABOUT */}
+            <Route
+              path="/about"
+              element={<About />}
+            />
 
-        {/* CONTACT */}
-        <Route
-          path="/contact"
-          element={<Contact />}
-        />
+            {/* CONTACT */}
+            <Route
+              path="/contact"
+              element={<Contact />}
+            />
 
-        {/* LOGIN */}
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+            {/* LOGIN */}
+            <Route
+              path="/login"
+              element={<Login />}
+            />
 
-        <Route
-          path="/signup"
-          element={<Signup />}
-        />
+            <Route
+              path="/signup"
+              element={<Signup />}
+            />
 
-        <Route
-          path="/forgot-password"
-          element={<ForgotPassword />}
-        />
+            <Route
+              path="/forgot-password"
+              element={<ForgotPassword />}
+            />
 
-        {/* ADMIN */}
-        <Route
-          path="/admin-login"
-          element={<AdminLogin />}
-        />
+            {/* ADMIN */}
+            <Route
+              path="/admin-login"
+              element={<AdminLogin />}
+            />
 
-        <Route
-          path="/admin-dashboard/*"
-          element={<AdminDashboard />}
-        />
-        
-        <Route
-  path="/wishlist"
-  element={<Wishlist />}
-/>
-<Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-      </Routes>
+            <Route
+              path="/admin-dashboard/*"
+              element={<AdminDashboard />}
+            />
+            
+            <Route
+              path="/wishlist"
+              element={<Wishlist />}
+            />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          </Routes>
+        </Suspense>
 
-    </BrowserRouter>
-  </WishlistProvider>
-  </CartProvider>
-  </ProductProvider>
-);
+      </BrowserRouter>
+    </WishlistProvider>
+    </CartProvider>
+    </ProductProvider>
+  );
 }
 
 export default App;

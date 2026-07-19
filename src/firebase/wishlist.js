@@ -38,17 +38,33 @@ export async function getWishlist(uid) {
 /* Live Listener (mocked using interval for simple real-time updates) */
 export function wishlistListener(uid, callback) {
   const fetchWish = async () => {
-    const data = await getWishlist(uid);
-    callback(data);
+    // Only fetch if the document is active/visible to user
+    if (document.visibilityState === "visible") {
+      const data = await getWishlist(uid);
+      callback(data);
+    }
   };
   
   // Initial fetch
-  fetchWish();
+  const initialFetch = async () => {
+    const data = await getWishlist(uid);
+    callback(data);
+  };
+  initialFetch();
   
-  // Poll every 4 seconds to simulate live snapshot updates
-  const interval = setInterval(fetchWish, 4000);
+  // Poll every 6 seconds to simulate live snapshot updates with visibility check
+  const interval = setInterval(fetchWish, 6000);
+  
+  // Instantly sync when the tab transitions back to visible/focused
+  const handleVisibilityChange = () => {
+    if (document.visibilityState === "visible") {
+      fetchWish();
+    }
+  };
+  document.addEventListener("visibilitychange", handleVisibilityChange);
   
   return () => {
     clearInterval(interval);
+    document.removeEventListener("visibilitychange", handleVisibilityChange);
   };
 }

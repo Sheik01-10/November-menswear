@@ -10,7 +10,7 @@ export default function AnnouncementBar({
     ? settings.announcements.filter(a => a.active).map(a => a.text)
     : (settings && !settings.announcementBarActive
         ? []
-        : [settings?.announcementBarText || "FREE SHIPPING ON ORDERS OVER ₹5,000"]
+        : [settings?.announcementBarText || "FREE SHIPPING ON ORDERS OVER ₹999"]
       );
 
   const show = showBar && (settings ? settings.announcementBarActive : true) && activeAnnouncements.length > 0;

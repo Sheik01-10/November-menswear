@@ -4,12 +4,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { Trash2, Plus, Minus, ArrowRight } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { auth } from "../firebase/firebase";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
+import { useProducts } from "../context/ProductContext";
 import toast from "react-hot-toast";
 
 import "./Cart.css";
 
 export default function Cart() {
   const navigate = useNavigate();
+  const { settings } = useProducts();
 
   const {
     cart,
@@ -77,13 +80,14 @@ export default function Cart() {
               {cart.map((item) => (
 
                 <div
-                  className="cart-card"
-                  key={item.id}
+                   className="cart-card"
+                   key={item.id}
                 >
 
                   <img
-                    src={item.front}
+                    src={getOptimizedImageUrl(item.front, 200)}
                     alt={item.name}
+                    loading="lazy"
                   />
 
                   <div className="cart-info">
@@ -160,6 +164,27 @@ export default function Cart() {
                 <span>Total</span>
                 <span>₹{grandTotal.toLocaleString("en-IN")}</span>
               </div>
+
+              {/* Shipping Promo Message */}
+              {(() => {
+                const threshold = settings && settings.freeShippingThreshold !== undefined ? settings.freeShippingThreshold : 999;
+                const activeThreshold = threshold === 5000 ? 999 : threshold;
+                const isFree = totalPrice >= activeThreshold;
+                return (
+                  <div className="shipping-promo-message" style={{
+                    textAlign: "center",
+                    margin: "15px 0",
+                    fontSize: "13px",
+                    fontWeight: "500",
+                    color: isFree ? "#22c55e" : "#888888",
+                    letterSpacing: "0.5px"
+                  }}>
+                    {isFree 
+                      ? "Free Shipping Applied!" 
+                      : `Add ₹${(activeThreshold - totalPrice).toLocaleString("en-IN")} more to unlock FREE Shipping.`}
+                  </div>
+                );
+              })()}
 
               <button onClick={handleCheckoutClick} className="checkout-btn" style={{ textDecoration: "none" }}>
 

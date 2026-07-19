@@ -2,6 +2,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import { Trash2, ShoppingBag, ArrowRight } from "lucide-react";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 
 import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
@@ -111,9 +112,10 @@ export default function Wishlist() {
                 >
 
                   <img
-                    src={item.front}
+                    src={getOptimizedImageUrl(item.front, 600)}
                     alt={item.name}
                     className="wishlist-image"
+                    loading="lazy"
                   />
 
                 </Link>

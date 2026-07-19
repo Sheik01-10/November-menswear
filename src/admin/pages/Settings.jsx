@@ -14,7 +14,7 @@ export default function AdminSettings() {
     announcementBarText: "",
     announcementBarActive: true,
     announcements: [],
-    freeShippingThreshold: 5000
+    freeShippingThreshold: 999
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

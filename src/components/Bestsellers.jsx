@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useProducts } from "../context/ProductContext";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 import {
   Swiper,
   SwiperSlide,
@@ -138,16 +139,18 @@ export default function Bestsellers() {
 
                   {/* Front */}
                   <img
-                    src={item.front}
+                    src={getOptimizedImageUrl(item.front, 600)}
                     alt={item.name}
                     className="front-img"
+                    loading="lazy"
                   />
 
                   {/* Back */}
                   <img
-                    src={item.back}
+                    src={getOptimizedImageUrl(item.back, 600)}
                     alt={item.name}
                     className="back-img"
+                    loading="lazy"
                   />
 
                   {/* Wishlist */}

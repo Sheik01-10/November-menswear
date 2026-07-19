@@ -14,7 +14,7 @@ export function CartProvider({ children }) {
     localStorage.setItem("november_cart", JSON.stringify(cart));
   }, [cart]);
 
-  const { products } = useProducts();
+  const { products, settings } = useProducts();
 
   // ==========================
   // ADD TO CART
@@ -163,12 +163,16 @@ export function CartProvider({ children }) {
   // ==========================
 
   const shippingTotal = useMemo(() => {
-    if (totalPrice >= 5000) return 0;
+    let threshold = settings && settings.freeShippingThreshold !== undefined ? settings.freeShippingThreshold : 999;
+    if (threshold === 5000) {
+      threshold = 999;
+    }
+    if (totalPrice >= threshold) return 0;
     return cart.reduce((sum, item) => {
       const charge = item.deliveryCharge !== undefined ? item.deliveryCharge : 150;
       return sum + charge * item.quantity;
     }, 0);
-  }, [cart, totalPrice]);
+  }, [cart, totalPrice, settings]);
 
   // ==========================
   // GRAND TOTAL
