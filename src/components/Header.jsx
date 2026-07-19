@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import "./Header.css";
 import AnnouncementBar from "./AnnouncementBar";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +24,7 @@ import {
 
 import { Link, useLocation } from "react-router-dom";
 import { useProducts } from "../context/ProductContext";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 
 export default function Header() {
 
@@ -79,8 +80,7 @@ export default function Header() {
 }, []);
 
 
-const handleLogout =
-  async () => {
+  const handleLogout = useCallback(async () => {
     try {
       await signOut(auth);
 
@@ -94,7 +94,7 @@ const handleLogout =
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [navigate]);
 
   // Refs for performant scroll handling
   const lastScrollY = useRef(typeof window !== "undefined" ? window.scrollY : 0);
@@ -107,35 +107,37 @@ const handleLogout =
   const [searchQuery, setSearchQuery] = useState("");
   const { products } = useProducts();
 
-  const filteredSearchProducts = searchQuery.trim() === ""
-    ? []
-    : (products || []).filter(prod =>
-        prod.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (prod.category && prod.category.toLowerCase().includes(searchQuery.toLowerCase()))
-      );
+  const filteredSearchProducts = useMemo(() => {
+    return searchQuery.trim() === ""
+      ? []
+      : (products || []).filter(prod =>
+          prod.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (prod.category && prod.category.toLowerCase().includes(searchQuery.toLowerCase()))
+        );
+  }, [searchQuery, products]);
 
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit = useCallback((e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       setSearchOpen(false);
       navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
     }
-  };
+  }, [searchQuery, navigate]);
 
-  const handlePopularTagClick = (tag) => {
+  const handlePopularTagClick = useCallback((tag) => {
     setSearchOpen(false);
     navigate(`/products?search=${encodeURIComponent(tag)}`);
-  };
+  }, [navigate]);
 
-  const handleProductClick = (prod) => {
+  const handleProductClick = useCallback((prod) => {
     setSearchOpen(false);
     navigate(`/products?search=${encodeURIComponent(prod.name)}`);
-  };
+  }, [navigate]);
 
-  const handleViewAllResults = () => {
+  const handleViewAllResults = useCallback(() => {
     setSearchOpen(false);
     navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
-  };
+  }, [searchQuery, navigate]);
 
   useEffect(() => {
     if (menuOpen || searchOpen) {
@@ -167,18 +169,25 @@ const handleLogout =
     showBarRef.current = showBar;
     showCenterRef.current = showCenterLogo;
 
-    // Cache elements and measurements
     let hero = document.querySelector(".hero");
-    let heroHeight = hero ? hero.offsetHeight : 700;
+    let heroHeight = hero ? hero.offsetHeight : 0;
 
-    const handleResize = () => {
+    const debounce = (func, wait) => {
+      let timeout;
+      return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+      };
+    };
+
+    const handleResize = debounce(() => {
       if (!hero) {
         hero = document.querySelector(".hero");
       }
       if (hero) {
         heroHeight = hero.offsetHeight;
       }
-    };
+    }, 150);
 
     window.addEventListener("resize", handleResize);
 
@@ -817,7 +826,7 @@ const handleLogout =
                           className="search-result-item"
                           onClick={() => handleProductClick(prod)}
                         >
-                          <img src={prod.front} alt={prod.name} className="search-result-img" />
+                          <img src={getOptimizedImageUrl(prod.front, 200)} alt={prod.name} className="search-result-img" loading="lazy" />
                           <div className="search-result-info">
                             <span className="search-result-brand">NOVEMBER</span>
                             <span className="search-result-name">{prod.name}</span>

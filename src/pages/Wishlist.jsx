@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
@@ -21,13 +22,10 @@ export default function Wishlist() {
     addToCart,
   } = useCart();
 
-  const handleMoveToCart = (item) => {
-
+  const handleMoveToCart = useCallback((item) => {
     addToCart(item);
-
     toggleWishlist(item);
-
-  };
+  }, [addToCart, toggleWishlist]);
 
   if (loading) {
     return (

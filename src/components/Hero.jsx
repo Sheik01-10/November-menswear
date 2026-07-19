@@ -172,10 +172,18 @@ export default function Hero() {
       });
     };
 
-    const handleResize = () => {
+    const debounce = (func, wait) => {
+      let timeout;
+      return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+      };
+    };
+
+    const handleResize = debounce(() => {
       updateDimensions();
       handleScroll();
-    };
+    }, 150);
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleResize);

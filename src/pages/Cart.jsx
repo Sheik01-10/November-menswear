@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Link, useNavigate } from "react-router-dom";
@@ -25,7 +26,7 @@ export default function Cart() {
     grandTotal,
   } = useCart();
 
-  const handleCheckoutClick = (e) => {
+  const handleCheckoutClick = useCallback((e) => {
     e.preventDefault();
     const currentUser = auth.currentUser || JSON.parse(localStorage.getItem("user") || "null");
     if (!currentUser) {
@@ -34,7 +35,7 @@ export default function Cart() {
     } else {
       navigate("/checkout");
     }
-  };
+  }, [navigate]);
 
   return (
     <>

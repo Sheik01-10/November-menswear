@@ -2,6 +2,7 @@ import "./About.css";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import BackButton from "./BackButton";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 
 // ADD THESE
 import Header from "./Header";
@@ -83,8 +84,9 @@ export default function About() {
             }}
           >
             <img
-              src="https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=1000"
+              src={getOptimizedImageUrl("https://images.unsplash.com/photo-1617127365659-c47fa864d8bc", 800)}
               alt="Luxury Menswear"
+              loading="lazy"
             />
           </motion.div>
 

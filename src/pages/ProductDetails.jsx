@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useProducts } from "../context/ProductContext";
 import { useCart } from "../context/CartContext";
@@ -54,19 +54,19 @@ export default function ProductDetails() {
 
   const images = product ? [product.front, product.back].filter(Boolean) : [];
 
-  const handleMainNext = () => {
+  const handleMainNext = useCallback(() => {
     if (images.length <= 1) return;
     const nextIdx = (images.indexOf(activeImage) + 1) % images.length;
     setActiveImage(images[nextIdx]);
-  };
+  }, [images, activeImage]);
 
-  const handleMainPrev = () => {
+  const handleMainPrev = useCallback(() => {
     if (images.length <= 1) return;
     const prevIdx = (images.indexOf(activeImage) - 1 + images.length) % images.length;
     setActiveImage(images[prevIdx]);
-  };
+  }, [images, activeImage]);
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = useCallback((e) => {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - left) / width) * 100;
     const y = ((e.clientY - top) / height) * 100;
@@ -74,28 +74,28 @@ export default function ProductDetails() {
       transformOrigin: `${x}% ${y}%`,
       transform: "scale(2.2)"
     });
-  };
+  }, []);
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = useCallback(() => {
     setIsZoomed(true);
-  };
+  }, []);
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     setIsZoomed(false);
     setZoomStyle({ transformOrigin: "center", transform: "scale(1)" });
-  };
+  }, []);
 
-  const handleModalNext = () => {
+  const handleModalNext = useCallback(() => {
     if (images.length <= 1) return;
     setModalImageIndex((prev) => (prev + 1) % images.length);
     setModalScale(1);
-  };
+  }, [images.length]);
 
-  const handleModalPrev = () => {
+  const handleModalPrev = useCallback(() => {
     if (images.length <= 1) return;
     setModalImageIndex((prev) => (prev - 1 + images.length) % images.length);
     setModalScale(1);
-  };
+  }, [images.length]);
 
   useEffect(() => {
     if (!isModalOpen) return;
@@ -114,7 +114,7 @@ export default function ProductDetails() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isModalOpen, images.length, handleModalNext, handleModalPrev]);
 
-  const handleTouchStart = (e) => {
+  const handleTouchStart = useCallback((e) => {
     if (e.touches.length === 1) {
       setTouchStart(e.touches[0].clientX);
     } else if (e.touches.length === 2) {
@@ -125,9 +125,9 @@ export default function ProductDetails() {
       setInitialPinchDist(dist);
       setStartScale(modalScale);
     }
-  };
+  }, [modalScale]);
 
-  const handleTouchMove = (e) => {
+  const handleTouchMove = useCallback((e) => {
     if (e.touches.length === 2 && initialPinchDist > 0) {
       const dist = Math.hypot(
         e.touches[0].clientX - e.touches[1].clientX,
@@ -136,9 +136,9 @@ export default function ProductDetails() {
       const factor = dist / initialPinchDist;
       setModalScale(Math.min(Math.max(startScale * factor, 1), 3));
     }
-  };
+  }, [initialPinchDist, startScale]);
 
-  const handleTouchEnd = (e) => {
+  const handleTouchEnd = useCallback((e) => {
     if (e.touches.length < 2) {
       setInitialPinchDist(0);
     }
@@ -151,11 +151,11 @@ export default function ProductDetails() {
       }
       setTouchStart(0);
     }
-  };
+  }, [touchStart, handleModalPrev, handleModalNext]);
 
-  const handleDoubleTap = () => {
+  const handleDoubleTap = useCallback(() => {
     setModalScale((prev) => (prev > 1 ? 1 : 2));
-  };
+  }, []);
 
   if (loading) {
     return (
@@ -190,7 +190,7 @@ export default function ProductDetails() {
   const qtyInCart = cartItem ? cartItem.quantity : 0;
   const remainingStock = Math.max(0, stock - qtyInCart);
 
-  const handleAddToBag = () => {
+  const handleAddToBag = useCallback(() => {
     if (isOutOfStock) return;
 
     if (product.sizes && product.sizes.length > 0 && !selectedSize) {
@@ -205,9 +205,9 @@ export default function ProductDetails() {
 
     addToCart(product, selectedSize);
     toast.success(`${product.name} (${selectedSize || "Standard"}) added to cart!`);
-  };
+  }, [isOutOfStock, product, selectedSize, qtyInCart, stock, addToCart]);
 
-  const handleBuyNow = () => {
+  const handleBuyNow = useCallback(() => {
     if (isOutOfStock) return;
 
     if (product.sizes && product.sizes.length > 0 && !selectedSize) {
@@ -229,13 +229,15 @@ export default function ProductDetails() {
     } else {
       navigate("/checkout");
     }
-  };
+  }, [isOutOfStock, product, selectedSize, qtyInCart, stock, addToCart, navigate]);
 
-  const relatedProducts = product
-    ? products
-        .filter((p) => p.category === product.category && p.id !== product.id)
-        .slice(0, 4)
-    : [];
+  const relatedProducts = useMemo(() => {
+    return product
+      ? products
+          .filter((p) => p.category === product.category && p.id !== product.id)
+          .slice(0, 4)
+      : [];
+  }, [products, product]);
 
   return (
     <>
@@ -319,13 +321,13 @@ export default function ProductDetails() {
               </div>
               
               <div className="thumbnails-wrapper">
-                {images.map((img, idx) => (
+                {images.map((img) => (
                   <button 
-                    key={idx}
+                    key={img}
                     className={`thumb-btn ${activeImage === img ? "active" : ""}`}
                     onClick={() => setActiveImage(img)}
                   >
-                    <img src={getOptimizedImageUrl(img, 200)} alt={`View ${idx + 1}`} loading="lazy" />
+                    <img src={getOptimizedImageUrl(img, 200)} alt="Product thumbnail" loading="lazy" />
                   </button>
                 ))}
               </div>
@@ -482,10 +484,10 @@ export default function ProductDetails() {
               </div>
               
               <div className="products-grid">
-                {relatedProducts.map((item, index) => (
+                {relatedProducts.map((item) => (
                   <Link 
                     className="product-card" 
-                    key={index} 
+                    key={item.id} 
                     to={`/product/${item.id}`}
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
@@ -562,7 +564,7 @@ export default function ProductDetails() {
               onDoubleClick={handleDoubleTap}
             >
               <img 
-                src={images[modalImageIndex]} 
+                src={getOptimizedImageUrl(images[modalImageIndex], 1200)} 
                 alt={`${product.name} Fullscreen`} 
                 className="gallery-modal-image"
                 style={{
@@ -593,16 +595,16 @@ export default function ProductDetails() {
           {/* Gallery Modal Thumbnails */}
           {images.length > 1 && (
             <div className="gallery-modal-thumbnails-wrapper" onClick={(e) => e.stopPropagation()}>
-              {images.map((img, idx) => (
+              {images.map((img) => (
                 <button 
-                  key={idx}
-                  className={`gallery-modal-thumb-btn ${modalImageIndex === idx ? "active" : ""}`}
+                  key={img}
+                  className={`gallery-modal-thumb-btn ${modalImageIndex === images.indexOf(img) ? "active" : ""}`}
                   onClick={() => {
-                    setModalImageIndex(idx);
+                    setModalImageIndex(images.indexOf(img));
                     setModalScale(1);
                   }}
                 >
-                  <img src={img} alt={`Thumb ${idx + 1}`} loading="lazy" />
+                  <img src={getOptimizedImageUrl(img, 200)} alt="Thumb preview" loading="lazy" />
                 </button>
               ))}
             </div>

@@ -1,10 +1,11 @@
+import { useCallback, memo } from "react";
 import { Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useWishlist } from "../context/WishlistContext";
 
 import "./WishlistButton.css";
 
-export default function WishlistButton({ product }) {
+export default memo(function WishlistButton({ product }) {
   const navigate = useNavigate();
 
   const {
@@ -14,7 +15,7 @@ export default function WishlistButton({ product }) {
 
   const active = isWishlisted(product.id);
 
-  const handleClick = async (e) => {
+  const handleClick = useCallback(async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -24,7 +25,7 @@ export default function WishlistButton({ product }) {
     if (!success) {
       navigate("/login");
     }
-  };
+  }, [product, toggleWishlist, navigate]);
 
   return (
     <button
@@ -40,4 +41,4 @@ export default function WishlistButton({ product }) {
       />
     </button>
   );
-}
+});

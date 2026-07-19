@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, memo } from "react";
 import { Share2, X, Copy, Check } from "lucide-react";
 import { FaWhatsapp, FaFacebook, FaTelegramPlane, FaTwitter } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 import "./ShareButton.css";
 
-export default function ShareButton({ product, variant = "card" }) {
+function ShareButton({ product, variant = "card" }) {
   const [showModal, setShowModal] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const productUrl = `${window.location.origin}/product/${product.id || product._id}`;
 
-  const handleShare = async (e) => {
+  const handleShare = useCallback(async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -30,9 +31,9 @@ export default function ShareButton({ product, variant = "card" }) {
     } else {
       setShowModal(true);
     }
-  };
+  }, [productUrl, product.name, product.description]);
 
-  const handleCopyLink = (url) => {
+  const handleCopyLink = useCallback((url) => {
     navigator.clipboard.writeText(url)
       .then(() => {
         setCopied(true);
@@ -43,7 +44,7 @@ export default function ShareButton({ product, variant = "card" }) {
         console.error("Failed to copy link:", err);
         toast.error("Failed to copy link");
       });
-  };
+  }, []);
 
   return (
     <>
@@ -77,7 +78,7 @@ export default function ShareButton({ product, variant = "card" }) {
             </div>
 
             <div className="share-modal-product">
-              <img src={product.front} alt={product.name} className="share-modal-product-img" />
+              <img src={getOptimizedImageUrl(product.front, 200)} alt={product.name} className="share-modal-product-img" loading="lazy" />
               <div className="share-modal-product-info">
                 <span className="share-modal-product-brand">NOVEMBER</span>
                 <h4>{product.name}</h4>
@@ -150,3 +151,5 @@ export default function ShareButton({ product, variant = "card" }) {
     </>
   );
 }
+
+export default memo(ShareButton);

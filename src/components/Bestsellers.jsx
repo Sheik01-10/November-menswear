@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, memo } from "react";
 import { Link } from "react-router-dom";
 import { useProducts } from "../context/ProductContext";
 import { getOptimizedImageUrl } from "../utils/imageOptimizer";
@@ -23,9 +23,11 @@ import "./Bestsellers.css";
 import WishlistButton from "../components/WishlistButton";
 import ShareButton from "../components/ShareButton";
 
-export default function Bestsellers() {
+function Bestsellers() {
   const { products } = useProducts();
-  const bestsellerProducts = products.filter(p => p.isBestseller);
+  const bestsellerProducts = useMemo(() => {
+    return products.filter(p => p.isBestseller);
+  }, [products]);
 
   const [isBeginning,
     setIsBeginning] =
@@ -208,3 +210,5 @@ export default function Bestsellers() {
 
   );
 }
+
+export default memo(Bestsellers);

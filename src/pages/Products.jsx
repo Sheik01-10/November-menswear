@@ -1,3 +1,4 @@
+import { useMemo, useCallback } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useProducts } from "../context/ProductContext";
 import { getOptimizedImageUrl } from "../utils/imageOptimizer";
@@ -15,7 +16,7 @@ export default function Products() {
   const navigate = useNavigate();
   const { products, categories, loading } = useProducts();
 
-  const getCategoryKey = (cat) => {
+  const getCategoryKey = useCallback((cat) => {
     if (!cat.href) return cat.label.toLowerCase();
     try {
       const url = new URL(cat.href, window.location.origin);
@@ -24,38 +25,41 @@ export default function Products() {
       const match = cat.href.match(/[?&]category=([^&]+)/);
       return match ? match[1] : cat.label.toLowerCase();
     }
-  };
+  }, []);
 
   const params = new URLSearchParams(location.search);
   const activeTab = params.get("category") || "new";
   const searchQuery = params.get("search") || "";
 
-  const handleTabClick = (category) => {
+  const handleTabClick = useCallback((category) => {
     if (category === "new") {
       navigate("/products");
     } else {
       navigate(`/products?category=${category}`);
     }
-  };
+  }, [navigate]);
 
   /* ==========================
      FILTER PRODUCTS
   ========================== */
-  let filteredProducts =
-    activeTab === "new"
-      ? products
-      : products.filter(
-        (item) =>
-          item.category === activeTab
-      );
+  const filteredProducts = useMemo(() => {
+    let filtered =
+      activeTab === "new"
+        ? products
+        : products.filter(
+          (item) =>
+            item.category === activeTab
+        );
 
-  if (searchQuery) {
-    filteredProducts = filteredProducts.filter(
-      (item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (item.category && item.category.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
-  }
+    if (searchQuery) {
+      filtered = filtered.filter(
+        (item) =>
+          item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (item.category && item.category.toLowerCase().includes(searchQuery.toLowerCase()))
+      );
+    }
+    return filtered;
+  }, [activeTab, products, searchQuery]);
 
   if (loading) {
     return (
@@ -136,11 +140,11 @@ export default function Products() {
         <div className="products-grid">
 
           {filteredProducts.map(
-            (item, index) => (
+            (item) => (
 
               <Link
                 className="product-card"
-                key={index}
+                key={item.id}
                 to={`/product/${item.id}`}
                 style={{ textDecoration: "none", color: "inherit" }}
               >

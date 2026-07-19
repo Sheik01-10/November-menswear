@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebase/firebase";
@@ -26,6 +26,7 @@ import axios from "axios";
 import "./Profile.css";
 import BackButton from "../components/BackButton";
 import toast from "react-hot-toast";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 
 const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
 
@@ -127,7 +128,7 @@ export default function Profile() {
   }, [navigate]);
 
   // Fetch complete profile info from backend
-  const fetchUserProfile = async (uid) => {
+  const fetchUserProfile = useCallback(async (uid) => {
     try {
       const res = await axios.get(`${BACKEND}/api/users/profile/${uid}`);
       setProfileName(res.data.name || "");
@@ -137,10 +138,10 @@ export default function Profile() {
     } catch (err) {
       console.error("Error fetching database profile:", err);
     }
-  };
+  }, []);
 
   // Fetch User Orders from Backend
-  const fetchUserOrders = async (email) => {
+  const fetchUserOrders = useCallback(async (email) => {
     try {
       setLoadingOrders(true);
       const res = await axios.get(`${BACKEND}/api/orders/user/${email}`);
@@ -151,9 +152,9 @@ export default function Profile() {
       setLoadingOrders(false);
       setAuthLoading(false);
     }
-  };
+  }, []);
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
       await signOut(auth);
       localStorage.removeItem("user");
@@ -161,13 +162,13 @@ export default function Profile() {
     } catch (error) {
       console.error("Logout Error:", error);
     }
-  };
+  }, [navigate]);
 
-  const toggleOrderExpand = (orderId) => {
+  const toggleOrderExpand = useCallback((orderId) => {
     setExpandedOrder((prev) => (prev === orderId ? null : orderId));
-  };
+  }, []);
 
-  const getStatusClass = (status) => {
+  const getStatusClass = useCallback((status) => {
     return {
       Completed: "status-completed",
       Processing: "status-processing",
@@ -175,10 +176,10 @@ export default function Profile() {
       Pending: "status-pending",
       Cancelled: "status-cancelled",
     }[status] || "status-pending";
-  };
+  }, []);
 
   // Profile Settings Actions
-  const handleUpdateProfileSubmit = async (e) => {
+  const handleUpdateProfileSubmit = useCallback(async (e) => {
     e.preventDefault();
     if (!profileName.trim()) {
       toast.error("Name is required");
@@ -207,9 +208,9 @@ export default function Profile() {
     } finally {
       setIsSavingProfile(false);
     }
-  };
+  }, [profileName, profilePhone, profilePhoto, currentUser]);
 
-  const handleAvatarChange = async (e) => {
+  const handleAvatarChange = useCallback(async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -230,7 +231,7 @@ export default function Profile() {
       setProfilePhoto(imageUrl);
 
       // Auto update in database
-      const res = await axios.put(`${BACKEND}/api/users/profile/${currentUser.uid}`, {
+      await axios.put(`${BACKEND}/api/users/profile/${currentUser.uid}`, {
         photo: imageUrl
       });
 
@@ -247,10 +248,10 @@ export default function Profile() {
       console.error("Upload error:", err);
       toast.error("Failed to upload avatar", { id: uploadToast });
     }
-  };
+  }, [currentUser]);
 
   // Address Actions
-  const handleAddressSubmit = async (e) => {
+  const handleAddressSubmit = useCallback(async (e) => {
     e.preventDefault();
     if (
       !addressForm.name.trim() ||
@@ -297,9 +298,9 @@ export default function Profile() {
     } finally {
       setIsSavingAddress(false);
     }
-  };
+  }, [addressForm, editingAddressId, currentUser]);
 
-  const openAddressFormForEdit = (addr) => {
+  const openAddressFormForEdit = useCallback((addr) => {
     setEditingAddressId(addr._id);
     setAddressForm({
       name: addr.name,
@@ -312,9 +313,9 @@ export default function Profile() {
       isDefault: addr.isDefault
     });
     setShowAddressForm(true);
-  };
+  }, []);
 
-  const closeAddressForm = () => {
+  const closeAddressForm = useCallback(() => {
     setShowAddressForm(false);
     setEditingAddressId(null);
     setAddressForm({
@@ -327,9 +328,9 @@ export default function Profile() {
       landmark: "",
       isDefault: false
     });
-  };
+  }, []);
 
-  const handleDeleteAddress = async (addressId) => {
+  const handleDeleteAddress = useCallback(async (addressId) => {
     if (!window.confirm("Are you sure you want to delete this address?")) return;
     try {
       const res = await axios.delete(
@@ -341,9 +342,9 @@ export default function Profile() {
       console.error("Error deleting address:", err);
       toast.error("Failed to delete address");
     }
-  };
+  }, [currentUser]);
 
-  const handleSetDefaultAddress = async (addressId) => {
+  const handleSetDefaultAddress = useCallback(async (addressId) => {
     try {
       const res = await axios.put(
         `${BACKEND}/api/users/profile/${currentUser.uid}/address/${addressId}/default`
@@ -354,10 +355,10 @@ export default function Profile() {
       console.error("Error setting default address:", err);
       toast.error("Failed to update default address");
     }
-  };
+  }, [currentUser]);
 
   // Inquiry Submission Action
-  const handleInquirySubmit = async (e) => {
+  const handleInquirySubmit = useCallback(async (e) => {
     e.preventDefault();
     if (!inquiryForm.subject.trim() || !inquiryForm.message.trim()) {
       toast.error("Please enter a subject and message");
@@ -380,7 +381,7 @@ export default function Profile() {
     } finally {
       setInquiryLoading(false);
     }
-  };
+  }, [inquiryForm, profileName, currentUser]);
 
   if (authLoading) {
     return (
@@ -667,11 +668,12 @@ export default function Profile() {
                                 <h4>Ordered Items ({order.items?.length})</h4>
                                 <div className="details-items-list">
                                   {order.items?.map((item, idx) => (
-                                    <div className="details-item-row" key={idx}>
+                                    <div className="details-item-row" key={item.id || item.productId || idx}>
                                       <img
-                                        src={item.front}
+                                        src={getOptimizedImageUrl(item.front, 200)}
                                         alt={item.name}
                                         className="details-item-img"
+                                        loading="lazy"
                                         onError={(e) => {
                                           e.target.src = "/default-avatar.png";
                                         }}

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useProducts } from "../context/ProductContext";
 import { getOptimizedImageUrl } from "../utils/imageOptimizer";
@@ -18,9 +18,11 @@ export default function QuietLuxury() {
     window.scrollTo(0, 0);
   }, []);
 
-  const filteredProducts = products.filter(
-    (item) => item.category === "quiet-luxury"
-  );
+  const filteredProducts = useMemo(() => {
+    return products.filter(
+      (item) => item.category === "quiet-luxury"
+    );
+  }, [products]);
 
   return (
     <>
@@ -49,10 +51,10 @@ export default function QuietLuxury() {
           </div>
         ) : (
           <div className="products-grid">
-            {filteredProducts.map((item, index) => (
+            {filteredProducts.map((item) => (
               <Link 
                 className="product-card" 
-                key={index}
+                key={item.id}
                 to={`/product/${item.id}`}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
