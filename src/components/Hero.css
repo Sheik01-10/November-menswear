@@ -282,17 +282,21 @@ body.drawer-open .hero-bg-text {
   }
 
   .hero-brand {
-    top: 145px;
+    top: 120px;
     width: 250px;
-    height: 240px;
+    height: 200px;
     z-index: 5;
   }
 
   /* NOVEMBER TEXT override for scroll */
   .hero-bg-text {
-    font-size: clamp(54px, 12vw, 60px);
-    letter-spacing: 3px;
-    top: 38%;
+    font-size: clamp(60px, 10vw, 54px);
+    letter-spacing: 4px;
+    top: 28%;
+  }
+
+  .hero-content {
+    bottom: clamp(30px, 6vh, 60px);
   }
 
   .hero-divider-container {
