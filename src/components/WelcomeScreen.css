@@ -1,65 +1,46 @@
+/* ==========================================
+   WELCOME SCREEN SPECIFIC STYLING
+   ========================================== */
+
 .welcome-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  z-index: 100000; /* Sits on top of auth screens */
   background: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  z-index: 100000;
-  color: #000000;
+}
+
+/* Top context text: e.g. "WELCOME TO" / "WELCOME BACK" */
+.welcome-top-text {
   font-family: "Jost", sans-serif;
-}
-
-.welcome-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  text-align: center;
-}
-
-/* Background highlights */
-.bg-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: min(500px, 90vw);
-  height: min(500px, 90vw);
-  background: radial-gradient(circle, rgba(0, 0, 0, 0.015) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: -1;
-  filter: blur(40px);
-}
-
-.welcome-message-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  padding: 0 24px;
-  max-width: min(650px, 90vw);
-}
-
-.welcome-message {
-  font-family: "Cormorant Garamond", serif;
-  font-size: clamp(32px, 5vw, 54px);
-  font-weight: 300;
-  color: #000000;
-  letter-spacing: 0.03em;
-  line-height: 1.25;
-}
-
-.welcome-submessage {
-  font-family: "Jost", sans-serif;
-  font-size: clamp(13px, 1.5vw, 16px);
-  font-weight: 300;
-  letter-spacing: 0.12em;
-  color: rgba(0, 0, 0, 0.6);
+  font-size: clamp(10px, 1.2vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.38em; /* Clean, luxury letter spacing */
+  color: #777777;
   text-transform: uppercase;
+  margin-bottom: clamp(24px, 4.5vh, 48px);
+  text-align: center;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+
+/* Bottom wrapper containing the name/brand and optional tagline */
+.welcome-bottom-wrapper {
+  margin-top: clamp(24px, 4.5vh, 48px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  will-change: transform, opacity;
+}
+
+/* Bottom primary greeting text: e.g. "NOVEMBER" / first name */
+.welcome-bottom-text {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 300;
+  font-size: clamp(28px, 4.5vw, 46px);
+  color: #111111;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0;
+  padding-bottom: clamp(14px, 2vh, 24px);
+  line-height: 1.15;
+  text-align: center;
 }
