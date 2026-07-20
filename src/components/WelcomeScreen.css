@@ -7,9 +7,15 @@
   background: #ffffff;
 }
 
+/* Override wordmark and tagline font family within welcome screen */
+.welcome-screen .char,
+.welcome-screen .splash-tagline-text {
+  font-family: "Times New Roman", Times, serif;
+}
+
 /* Top context text: e.g. "WELCOME TO" / "WELCOME BACK" */
 .welcome-top-text {
-  font-family: "Jost", sans-serif;
+  font-family: "Times New Roman", Times, serif;
   font-size: clamp(10px, 1.2vw, 13px);
   font-weight: 500;
   letter-spacing: 0.38em; /* Clean, luxury letter spacing */
@@ -33,7 +39,7 @@
 
 /* Bottom primary greeting text: e.g. "NOVEMBER" / first name */
 .welcome-bottom-text {
-  font-family: "Cormorant Garamond", serif;
+  font-family: "Times New Roman", Times, serif;
   font-weight: 300;
   font-size: clamp(28px, 4.5vw, 46px);
   color: #111111;
