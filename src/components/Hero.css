@@ -277,22 +277,22 @@ body.drawer-open .hero-bg-text {
 @media (max-width: 768px) {
   .hero {
     min-height: 100svh;
-    padding-top: 120px;
+    padding-top: 150px;
     bottom: 20px;
   }
 
   .hero-brand {
     top: 120px;
-    width: 250px;
-    height: 270px;
+    width: 150px;
+    height: 200px;
     z-index: 5;
   }
 
   /* NOVEMBER TEXT override for scroll */
   .hero-bg-text {
-    font-size: clamp(80px, 10vw, 54px);
+    font-size: clamp(60px, 10vw, 54px);
     letter-spacing: 4px;
-    top: 28%;
+    top: 20%;
   }
 
   .hero-content {

@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import "./Footer.css";
 import { Link } from "react-router-dom";
-import { CreditCard, Clock, Truck } from "lucide-react";
+import { CreditCard, Clock, Truck, MapPin, Phone, Smartphone, Mail } from "lucide-react";
 
 function Footer() {
   const [openSections, setOpenSections] = useState({
@@ -110,26 +110,46 @@ function Footer() {
           <div className="footer-column support">
             <h3>SUPPORT</h3>
 
-            <h4>NOVEMBER</h4>
+            <h4 className="support-brand">NOVEMBER</h4>
 
-            <p>
-              291, Gandhiji Road,
-              Surampattivalasu,
-              Erode,
-              Tamil Nadu - 638001
-            </p>
+            <div className="support-info">
+              <div className="support-item">
+                <span className="support-icon">
+                  <MapPin size={18} strokeWidth={1.2} />
+                </span>
+                <span className="support-text">
+                  <span>291, Gandhiji Road, Surampattivalasu,</span>
+                  <span>Erode, Tamil Nadu - 638001</span>
+                </span>
+              </div>
 
-            <p>
-              +91 7604801743
-            </p>
+              <div className="support-item">
+                <span className="support-icon">
+                  <Phone size={18} strokeWidth={1.2} />
+                </span>
+                <span className="support-text">
+                  <a href="tel:+917604801743">+91 7604801743</a>
+                </span>
+              </div>
 
-            <p>
-              +91 7604901743
-            </p>
+              <div className="support-item">
+                <span className="support-icon">
+                  <Smartphone size={18} strokeWidth={1.2} />
+                </span>
+                <span className="support-text">
+                  <a href="tel:+917604901743">+91 7604901743</a>
+                </span>
+              </div>
 
-            <p>
-              www.novemberxix@gmail.com
-            </p>
+              <div className="support-item">
+                <span className="support-icon">
+                  <Mail size={18} strokeWidth={1.2} />
+                </span>
+                <span className="support-text">
+                  <a href="mailto:www.novemberxix@gmail.com">www.novemberxix@gmail.com</a>
+                </span>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -198,15 +218,45 @@ function Footer() {
           {/* MOBILE SUPPORT */}
           <div className="footer-mobile-support">
             <h4 className="footer-mobile-support-brand">NOVEMBER</h4>
-            <p className="footer-mobile-support-address">
-              291, Gandhiji Road,<br />
-              Surampattivalasu,<br />
-              Erode,<br />
-              Tamil Nadu - 638001
-            </p>
-            <p className="footer-mobile-support-contact">+91 7604801743</p>
-            <p className="footer-mobile-support-contact">+91 7604901743</p>
-            <p className="footer-mobile-support-email">www.novemberxix@gmail.com</p>
+            
+            <div className="support-info">
+              <div className="support-item">
+                <span className="support-icon">
+                  <MapPin size={18} strokeWidth={1.2} />
+                </span>
+                <span className="support-text">
+                  <span>291, Gandhiji Road, Surampattivalasu,</span>
+                  <span>Erode, Tamil Nadu - 638001</span>
+                </span>
+              </div>
+
+              <div className="support-item">
+                <span className="support-icon">
+                  <Phone size={18} strokeWidth={1.2} />
+                </span>
+                <span className="support-text">
+                  <a href="tel:+917604801743">+91 7604801743</a>
+                </span>
+              </div>
+
+              <div className="support-item">
+                <span className="support-icon">
+                  <Smartphone size={18} strokeWidth={1.2} />
+                </span>
+                <span className="support-text">
+                  <a href="tel:+917604901743">+91 7604901743</a>
+                </span>
+              </div>
+
+              <div className="support-item">
+                <span className="support-icon">
+                  <Mail size={18} strokeWidth={1.2} />
+                </span>
+                <span className="support-text">
+                  <a href="mailto:www.novemberxix@gmail.com">www.novemberxix@gmail.com</a>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
