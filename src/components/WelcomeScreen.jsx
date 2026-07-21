@@ -65,7 +65,7 @@ const WelcomeScreen = ({ name, isNew, onComplete }) => {
 
       // Calculate scale factor for initial emblem size dynamically
       const initialSize = Math.max(160, Math.min(window.innerWidth * 0.2, 240));
-      const finalSize = Math.max(48, Math.min(window.innerWidth * 0.06, 92));
+      const finalSize = Math.max(40, Math.min(window.innerWidth * 0.052, 80));
       const scaleFactor = initialSize / finalSize;
 
       // 3. Set initial states for animation (emblem centered and scaled large, letters hidden behind emblem)
@@ -209,8 +209,8 @@ const WelcomeScreen = ({ name, isNew, onComplete }) => {
             {/* Emblem (serves as O) */}
             <div className="emblem-wrapper" ref={emblemWrapperRef}>
               <img
-                src="/logo-emblem.svg"
-                alt="NOVEMBER Emblem"
+                src="/logo.png"
+                alt="NOVEMBER Logo"
                 className="logo-emblem"
                 ref={logoEmblemRef}
               />

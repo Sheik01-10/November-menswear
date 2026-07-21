@@ -115,7 +115,7 @@ export default function Hero() {
           if (window.innerWidth <= 768) {
             startY = logoBottom + 30;
           } else {
-            startY = logoBottom + 70;
+            startY = logoBottom + 110;
           }
 
           /* SCROLL PROGRESS */
@@ -235,7 +235,7 @@ export default function Hero() {
 
       <div className="hero-brand" style={{ zIndex: 4 }}>
         <img
-          src="/logo.svg"
+          src="/logo.png"
           alt="November"
           className="hero-logo"
         />

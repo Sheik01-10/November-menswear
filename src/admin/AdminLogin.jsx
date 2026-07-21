@@ -29,7 +29,7 @@ export default function AdminLogin() {
   <div className="admin-card">
 
     <img
-      src="/logo.svg"
+      src="/logo.png"
       alt="November"
       className="brand-logo"
     />

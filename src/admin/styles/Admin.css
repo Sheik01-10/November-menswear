@@ -118,7 +118,7 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   to { opacity: 1; transform: translateY(0); }
 }
 
-.brand-logo { width: 160px; height: auto; object-fit: contain; margin-bottom: -30px; }
+.brand-logo { width: 160px; height: auto; object-fit: contain; margin-bottom: 0px; }
 
 .admin-card .brand-name {
   font-family: var(--font-serif);

@@ -333,7 +333,7 @@ export default function Header() {
       className="center-logo"
     >
       <img
-        src="/logo.svg"
+        src="/logo.png"
         alt="November"
         className="center-logo-img"
       />

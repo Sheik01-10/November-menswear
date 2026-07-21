@@ -238,7 +238,7 @@ export default function Login() {
         {/* LOGO */}
         <div className="auth-logo-wrap">
           <img
-            src="/logo.svg"
+            src="/logo.png"
             alt="November"
             className="auth-logo"
           />

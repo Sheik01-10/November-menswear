@@ -259,7 +259,7 @@ export default function Signup() {
       <div className="auth-card">
         <div className="auth-logo-wrap">
           <img
-            src="/logo.svg"
+            src="/logo.png"
             alt="November"
             className="auth-logo"
           />
