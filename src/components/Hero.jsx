@@ -157,8 +157,9 @@ export default function Hero() {
             heroText.style.zIndex = "2";
           }
 
-          // Keep the color of the NOVEMBER text matching the gold logo color
+          // Keep the color of the THE NOVEMBER text matching the gold logo color
           heroText.style.color = "#c9a96a";
+          heroText.style.webkitTextFillColor = "#c9a96a";
         }
 
         /* ====================
@@ -236,13 +237,13 @@ export default function Hero() {
       <div className="hero-brand" style={{ zIndex: 4 }}>
         <img
           src="/logo.png"
-          alt="November"
+          alt="The November"
           className="hero-logo"
         />
       </div>
 
       <h1 className="hero-bg-text" style={{ zIndex: 2 }}>
-        NOVEMBER
+        THE NOVEMBER
       </h1>
 
       {/* CONTENT */}

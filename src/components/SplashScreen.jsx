@@ -198,6 +198,20 @@ const SplashScreen = ({ onComplete }) => {
         <div className="splash-brand-wrapper">
           
           <div className="splash-wordmark-container" ref={wordmarkWrapperRef}>
+            {/* Letters T H E */}
+            <div className="char-wrapper">
+              <span className="char char-letter">T</span>
+            </div>
+            <div className="char-wrapper">
+              <span className="char char-letter">H</span>
+            </div>
+            <div className="char-wrapper">
+              <span className="char char-letter">E</span>
+            </div>
+
+            {/* Spacer for space between THE and NOVEMBER */}
+            <div className="char-space-spacer" style={{ width: "clamp(12px, 1.5vw, 24px)" }}></div>
+
             {/* Letter N */}
             <div className="char-wrapper">
               <span className="char char-letter">N</span>
@@ -207,7 +221,7 @@ const SplashScreen = ({ onComplete }) => {
             <div className="emblem-wrapper" ref={emblemWrapperRef}>
               <img
                 src="/logo.png"
-                alt="NOVEMBER Logo"
+                alt="THE NOVEMBER Logo"
                 className="logo-emblem"
                 ref={logoEmblemRef}
               />

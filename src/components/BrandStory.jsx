@@ -3,9 +3,9 @@ import "./BrandStory.css";
 
 const QUOTES = [
   {
-    title: "NOVEMBER",
+    title: "THE NOVEMBER",
     text:
-      "NOVEMBER is built for men who believe style is more than appearance. Every piece is thoughtfully designed to elevate confidence, elegance and everyday luxury.",
+      "THE NOVEMBER is built for men who believe style is more than appearance. Every piece is thoughtfully designed to elevate confidence, elegance and everyday luxury.",
   },
 
   {

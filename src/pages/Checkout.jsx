@@ -258,7 +258,7 @@ export default function Checkout() {
         key: keyId,
         amount: rzpAmount,
         currency: currency,
-        name: "NOVEMBER Menswear",
+        name: "THE NOVEMBER Menswear",
         description: "Premium Luxury Clothing",
         image: "https://november-menswear.web.app/logo.png", // or local fallback
         order_id: rzpOrderId,
@@ -371,7 +371,7 @@ export default function Checkout() {
             
             <p className="success-message">
               A confirmation email has been dispatched to <strong>{orderSuccess.customerEmail}</strong>. 
-              Your bespoke November menswear selections are currently being packaged and will reach your address in 3-5 business days.
+              Your bespoke THE NOVEMBER menswear selections are currently being packaged and will reach your address in 3-5 business days.
             </p>
 
             {/* Premium Delivery Timeline */}
@@ -846,7 +846,7 @@ export default function Checkout() {
                     <div className="item-details">
                       <h3>{item.name}</h3>
                       <p className="item-collection">
-                        NOVEMBER COLLECTION{item.selectedSize ? ` | Size: ${item.selectedSize}` : ""}
+                        THE NOVEMBER COLLECTION{item.selectedSize ? ` | Size: ${item.selectedSize}` : ""}
                       </p>
                     </div>
                     <div className="item-price">

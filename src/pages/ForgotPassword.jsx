@@ -41,14 +41,14 @@ export default function ForgotPassword() {
         <div className="auth-logo-wrap">
           <img
             src="/logo.png"
-            alt="November"
+            alt="The November"
             className="auth-logo"
           />
         </div>
 
         {/* BRAND */}
         <h1 className="brand-name">
-          NOVEMBER
+          THE NOVEMBER
         </h1>
 
         {/* TITLE */}

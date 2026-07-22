@@ -334,7 +334,7 @@ export default function Header() {
     >
       <img
         src="/logo.png"
-        alt="November"
+        alt="The November"
         className="center-logo-img"
       />
     </Link>
@@ -828,7 +828,7 @@ export default function Header() {
                         >
                           <img src={getOptimizedImageUrl(prod.front, 200)} alt={prod.name} className="search-result-img" loading="lazy" />
                           <div className="search-result-info">
-                            <span className="search-result-brand">NOVEMBER</span>
+                            <span className="search-result-brand">THE NOVEMBER</span>
                             <span className="search-result-name">{prod.name}</span>
                             <div className="search-result-price-wrap">
                               <span className="search-result-price">{prod.price}</span>

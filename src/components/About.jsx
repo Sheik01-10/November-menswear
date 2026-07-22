@@ -42,11 +42,11 @@ export default function About() {
             </p>
 
             <h1 className="about-title">
-              ABOUT <span>NOVEMBER</span>
+              ABOUT <span>THE NOVEMBER</span>
             </h1>
 
             <p className="about-desc">
-              At <strong>NOVEMBER</strong>,
+              At <strong>THE NOVEMBER</strong>,
               we believe style is more
               than fashion — it is confidence,
               identity and expression.
@@ -59,7 +59,7 @@ export default function About() {
           </motion.div>
 
           <h1 className="bg-word">
-            NOVEMBER
+            THE NOVEMBER
           </h1>
         </section>
 
@@ -119,7 +119,7 @@ export default function About() {
             </h2>
 
             <p>
-              <strong>NOVEMBER</strong>
+              <strong>THE NOVEMBER</strong>
               {" "}is a premium menswear
               brand dedicated to modern
               style, quality craftsmanship
@@ -159,7 +159,7 @@ export default function About() {
           >
             <h2>
               Experience The Luxury
-              Of NOVEMBER
+              Of THE NOVEMBER
             </h2>
 
             <p>

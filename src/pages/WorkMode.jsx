@@ -87,7 +87,7 @@ export default function WorkMode() {
 
                 {/* INFO */}
                 <div className="product-info">
-                  <p className="brand-name">NOVEMBER</p>
+                  <p className="brand-name">THE NOVEMBER</p>
                   <h3>{item.name}</h3>
                   <div className="price-wrap">
                     <span className="price">{item.price}</span>

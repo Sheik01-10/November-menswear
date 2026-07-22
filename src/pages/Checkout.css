@@ -251,8 +251,9 @@
 }
 
 .item-thumbnail-wrap img {
-  width: 65px;
-  height: 75px;
+  width: 64px;
+  aspect-ratio: 4 / 5;
+  height: auto;
   object-fit: cover;
   border-radius: 12px;
   background: #f8f8f8;
@@ -725,7 +726,8 @@
 
 .receipt-item-img {
   width: 48px;
-  height: 58px;
+  aspect-ratio: 4 / 5;
+  height: auto;
   object-fit: cover;
   border-radius: 8px;
   background: #f8f8f8;

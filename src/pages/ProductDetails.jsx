@@ -335,7 +335,7 @@ export default function ProductDetails() {
 
             {/* Right: Info */}
             <div className="product-info-panel">
-              <span className="brand-label">NOVEMBER COLLECTION</span>
+              <span className="brand-label">THE NOVEMBER COLLECTION</span>
               <h1 className="product-title">{product.name}</h1>
               
               <div className="price-container">
@@ -519,7 +519,7 @@ export default function ProductDetails() {
 
                     {/* INFO */}
                     <div className="product-info">
-                      <p className="brand-name">NOVEMBER</p>
+                      <p className="brand-name">THE NOVEMBER</p>
                       <h3>{item.name}</h3>
                       <div className="price-wrap">
                         <span className="price">{item.price}</span>

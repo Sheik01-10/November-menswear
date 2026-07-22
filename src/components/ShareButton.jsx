@@ -19,7 +19,7 @@ function ShareButton({ product, variant = "card" }) {
       try {
         await navigator.share({
           title: product.name,
-          text: product.description || `Check out ${product.name} on November!`,
+          text: product.description || `Check out ${product.name} on The November!`,
           url: productUrl,
         });
       } catch (error) {
@@ -80,7 +80,7 @@ function ShareButton({ product, variant = "card" }) {
             <div className="share-modal-product">
               <img src={getOptimizedImageUrl(product.front, 200)} alt={product.name} className="share-modal-product-img" loading="lazy" />
               <div className="share-modal-product-info">
-                <span className="share-modal-product-brand">NOVEMBER</span>
+                <span className="share-modal-product-brand">THE NOVEMBER</span>
                 <h4>{product.name}</h4>
                 <p>{product.price}</p>
               </div>
@@ -88,7 +88,7 @@ function ShareButton({ product, variant = "card" }) {
 
             <div className="share-modal-options">
               <a
-                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Check out ${product.name} on November: ${productUrl}`)}`}
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Check out ${product.name} on The November: ${productUrl}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="share-option-item whatsapp"
@@ -112,7 +112,7 @@ function ShareButton({ product, variant = "card" }) {
               </a>
 
               <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out ${product.name} on November!`)}&url=${encodeURIComponent(productUrl)}`}
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out ${product.name} on The November!`)}&url=${encodeURIComponent(productUrl)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="share-option-item twitter"
@@ -124,7 +124,7 @@ function ShareButton({ product, variant = "card" }) {
               </a>
 
               <a
-                href={`https://t.me/share/url?url=${encodeURIComponent(productUrl)}&text=${encodeURIComponent(`Check out ${product.name} on November!`)}`}
+                href={`https://t.me/share/url?url=${encodeURIComponent(productUrl)}&text=${encodeURIComponent(`Check out ${product.name} on The November!`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="share-option-item telegram"

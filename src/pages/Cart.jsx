@@ -94,7 +94,7 @@ export default function Cart() {
                   <div className="cart-info">
 
                     <span className="category">
-                      NOVEMBER COLLECTION
+                      THE NOVEMBER COLLECTION
                     </span>
 
                     <h3>{item.name}</h3>

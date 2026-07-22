@@ -43,7 +43,7 @@ export default function PrivacyPolicy() {
           >
             <h2>1. INTRODUCTION</h2>
             <p>
-              Welcome to <strong>NOVEMBER</strong>. We are committed to protecting your privacy and ensuring the security of your personal data. This Privacy Policy details how we collect, process, use, and share information when you visit our website, register an account, purchase products, or engage with our services.
+              Welcome to <strong>THE NOVEMBER</strong>. We are committed to protecting your privacy and ensuring the security of your personal data. This Privacy Policy details how we collect, process, use, and share information when you visit our website, register an account, purchase products, or engage with our services.
             </p>
             <p>
               By accessing our website and purchasing our luxury menswear collections, you consent to the practices described in this Privacy Policy.
@@ -83,7 +83,7 @@ export default function PrivacyPolicy() {
             <ul>
               <li>Processing and delivering your bespoke apparel orders, including shipping coordination and order tracking.</li>
               <li>Securing and verifying online transactions via Razorpay.</li>
-              <li>Managing your November Client Account and order history database.</li>
+              <li>Managing your THE NOVEMBER Client Account and order history database.</li>
               <li>Improving our website navigation, product placement, and design layout.</li>
               <li>Providing premium customer support, responding to inquiries, and sharing luxury updates if requested.</li>
             </ul>
@@ -148,7 +148,7 @@ export default function PrivacyPolicy() {
           >
             <h2>7. YOUR RIGHTS & CHOICE</h2>
             <p>
-              As a valued November client, you possess rights over your personal data:
+              As a valued THE NOVEMBER client, you possess rights over your personal data:
             </p>
             <ul>
               <li>Access, edit, or update your name, address, and profile settings in your client dashboard.</li>

@@ -121,7 +121,7 @@ export default function Wishlist() {
                 <div className="wishlist-content">
 
                   <span className="wishlist-category">
-                    NOVEMBER COLLECTION
+                    THE NOVEMBER COLLECTION
                   </span>
 
                   <h3>{item.name}</h3>

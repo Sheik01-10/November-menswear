@@ -80,7 +80,7 @@
   transform: translate(-50%, -50%);
   
   font-family: "Cormorant Garamond", serif;
-  font-size: clamp(140px, 12vw, 260px);
+  font-size: clamp(90px, 8vw, 180px);
   font-weight: 500;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -256,7 +256,7 @@ body.drawer-open .hero-bg-text {
 @media (max-width: 992px) {
   .hero-bg-text {
     top: 40%;
-    font-size: clamp(80px, 10vw, 150px);
+    font-size: clamp(60px, 7vw, 110px);
   }
 
   .hero-brand {
@@ -290,7 +290,7 @@ body.drawer-open .hero-bg-text {
 
   /* NOVEMBER TEXT override for scroll */
   .hero-bg-text {
-    font-size: clamp(60px, 10vw, 54px);
+    font-size: clamp(40px, 6.5vw, 48px);
     letter-spacing: 4px;
     top: 20%;
   }

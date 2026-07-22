@@ -30,12 +30,12 @@ export default function AdminLogin() {
 
     <img
       src="/logo.png"
-      alt="November"
+      alt="The November"
       className="brand-logo"
     />
 
     <h1 className="brand-name">
-      NOVEMBER
+      THE NOVEMBER
     </h1>
 
     <p className="brand-subtitle">

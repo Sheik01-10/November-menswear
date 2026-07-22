@@ -1154,7 +1154,8 @@ body.drawer-open .lux-header {
 
 .search-result-img {
   width: 70px;
-  height: 80px;
+  aspect-ratio: 4 / 5;
+  height: auto;
   object-fit: cover;
   border-radius: 10px;
   background: #f5f5f5;
@@ -1252,7 +1253,8 @@ body.drawer-open .lux-header {
   
   .search-result-img {
     width: 55px;
-    height: 65px;
+    aspect-ratio: 4 / 5;
+    height: auto;
   }
   
   .search-result-name {

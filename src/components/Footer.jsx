@@ -110,7 +110,7 @@ function Footer() {
           <div className="footer-column support">
             <h3>SUPPORT</h3>
 
-            <h4 className="support-brand">NOVEMBER</h4>
+            <h4 className="support-brand">THE NOVEMBER</h4>
 
             <div className="support-info">
               <div className="support-item">
@@ -217,7 +217,7 @@ function Footer() {
 
           {/* MOBILE SUPPORT */}
           <div className="footer-mobile-support">
-            <h4 className="footer-mobile-support-brand">NOVEMBER</h4>
+            <h4 className="footer-mobile-support-brand">THE NOVEMBER</h4>
             
             <div className="support-info">
               <div className="support-item">
@@ -263,7 +263,7 @@ function Footer() {
         {/* BOTTOM */}
         <div className="footer-bottom">
           <p>
-            © 2026 NOVEMBER.
+            © 2026 THE NOVEMBER.
             All Rights Reserved.
           </p>
         </div>

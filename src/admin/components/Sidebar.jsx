@@ -32,7 +32,7 @@ export default function Sidebar({ logout, sidebarOpen, setSidebarOpen }) {
 
         {/* Logo */}
         <div className="sidebar-logo-wrap">
-          <h1 className="sidebar-logo-text">NOVEMBER</h1>
+          <h1 className="sidebar-logo-text">THE NOVEMBER</h1>
           <span className="sidebar-logo-sub">MENSWEAR</span>
           <span className="sidebar-logo-short" style={{ display: "none" }}>N</span>
         </div>

@@ -69,7 +69,7 @@ export default function Signup() {
         const result = await getRedirectResult(auth);
         if (result && result.user) {
           const user = result.user;
-          const name = user.displayName || "November User";
+          const name = user.displayName || "The November User";
           const userData = {
             uid: user.uid,
             name,
@@ -110,7 +110,7 @@ export default function Signup() {
         if (!localUser) {
           const userData = {
             uid: user.uid,
-            name: user.displayName || "November User",
+            name: user.displayName || "The November User",
             email: user.email,
             photo: user.photoURL || "",
             phone: ""
@@ -212,7 +212,7 @@ export default function Signup() {
       try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
-        const name = user.displayName || "November User";
+        const name = user.displayName || "The November User";
         const userData = {
           uid: user.uid,
           name,
@@ -260,13 +260,13 @@ export default function Signup() {
         <div className="auth-logo-wrap">
           <img
             src="/logo.png"
-            alt="November"
+            alt="The November"
             className="auth-logo"
           />
         </div>
 
         <h1 className="brand-name">
-          NOVEMBER
+          THE NOVEMBER
         </h1>
 
         <div className="title-wrap">

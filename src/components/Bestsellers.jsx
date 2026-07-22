@@ -171,7 +171,7 @@ function Bestsellers() {
                 <div className="product-info">
 
                   <p className="brand-name">
-                    NOVEMBER
+                    THE NOVEMBER
                   </p>
 
                   <h3>
