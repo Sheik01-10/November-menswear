@@ -157,41 +157,19 @@ export default function ProductDetails() {
     setModalScale((prev) => (prev > 1 ? 1 : 2));
   }, []);
 
-  if (loading) {
-    return (
-      <div className="product-loading">
-        <p>LOADING PRODUCT DETAILS...</p>
-      </div>
-    );
-  }
-
-  if (!product) {
-    return (
-      <>
-        <Header />
-        <div className="product-not-found">
-          <h2>Product Not Found</h2>
-          <p>The product you are looking for does not exist or has been removed.</p>
-          <Link to="/products" className="btn-back-collection">Back to Collection</Link>
-        </div>
-        <Footer />
-      </>
-    );
-  }
-
-  const discountPct = product.pct || "";
-  const stock = product.stockQuantity !== undefined ? product.stockQuantity : 0;
-  const isOutOfStock = stock === 0 || !product.inStock;
-  const isLowStock = stock > 0 && stock <= 5;
+  const discountPct = product ? (product.pct || "") : "";
+  const stock = product && product.stockQuantity !== undefined ? product.stockQuantity : 0;
+  const isOutOfStock = product ? (stock === 0 || !product.inStock) : true;
+  const isLowStock = product ? (stock > 0 && stock <= 5) : false;
 
   // Calculate remaining stock for this size in cart
-  const cartItemId = product.id + (selectedSize ? `-${selectedSize}` : "");
+  const cartItemId = product ? (product.id + (selectedSize ? `-${selectedSize}` : "")) : "";
   const cartItem = cart.find(item => item.id === cartItemId);
   const qtyInCart = cartItem ? cartItem.quantity : 0;
   const remainingStock = Math.max(0, stock - qtyInCart);
 
   const handleAddToBag = useCallback(() => {
-    if (isOutOfStock) return;
+    if (!product || isOutOfStock) return;
 
     if (product.sizes && product.sizes.length > 0 && !selectedSize) {
       toast.error("Please select a size");
@@ -208,7 +186,7 @@ export default function ProductDetails() {
   }, [isOutOfStock, product, selectedSize, qtyInCart, stock, addToCart]);
 
   const handleBuyNow = useCallback(() => {
-    if (isOutOfStock) return;
+    if (!product || isOutOfStock) return;
 
     if (product.sizes && product.sizes.length > 0 && !selectedSize) {
       toast.error("Please select a size");
@@ -238,6 +216,28 @@ export default function ProductDetails() {
           .slice(0, 4)
       : [];
   }, [products, product]);
+
+  if (loading) {
+    return (
+      <div className="product-loading">
+        <p>LOADING PRODUCT DETAILS...</p>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <>
+        <Header />
+        <div className="product-not-found">
+          <h2>Product Not Found</h2>
+          <p>The product you are looking for does not exist or has been removed.</p>
+          <Link to="/products" className="btn-back-collection">Back to Collection</Link>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
