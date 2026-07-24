@@ -190,6 +190,35 @@ export default function Hero() {
       {/* Background Overlay Texture */}
       <div className="hero-texture-overlay"></div>
 
+      {/* Corner Flourishes */}
+      <svg className="hero-corner-flourish flourish-top-left" viewBox="0 0 300 300" fill="none">
+        <circle cx="0" cy="0" r="80" stroke="#c9a96a" strokeWidth="0.8" opacity="0.12" />
+        <circle cx="0" cy="0" r="100" stroke="#c9a96a" strokeWidth="0.8" opacity="0.15" />
+        <circle cx="0" cy="0" r="120" stroke="#c9a96a" strokeWidth="0.8" opacity="0.18" />
+        <circle cx="0" cy="0" r="140" stroke="#c9a96a" strokeWidth="0.8" opacity="0.2" />
+        <circle cx="0" cy="0" r="160" stroke="#c9a96a" strokeWidth="0.8" opacity="0.22" />
+        <circle cx="0" cy="0" r="180" stroke="#c9a96a" strokeWidth="0.8" opacity="0.25" />
+        <circle cx="0" cy="0" r="200" stroke="#c9a96a" strokeWidth="0.8" opacity="0.22" />
+        <circle cx="0" cy="0" r="220" stroke="#c9a96a" strokeWidth="0.8" opacity="0.2" />
+        <circle cx="0" cy="0" r="240" stroke="#c9a96a" strokeWidth="0.8" opacity="0.18" />
+        <circle cx="0" cy="0" r="260" stroke="#c9a96a" strokeWidth="0.8" opacity="0.15" />
+        <circle cx="0" cy="0" r="280" stroke="#c9a96a" strokeWidth="0.8" opacity="0.1" />
+      </svg>
+
+      <svg className="hero-corner-flourish flourish-bottom-right" viewBox="0 0 300 300" fill="none">
+        <circle cx="300" cy="300" r="80" stroke="#c9a96a" strokeWidth="0.8" opacity="0.12" />
+        <circle cx="300" cy="300" r="100" stroke="#c9a96a" strokeWidth="0.8" opacity="0.15" />
+        <circle cx="300" cy="300" r="120" stroke="#c9a96a" strokeWidth="0.8" opacity="0.18" />
+        <circle cx="300" cy="300" r="140" stroke="#c9a96a" strokeWidth="0.8" opacity="0.2" />
+        <circle cx="300" cy="300" r="160" stroke="#c9a96a" strokeWidth="0.8" opacity="0.22" />
+        <circle cx="300" cy="300" r="180" stroke="#c9a96a" strokeWidth="0.8" opacity="0.25" />
+        <circle cx="300" cy="300" r="200" stroke="#c9a96a" strokeWidth="0.8" opacity="0.22" />
+        <circle cx="300" cy="300" r="220" stroke="#c9a96a" strokeWidth="0.8" opacity="0.2" />
+        <circle cx="300" cy="300" r="240" stroke="#c9a96a" strokeWidth="0.8" opacity="0.18" />
+        <circle cx="300" cy="300" r="260" stroke="#c9a96a" strokeWidth="0.8" opacity="0.15" />
+        <circle cx="300" cy="300" r="280" stroke="#c9a96a" strokeWidth="0.8" opacity="0.1" />
+      </svg>
+
       {/* Floating Header Text */}
       <h1 className="hero-bg-text">
         THE NOVEMBER

@@ -4,256 +4,158 @@ import "./SplashScreen.css";
 
 const SplashScreen = ({ onComplete }) => {
   const containerRef = useRef(null);
-  const wordmarkWrapperRef = useRef(null);
   const emblemWrapperRef = useRef(null);
   const logoEmblemRef = useRef(null);
+  const sparkleRef = useRef(null);
+  const wordmarkRef = useRef(null);
   const taglineWrapperRef = useRef(null);
-  const shineSweepRef = useRef(null);
 
   useEffect(() => {
     // Prevent scrolling while splash screen is active
     document.body.style.overflow = "hidden";
 
     const container = containerRef.current;
-    const wordmark = wordmarkWrapperRef.current;
     const emblem = emblemWrapperRef.current;
     const logoImg = logoEmblemRef.current;
+    const sparkle = sparkleRef.current;
+    const wordmark = wordmarkRef.current;
     const tagline = taglineWrapperRef.current;
-    const shine = shineSweepRef.current;
 
     let tl;
+    let sparkleTween;
+    let active = true;
 
     document.fonts.ready.then(() => {
-      const letters = wordmark.querySelectorAll(".char-letter");
+      if (!active) return;
+      // 1. Reset all elements to initial state for animation
+      gsap.set(container, { opacity: 1 });
+      gsap.set(emblem, { opacity: 0, scale: 1.15 });
+      gsap.set(logoImg, { opacity: 1 });
+      gsap.set(sparkle, { opacity: 0, scale: 0, rotate: -45 });
+      gsap.set(tagline, { opacity: 0, y: 12 });
 
-      // 1. Reset all elements to their natural layout positions to measure coordinates
-      gsap.set(wordmark, { x: 0, scale: 1 });
-      gsap.set(letters, { x: 0, opacity: 1, scale: 1 });
-      gsap.set(emblem, { scale: 1 });
-      gsap.set(logoImg, { scale: 1, opacity: 1 });
+      const chars = wordmark.querySelectorAll(".splash-char");
+      gsap.set(chars, { opacity: 0, y: 15, scale: 0.92 });
 
-      // 2. Measure layout positions in natural state
-      const wordmarkRect = wordmark.getBoundingClientRect();
-      const wordmarkCenter = wordmarkRect.left + wordmarkRect.width / 2;
-
-      const emblemRect = emblem.getBoundingClientRect();
-      const emblemCenter = emblemRect.left + emblemRect.width / 2;
-
-      // Calculate shift needed to center the emblem initially
-      const initialWordmarkShift = wordmarkCenter - emblemCenter;
-
-      // Calculate translations for each letter to stack directly behind the emblem's center
-      const lettersData = Array.from(letters).map((letter) => {
-        const letterRect = letter.getBoundingClientRect();
-        const letterCenter = letterRect.left + letterRect.width / 2;
-        return {
-          el: letter,
-          dx: emblemCenter - letterCenter,
-        };
-      });
-
-      // Calculate scale factor for initial emblem size dynamically
-      const initialSize = Math.max(160, Math.min(window.innerWidth * 0.2, 240));
-      const finalSize = Math.max(40, Math.min(window.innerWidth * 0.052, 80));
-      const scaleFactor = initialSize / finalSize;
-
-      // 3. Set initial states for animation (emblem centered and scaled large, letters hidden behind emblem)
-      gsap.set(wordmark, { x: initialWordmarkShift, scale: 0.95 });
-      gsap.set(emblem, { scale: 1 });
-
-      lettersData.forEach((item) => {
-        gsap.set(item.el, { x: item.dx, opacity: 0, scale: 0.4 });
-      });
-
-      gsap.set(logoImg, { scale: 1, opacity: 0 });
-      gsap.set(tagline, { opacity: 0, y: 15 });
-      gsap.set(shine, { xPercent: -150 });
-
-      // 4. Create Timeline (Runs in exactly 2.0 seconds)
+      // 2. Create high-performance GSAP Timeline
       tl = gsap.timeline({
         onComplete: () => {
-          // Restore body scroll
           document.body.style.overflow = "";
           if (onComplete) onComplete();
         },
       });
 
-      // Step A: Logo Emblem softly fades in (0.0s - 0.4s)
-      tl.to(logoImg, {
+      // Step B: Logo Emblem fades in and scales down to normal size
+      tl.to(emblem, {
         opacity: 1,
-        duration: 1.4,
+        scale: 1.0,
+        duration: 1.2,
+        ease: "power3.out",
+      }, "start+=0.15");
+
+      // Step C: Sparkling lens flare glistens on the crest top-right circle
+      tl.to(sparkle, {
+        opacity: 1,
+        scale: 1.0,
+        rotate: 45,
+        duration: 0.7,
+        ease: "back.out(1.5)",
+      }, "start+=0.8");
+
+      // Continuous sparkle glimmer loop (independent of timeline so timeline can complete)
+      sparkleTween = gsap.to(sparkle, {
+        scale: 1.15,
+        opacity: 0.85,
+        duration: 0.8,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 1.5,
+      });
+
+      // Step D: Staggered fade-in of wordmark letters with a soft slide-up
+      tl.to(chars, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.8,
+        stagger: 0.04,
+        ease: "power3.out",
+      }, "start+=0.5");
+
+      // Step E: Tagline and Divider fade in
+      tl.to(tagline, {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
         ease: "power2.out",
-      });
+      }, "start+=1.0");
 
-      // Step B: Slow cinematic zoom & letter expansion (0.3s - 1.2s)
-      // 1. Zoom in the entire wordmark wrapper (overall scale increases)
-      tl.to(
-        wordmark,
-        {
-          scale: 1.05,
-          duration: 0.9,
-          ease: "power2.out",
-        },
-        "morph"
-      );
+      // Step F: Hold final splash screen frame
+      tl.to({}, { duration: 0.5 });
 
-      // 2. Scale the emblem image from 1 down to finalScale
-      const finalScale = 1 / scaleFactor;
-      tl.to(
-        logoImg,
-        {
-          scale: finalScale,
-          duration: 0.9,
-          ease: "power3.inOut",
-        },
-        "morph"
-      );
-
-      // 3. Shift the wordmark container so the resulting full wordmark ends up perfectly centered
-      tl.to(
-        wordmark,
-        {
-          x: 0,
-          duration: 0.9,
-          ease: "power3.inOut",
-        },
-        "morph"
-      );
-
-      // 4. Slide letters out from the emblem center to their respective positions
-      lettersData.forEach((item) => {
-        tl.to(
-          item.el,
-          {
-            x: 0,
-            opacity: 1,
-            scale: 1,
-            duration: 0.9,
-            ease: "power3.inOut",
-          },
-          "morph"
-        );
-      });
-
-      // Step C: Tagline fades in directly beneath with soft upward motion (1.0s - 1.4s)
-      tl.to(
-        tagline,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.4,
-          ease: "power2.out",
-        },
-        "tagline"
-      );
-
-      // Step D: Subtle champagne-gold shine sweeps across using GPU translateX (1.2s - 1.7s)
-      tl.to(
-        shine,
-        {
-          xPercent: 150,
-          duration: 0.5,
-          ease: "power2.inOut",
-        },
-        "sweep"
-      );
-
-      // Step E: Hold final splash screen briefly (1.7s - 1.85s)
-      tl.to({}, { duration: 0.15 });
-
-      // Step F: Fade out the entire splash screen (1.85s - 2.0s)
+      // Step G: Exit transition (Seamless fade out and lift contents)
       tl.to(container, {
         opacity: 0,
-        duration: 0.15,
-        ease: "power2.out",
-      });
-
-      // Visual Testing Helper: check URL query parameter to pause at specific states (adjusted for 2s timing)
-      const urlParams = new URLSearchParams(window.location.search);
-      const frame = urlParams.get("frame");
-      if (frame) {
-        if (frame === "emblem") {
-          tl.seek(0.3).pause();
-        } else if (frame === "morph") {
-          tl.seek(0.8).pause();
-        } else if (frame === "tagline") {
-          tl.seek(1.3).pause();
-        } else if (frame === "final") {
-          tl.seek(1.7).pause();
-        }
-      }
+        y: -15,
+        pointerEvents: "none",
+        duration: 0.45,
+        ease: "power2.inOut",
+      }, "exit");
     });
 
     return () => {
+      active = false;
       if (tl) tl.kill();
+      if (sparkleTween) sparkleTween.kill();
       document.body.style.overflow = "";
     };
   }, [onComplete]);
+
+  // Split wordmark into letters for staggered animation
+  const wordmarkText = "THE NOVEMBER";
 
   return (
     <div className="splash-screen" ref={containerRef}>
       <div className="splash-container">
         
-        {/* Brand Container containing the wordmark and the sweep overlay */}
-        <div className="splash-brand-wrapper">
+        {/* Emblem Container with Sparkle */}
+        <div className="splash-emblem-container" ref={emblemWrapperRef}>
+          <img
+            src="/logo.png"
+            alt="THE NOVEMBER Emblem"
+            className="logo-emblem"
+            ref={logoEmblemRef}
+          />
           
-          <div className="splash-wordmark-container" ref={wordmarkWrapperRef}>
-            {/* Letters T H E */}
-            <div className="char-wrapper">
-              <span className="char char-letter">T</span>
-            </div>
-            <div className="char-wrapper">
-              <span className="char char-letter">H</span>
-            </div>
-            <div className="char-wrapper">
-              <span className="char char-letter">E</span>
-            </div>
-
-            {/* Spacer for space between THE and NOVEMBER */}
-            <div className="char-space-spacer" style={{ width: "clamp(12px, 1.5vw, 24px)" }}></div>
-
-            {/* Letter N */}
-            <div className="char-wrapper">
-              <span className="char char-letter">N</span>
-            </div>
-
-            {/* Emblem (serves as O) */}
-            <div className="emblem-wrapper" ref={emblemWrapperRef}>
-              <img
-                src="/logo.png"
-                alt="THE NOVEMBER Logo"
-                className="logo-emblem"
-                ref={logoEmblemRef}
-              />
-            </div>
-
-            {/* Letters V E M B E R */}
-            <div className="rest-letters-wrapper">
-              <div className="char-wrapper">
-                <span className="char char-letter">V</span>
-              </div>
-              <div className="char-wrapper">
-                <span className="char char-letter">E</span>
-              </div>
-              <div className="char-wrapper">
-                <span className="char char-letter">M</span>
-              </div>
-              <div className="char-wrapper">
-                <span className="char char-letter">B</span>
-              </div>
-              <div className="char-wrapper">
-                <span className="char char-letter">E</span>
-              </div>
-              <div className="char-wrapper">
-                <span className="char char-letter">R</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Shine Sweep Overlay */}
-          <div className="shine-sweep" ref={shineSweepRef}></div>
-
+          {/* Sparkle SVG */}
+          <svg className="splash-sparkle" viewBox="0 0 100 100" fill="none" ref={sparkleRef}>
+            <path 
+              d="M50 0 C50 35 35 50 0 50 C35 50 50 65 50 100 C50 65 65 50 100 50 C65 50 50 35 50 0 Z" 
+              fill="#ffffff" 
+            />
+            <circle cx="50" cy="50" r="12" fill="#ffffff" filter="blur(3px)" opacity="0.8" />
+            <circle cx="50" cy="50" r="4" fill="#ffffff" />
+          </svg>
         </div>
+
+        {/* Brand Wordmark (Serif Gold Header) */}
+        <h1 className="splash-wordmark" ref={wordmarkRef}>
+          {wordmarkText.split("").map((char, index) => {
+            if (char === " ") {
+              return (
+                <span key={index} className="splash-char-space">
+                  &nbsp;
+                </span>
+              );
+            }
+            return (
+              <span key={index} className="splash-char">
+                {char}
+              </span>
+            );
+          })}
+        </h1>
 
         {/* Tagline and Dividers */}
         <div className="splash-tagline-wrapper" ref={taglineWrapperRef}>

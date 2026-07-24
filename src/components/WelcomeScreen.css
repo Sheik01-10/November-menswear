@@ -1,52 +1,169 @@
 /* ==========================================
-   WELCOME SCREEN SPECIFIC STYLING
-   ========================================== */
+   WELCOME SCREEN
+========================================== */
 
 .welcome-screen {
-  z-index: 100000; /* Sits on top of auth screens */
+  z-index: 100000;
   background: #ffffff;
 }
 
-/* Override wordmark and tagline font family within welcome screen */
-.welcome-screen .char,
-.welcome-screen .splash-tagline-text {
-  font-family: "Times New Roman", Times, serif;
+.welcome-heading{
+  font-family:"Cormorant Garamond",serif;
+  font-size:clamp(18px,2vw,24px);
+  font-weight:600;
+  letter-spacing:.42em;
+  text-transform:uppercase;
+  color:#6d6d6d;
 }
 
-/* Top context text: e.g. "WELCOME TO" / "WELCOME BACK" */
+.welcome-user{
+  font-family:"Cormorant Garamond",serif;
+  font-size:clamp(18px,2vw,22px);
+  font-weight:500;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:#111;
+}
+
+.welcome-tagline{
+  font-family:"Cormorant Garamond",serif;
+  font-size:clamp(16px,1.8vw,20px);
+  font-style:italic;
+  letter-spacing:.14em;
+  color:#a88448;
+}
+
+/* ==========================================
+   WELCOME TEXT
+========================================== */
+
 .welcome-top-text {
-  font-family: "Times New Roman", Times, serif;
-  font-size: clamp(10px, 1.2vw, 13px);
-  font-weight: 500;
-  letter-spacing: 0.38em; /* Clean, luxury letter spacing */
-  color: #777777;
-  text-transform: uppercase;
-  margin-bottom: clamp(24px, 4.5vh, 48px);
-  text-align: center;
-  white-space: nowrap;
-  will-change: transform, opacity;
-}
-
-/* Bottom wrapper containing the name/brand and optional tagline */
-.welcome-bottom-wrapper {
-  margin-top: clamp(24px, 4.5vh, 48px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  justify-content: center;
+
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 600;
+
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+
+  color: #6d6d6d;
+
+  margin-bottom: clamp(28px, 4vh, 42px);
+
+  text-align: center;
+  white-space: nowrap;
+
+  position: relative;
+
   will-change: transform, opacity;
 }
 
-/* Bottom primary greeting text: e.g. "NOVEMBER" / first name */
-.welcome-bottom-text {
-  font-family: "Times New Roman", Times, serif;
-  font-weight: 300;
-  font-size: clamp(28px, 4.5vw, 46px);
-  color: #111111;
-  letter-spacing: 0.05em;
+/* Gold Divider */
+
+.welcome-top-text::after {
+  content: "";
+
+  width: 90px;
+  height: 1px;
+
+  margin-top: 18px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #c9a96a,
+    #e5cf9c,
+    #c9a96a,
+    transparent
+  );
+}
+
+/* Diamond */
+
+.welcome-top-text::before {
+  content: "♦";
+
+  position: absolute;
+
+  bottom: -12px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  background: #fff;
+
+  padding: 0 10px;
+
+  color: #c9a96a;
+
+  font-size: 9px;
+}
+
+/* ==========================================
+   USER NAME
+========================================== */
+
+.splash-tagline-text {
+
+  font-family: "Cormorant Garamond", serif !important;
+
+  font-size: clamp(17px, 2vw, 22px) !important;
+
+  font-weight: 500;
+
+  letter-spacing: .18em !important;
+
   text-transform: uppercase;
-  margin: 0;
-  padding-bottom: clamp(14px, 2vh, 24px);
-  line-height: 1.15;
-  text-align: center;
+
+  color: #111;
+
+  line-height: 1.2;
+}
+
+/* Crafted for Elegance */
+
+.splash-tagline-text:has(span){
+  letter-spacing:.24em;
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width:768px){
+
+  .welcome-top-text{
+
+    font-size:18px;
+
+    letter-spacing:.34em;
+
+    margin-bottom:28px;
+  }
+
+  .welcome-top-text::after{
+
+    width:70px;
+
+    margin-top:15px;
+  }
+
+  .welcome-top-text::before{
+
+    bottom:-10px;
+
+    font-size:8px;
+  }
+
+  .splash-tagline-text{
+
+    font-size:18px !important;
+
+    letter-spacing:.14em !important;
+  }
+
 }

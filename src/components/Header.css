@@ -25,7 +25,8 @@ body{
   left:0;
   width:100%;
 
-  z-index:1000;
+  z-index:10000 !important;
+  pointer-events: auto !important;
 
   /* Start transparent over the hero */
   background: transparent;
@@ -465,7 +466,7 @@ body.drawer-open .lux-header {
 
     overflow:hidden;
 
-    z-index:9999;
+    z-index:10005 !important;
 
     box-shadow:
         0 20px 60px rgba(0,0,0,.12);
@@ -787,7 +788,7 @@ body.drawer-open .lux-header {
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
 
-  z-index:9998;
+  z-index:20000;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -822,7 +823,7 @@ body.drawer-open .lux-header {
 
   overflow:hidden;
 
-  z-index:9999;
+  z-index:20001;
   box-shadow:10px 0 30px rgba(0,0,0,0.05);
 
   transform: translateX(-100%);
@@ -942,7 +943,7 @@ body.drawer-open .lux-header {
 .search-overlay {
   position: fixed;
   inset: 0;
-  z-index: 99999;
+  z-index: 30000;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -1353,5 +1354,76 @@ body.drawer-open .lux-header {
   .drawer-submenu-inner a {
     font-size: 14px !important;
     padding: 8px 0 8px 20px !important;
+  }
+}
+
+/* ==================================================
+   CUSTOM AVATAR & HOMEPAGE TRANSPARENT OVERRIDES
+   ================================================== */
+
+.profile-avatar-custom {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #007A87 !important; /* Premium luxury teal */
+  color: #ffffff !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Jost', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0;
+  box-shadow: 0 2px 8px rgba(0, 122, 135, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.profile-avatar-custom:hover {
+  transform: scale(1.05);
+}
+
+/* On mobile/tablet, transparent header forces mobile layout actions */
+@media (max-width: 992px) {
+  .lux-header.hero-header-active .header-left,
+  .lux-header.hero-header-active .header-center,
+  .lux-header.hero-header-active .lux-icons {
+    display: none !important;
+  }
+
+  .lux-header.hero-header-active .mobile-actions {
+    display: flex !important;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .lux-header.hero-header-active .hamburger {
+    display: flex !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    color: #111111 !important;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lux-header.hero-header-active .icon-btn {
+    background: transparent !important;
+    color: #111111 !important;
+    border: none !important;
+    padding: 0 !important;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lux-header.hero-header-active .lux-header-inner {
+    padding: 0 20px !important;
+    height: 70px !important;
   }
 }

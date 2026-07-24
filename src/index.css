@@ -107,3 +107,17 @@ html {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
 }
+
+/* Home Page Fade-In Transition after Splash Screen */
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+main {
+  animation: fadeInPage 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

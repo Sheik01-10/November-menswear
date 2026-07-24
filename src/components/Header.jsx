@@ -201,12 +201,17 @@ export default function Header() {
         const isHomePage =
   pathname === "/";
 
-        /* CENTER LOGO */
+        if (!heroHeight || heroHeight === 0) {
+          hero = document.querySelector(".hero");
+          if (hero) {
+            heroHeight = hero.offsetHeight;
+          }
+        }
 
         const shouldShowCenter =
   !isHomePage ||
   currentScrollY >
-    heroHeight;
+    (heroHeight || 700);
 
         if (
           shouldShowCenter !==
@@ -269,6 +274,28 @@ export default function Header() {
 
   }, [pathname]);
 
+  const isTransparentHero = pathname === "/" && !showCenterLogo;
+
+  const renderProfileAvatar = () => {
+    if (user && user.photoURL) {
+      return (
+        <img
+          src={user.photoURL}
+          alt="Profile"
+          className="profile-avatar"
+        />
+      );
+    }
+    const initial = user
+      ? (user.displayName?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || "M")
+      : "M";
+    return (
+      <div className="profile-avatar-custom">
+        {initial}
+      </div>
+    );
+  };
+
   return (
     <>
       {/* Announcement Bar */}
@@ -278,26 +305,16 @@ export default function Header() {
   />
 )}
 
-      {/* HEADER */}
       <header
-        className={`lux-header
-  ${
-    pathname !== "/" ||
-    showCenterLogo
-      ? "sticky-header"
-      : ""
-  }
-  ${
-    showHeader
-      ? "header-show"
-      : "header-hide"
-  }
-  ${
-    showBar &&
-    pathname === "/"
-      ? "header-with-bar"
-      : "header-no-bar"
-  }`}
+        className={`lux-header ${
+          pathname !== "/" || showCenterLogo ? "sticky-header" : ""
+        } ${
+          showHeader ? "header-show" : "header-hide"
+        } ${
+          showBar && pathname === "/" ? "header-with-bar" : "header-no-bar"
+        } ${
+          isTransparentHero ? "hero-header-active" : ""
+        }`}
       >
         <div className="lux-header-inner">
 

@@ -146,7 +146,7 @@ function Footer() {
                   <Mail size={18} strokeWidth={1.2} />
                 </span>
                 <span className="support-text">
-                  <a href="mailto:www.novemberxix@gmail.com">www.novemberxix@gmail.com</a>
+                  <a href="mailto:team.thenovember@gmail.com">team.thenovember@gmail.com</a>
                 </span>
               </div>
             </div>
@@ -253,7 +253,7 @@ function Footer() {
                   <Mail size={18} strokeWidth={1.2} />
                 </span>
                 <span className="support-text">
-                  <a href="mailto:www.novemberxix@gmail.com">www.novemberxix@gmail.com</a>
+                  <a href="mailto:team.thenovember@gmail.com">team.thenovember@gmail.com</a>
                 </span>
               </div>
             </div>
