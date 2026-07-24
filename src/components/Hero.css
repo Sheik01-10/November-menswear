@@ -34,6 +34,10 @@
    ========================================== */
 
 .hero-bg-text {
+  position: fixed;
+  left: 50%;
+  top: 0;
+  transform: translate3d(-50%, 50vh, 0) translateY(-50%) scale(1);
   font-family: "Cinzel", serif;
   font-size: clamp(36px, 8vw, 120px);
   font-weight: 500;
@@ -43,6 +47,7 @@
   pointer-events: none;
   user-select: none;
   z-index: 2;
+  
 
   /* Premium champagne gold metallic gradient */
   background: linear-gradient(

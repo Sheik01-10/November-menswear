@@ -72,15 +72,6 @@ export default function Hero() {
       }
     };
 
-    updateDimensions();
-    const timer = setTimeout(updateDimensions, 200);
-
-    if (heroText) {
-      heroText.style.position = "fixed";
-      heroText.style.left = "50%";
-      heroText.style.top = "0";
-    }
-
     let ticking = false;
 
     const handleScroll = () => {
@@ -160,6 +151,22 @@ export default function Hero() {
       });
     };
 
+    // Ensure fixed layout properties on load before calculating dimensions
+    if (heroText) {
+      heroText.style.position = "fixed";
+      heroText.style.left = "50%";
+      heroText.style.top = "0";
+    }
+
+    updateDimensions();
+    handleScroll();
+
+    // Call updateDimensions and handleScroll after a delay to ensure fonts/layout stabilizes
+    const timer = setTimeout(() => {
+      updateDimensions();
+      handleScroll();
+    }, 200);
+
     const debounce = (func, wait) => {
       let timeout;
       return (...args) => {
@@ -175,8 +182,6 @@ export default function Hero() {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleResize);
-
-    handleScroll();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
