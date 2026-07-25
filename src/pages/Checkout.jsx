@@ -255,7 +255,7 @@ export default function Checkout() {
 
       // 3. Setup Razorpay options
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || keyId,
+        key: keyId || import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: rzpAmount,
 
         currency: currency,
