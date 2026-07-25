@@ -255,8 +255,9 @@ export default function Checkout() {
 
       // 3. Setup Razorpay options
       const options = {
-        key: keyId,
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || keyId,
         amount: rzpAmount,
+
         currency: currency,
         name: "THE NOVEMBER Menswear",
         description: "Premium Luxury Clothing",
