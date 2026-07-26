@@ -12,7 +12,7 @@ export default function AdminLogin() {
     e.preventDefault();
 
     if (
-      email === "admin@novemberxix.com" &&
+      email === "admin@thenovember.in" &&
       password === "November@123"
     ) {
       localStorage.setItem("isAdmin", "true");
