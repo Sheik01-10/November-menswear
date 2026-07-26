@@ -445,7 +445,10 @@ export default function AdminProducts() {
                 <div className="form-group full">
                   <label style={{ display: "block", marginBottom: "8px" }}>Available Sizes</label>
                   <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                    {["S", "M", "L", "XL", "XXL"].map((sz) => {
+                    {(form.category === "pants" || form.category === "trousers"
+                      ? ["28", "30", "32", "34", "36", "38", "40", "42", "44"]
+                      : ["S", "M", "L", "XL", "XXL"]
+                    ).map((sz) => {
                       const isSelected = form.sizes?.includes(sz);
                       return (
                         <button

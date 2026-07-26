@@ -81,10 +81,11 @@ export default function Products() {
 
         {/* PAGE HEADER */}
         <div className="products-header">
-
+          <div className="header-content">
           <h1>
             {searchQuery ? `SEARCH: "${searchQuery}"` : "OUR COLLECTION"}
           </h1>
+          </div>
 
           <p>
             {searchQuery

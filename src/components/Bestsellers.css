@@ -240,7 +240,7 @@
 @media (max-width: 768px) {
 
   .bestseller-section {
-    padding: 70px 18px;
+    padding: 10px 18px;
   }
 
   .custom-prev,
@@ -252,6 +252,7 @@
   .bestseller-title {
     font-size: 15px;
     letter-spacing: 4px;
+    color: var(--text-primary);
   }
 
   .front-img,

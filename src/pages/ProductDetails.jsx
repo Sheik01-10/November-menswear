@@ -365,7 +365,10 @@ export default function ProductDetails() {
                     {selectedSize && <span className="selected-size-label">Selected: {selectedSize}</span>}
                   </div>
                   <div className="sizes-grid">
-                    {["S", "M", "L", "XL", "XXL"].map((size) => {
+                    {(product.category === "pants" || product.category === "trousers"
+                      ? ["28", "30", "32", "34", "36", "38", "40", "42", "44"]
+                      : ["S", "M", "L", "XL", "XXL"]
+                    ).map((size) => {
                       const isAvailable = product.sizes.includes(size);
                       const isSelected = selectedSize === size;
                       return (

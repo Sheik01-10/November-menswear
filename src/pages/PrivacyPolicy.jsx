@@ -43,7 +43,7 @@ export default function PrivacyPolicy() {
           >
             <h2>1. INTRODUCTION</h2>
             <p>
-              Welcome to <strong>THE NOVEMBER</strong>. We are committed to protecting your privacy and ensuring the security of your personal data. This Privacy Policy details how we collect, process, use, and share information when you visit our website, register an account, purchase products, or engage with our services.
+              Welcome to <strong>THE NOVEMBER</strong>. We are committed to protecting your privacy and ensuring the security of your personal data. This Privacy Policy details how we collect, process, use and share information when you visit our website, register an account, purchase products, or engage with our services.
             </p>
             <p>
               By accessing our website and purchasing our luxury menswear collections, you consent to the practices described in this Privacy Policy.
@@ -62,10 +62,10 @@ export default function PrivacyPolicy() {
               To offer a premium shopping experience, we collect specific information, including:
             </p>
             <ul>
-              <li><strong>Personal details</strong>: Your name, email address, phone number, and account credentials when you register or order.</li>
-              <li><strong>Delivery Information</strong>: Shipping address, billing details, city, state, postal code, and any landmark details.</li>
-              <li><strong>Payment Information</strong>: Order transactions, payment methods chosen (COD or online), and Razorpay transaction signatures. We do not store credit card details directly; all online transactions are securely handled by our licensed payment processors.</li>
-              <li><strong>Device & Usage Data</strong>: IP addresses, browser types, page viewing history, search parameters, and wishlist interactions.</li>
+              <li><strong>Personal details</strong>: Your name, email address, phone number and account credentials when you register or order.</li>
+              <li><strong>Delivery Information</strong>: Shipping address, billing details, city, state, postal code and any landmark details.</li>
+              <li><strong>Payment Information</strong>: Order transactions, payment methods chosen (COD or online) and Razorpay transaction signatures. We do not store credit card details directly; all online transactions are securely handled by our licensed payment processors.</li>
+              <li><strong>Device & Usage Data</strong>: IP addresses, browser types, page viewing history, search parameters and wishlist interactions.</li>
             </ul>
           </motion.section>
 
@@ -84,8 +84,8 @@ export default function PrivacyPolicy() {
               <li>Processing and delivering your bespoke apparel orders, including shipping coordination and order tracking.</li>
               <li>Securing and verifying online transactions via Razorpay.</li>
               <li>Managing your THE NOVEMBER Client Account and order history database.</li>
-              <li>Improving our website navigation, product placement, and design layout.</li>
-              <li>Providing premium customer support, responding to inquiries, and sharing luxury updates if requested.</li>
+              <li>Improving our website navigation, product placement and design layout.</li>
+              <li>Providing premium customer support, responding to inquiries and sharing luxury updates if requested.</li>
             </ul>
           </motion.section>
 
@@ -98,7 +98,7 @@ export default function PrivacyPolicy() {
           >
             <h2>4. COOKIES & TRACKING TECHNOLOGIES</h2>
             <p>
-              We utilize cookies and local storage tokens to enhance user experience, save cart selections, retain your wishlist, and recall your preferences.
+              We utilize cookies and local storage tokens to enhance user experience, save cart selections, retain your wishlist and recall your preferences.
             </p>
             <p>
               You can disable cookies through your browser settings, though doing so might disable certain essential shopping functions of our online store, such as maintaining item quantities in your shopping bag.
@@ -132,7 +132,7 @@ export default function PrivacyPolicy() {
           >
             <h2>6. DATA SECURITY</h2>
             <p>
-              We employ SSL encryption, secure network channels, and industry-standard security protocols to protect your personal details from unauthorized access, loss, or disclosure.
+              We employ SSL encryption, secure network channels and industry-standard security protocols to protect your personal details from unauthorized access, loss, or disclosure.
             </p>
             <p>
               While we take maximum measures to protect your data, no method of digital transmission or storage is 100% secure. We encourage you to use unique passwords for your account to enhance your own security.
@@ -151,7 +151,7 @@ export default function PrivacyPolicy() {
               As a valued THE NOVEMBER client, you possess rights over your personal data:
             </p>
             <ul>
-              <li>Access, edit, or update your name, address, and profile settings in your client dashboard.</li>
+              <li>Access, edit, or update your name, address and profile settings in your client dashboard.</li>
               <li>Request the complete deletion of your account and related records by reaching out to our service team.</li>
               <li>Opt-out of any promotional email communications.</li>
             </ul>
@@ -169,7 +169,7 @@ export default function PrivacyPolicy() {
               For any queries regarding this Privacy Policy, please contact our support desk:
             </p>
             <ul>
-              <li><strong>Email</strong>: www.novemberxix@gmail.com</li>
+              <li><strong>Email</strong>: team.thenovember@gmail.com</li>
               <li><strong>Address</strong>: 291, Gandhiji Road, Surampattivalasu, Erode, Tamil Nadu - 638001</li>
               <li><strong>Phone</strong>: +91 7604801743, +91 7604901743</li>
             </ul>

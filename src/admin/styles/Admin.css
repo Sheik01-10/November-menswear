@@ -1049,7 +1049,7 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   .stats-grid { grid-template-columns: 1fr; }
   .banner-grid { grid-template-columns: 1fr; }
   .admin-card { padding: 50px 24px; }
-  .admin-card .brand-name { font-size: 2.8rem; letter-spacing: 6px; }
+  .admin-card .brand-name { font-size: 2.8rem; letter-spacing: 3px; }
   .brand-logo { width: 70px; }
 }
 
@@ -1758,6 +1758,12 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   .admin-sidebar nav span,
   .admin-sidebar button span {
     display: inline !important;
+    text-align: center;
+  }
+  .sidebar-logo-sub {
+    font-size: 10px;
+    letter-spacing: 3px;
+    margin-left:85px;
   }
   
   .admin-sidebar nav a,

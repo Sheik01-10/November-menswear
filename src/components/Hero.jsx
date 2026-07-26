@@ -118,11 +118,11 @@ export default function Hero() {
           // Interpolate between scrolling naturally and sticking in header
           const currentY = (startY - scrollY) * (1 - eased) + targetY * eased;
 
-          let targetWidth = 150;
+          let targetWidth = 140;
           if (window.innerWidth <= 480) {
             targetWidth = 110;
           } else if (window.innerWidth <= 992) {
-            targetWidth = 82;
+            targetWidth = 172;
           }
 
           const scale = 1 - (1 - targetWidth / unscaledWidth) * eased;
@@ -190,8 +190,15 @@ export default function Hero() {
     };
   }, []);
 
+  const heroStyle = activeBanner?.image ? {
+    backgroundImage: `url(${activeBanner.image})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat"
+  } : {};
+
   return (
-    <section className="hero">
+    <section className="hero" style={heroStyle}>
       {/* Background Overlay Texture */}
       <div className="hero-texture-overlay"></div>
 

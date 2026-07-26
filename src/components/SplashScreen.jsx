@@ -6,7 +6,6 @@ const SplashScreen = ({ onComplete }) => {
   const containerRef = useRef(null);
   const emblemWrapperRef = useRef(null);
   const logoEmblemRef = useRef(null);
-  const sparkleRef = useRef(null);
   const wordmarkRef = useRef(null);
   const taglineWrapperRef = useRef(null);
 
@@ -17,12 +16,10 @@ const SplashScreen = ({ onComplete }) => {
     const container = containerRef.current;
     const emblem = emblemWrapperRef.current;
     const logoImg = logoEmblemRef.current;
-    const sparkle = sparkleRef.current;
     const wordmark = wordmarkRef.current;
     const tagline = taglineWrapperRef.current;
 
     let tl;
-    let sparkleTween;
     let active = true;
 
     document.fonts.ready.then(() => {
@@ -31,7 +28,6 @@ const SplashScreen = ({ onComplete }) => {
       gsap.set(container, { opacity: 1 });
       gsap.set(emblem, { opacity: 0, scale: 1.15 });
       gsap.set(logoImg, { opacity: 1 });
-      gsap.set(sparkle, { opacity: 0, scale: 0, rotate: -45 });
       gsap.set(tagline, { opacity: 0, y: 12 });
 
       const chars = wordmark.querySelectorAll(".splash-char");
@@ -51,27 +47,8 @@ const SplashScreen = ({ onComplete }) => {
         scale: 1.0,
         duration: 1.2,
         ease: "power3.out",
+        force3D: true,
       }, "start+=0.15");
-
-      // Step C: Sparkling lens flare glistens on the crest top-right circle
-      tl.to(sparkle, {
-        opacity: 1,
-        scale: 1.0,
-        rotate: 45,
-        duration: 0.7,
-        ease: "back.out(1.5)",
-      }, "start+=0.8");
-
-      // Continuous sparkle glimmer loop (independent of timeline so timeline can complete)
-      sparkleTween = gsap.to(sparkle, {
-        scale: 1.15,
-        opacity: 0.85,
-        duration: 0.8,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: 1.5,
-      });
 
       // Step D: Staggered fade-in of wordmark letters with a soft slide-up
       tl.to(chars, {
@@ -81,6 +58,7 @@ const SplashScreen = ({ onComplete }) => {
         duration: 0.8,
         stagger: 0.04,
         ease: "power3.out",
+        force3D: true,
       }, "start+=0.5");
 
       // Step E: Tagline and Divider fade in
@@ -89,6 +67,7 @@ const SplashScreen = ({ onComplete }) => {
         y: 0,
         duration: 0.6,
         ease: "power2.out",
+        force3D: true,
       }, "start+=1.0");
 
       // Step F: Hold final splash screen frame
@@ -101,13 +80,13 @@ const SplashScreen = ({ onComplete }) => {
         pointerEvents: "none",
         duration: 0.45,
         ease: "power2.inOut",
+        force3D: true,
       }, "exit");
     });
 
     return () => {
       active = false;
       if (tl) tl.kill();
-      if (sparkleTween) sparkleTween.kill();
       document.body.style.overflow = "";
     };
   }, [onComplete]);
@@ -119,7 +98,7 @@ const SplashScreen = ({ onComplete }) => {
     <div className="splash-screen" ref={containerRef}>
       <div className="splash-container">
         
-        {/* Emblem Container with Sparkle */}
+        {/* Emblem Container */}
         <div className="splash-emblem-container" ref={emblemWrapperRef}>
           <img
             src="/logo.png"
@@ -127,16 +106,6 @@ const SplashScreen = ({ onComplete }) => {
             className="logo-emblem"
             ref={logoEmblemRef}
           />
-          
-          {/* Sparkle SVG */}
-          <svg className="splash-sparkle" viewBox="0 0 100 100" fill="none" ref={sparkleRef}>
-            <path 
-              d="M50 0 C50 35 35 50 0 50 C35 50 50 65 50 100 C50 65 65 50 100 50 C65 50 50 35 50 0 Z" 
-              fill="#ffffff" 
-            />
-            <circle cx="50" cy="50" r="12" fill="#ffffff" filter="blur(3px)" opacity="0.8" />
-            <circle cx="50" cy="50" r="4" fill="#ffffff" />
-          </svg>
         </div>
 
         {/* Brand Wordmark (Serif Gold Header) */}

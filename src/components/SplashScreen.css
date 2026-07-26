@@ -16,6 +16,7 @@
   align-items: center;
   overflow: hidden;
   z-index: 99999;
+  will-change: transform, opacity;
 }
 
 .splash-container {
@@ -25,7 +26,7 @@
   align-items: center;
   width: 100%;
   max-width: 100%;
-  padding: 24px;
+  padding: 10px;
   text-align: center;
 }
 
@@ -57,24 +58,6 @@
     drop-shadow(0 2px 4px rgba(201,169,106,.15));
 }
 
-/* Sparkle */
-
-.splash-sparkle {
-  position: absolute;
-  top: 23%;
-  right: 23%;
-
-  width: clamp(34px,4vw,42px);
-  height: clamp(34px,4vw,42px);
-
-  transform: translate(50%,-50%);
-
-  pointer-events: none;
-  z-index: 10;
-
-  filter: drop-shadow(0 0 6px rgba(255,215,0,.7));
-}
-
 /* ==========================================
    BRAND NAME
 ========================================== */
@@ -94,18 +77,15 @@
   font-weight: 500;
 
   display: inline-block;
+  will-change: transform, opacity;
 
-  background: linear-gradient(
-    135deg,
-    #a88448 0%,
-    #e2c286 45%,
-    #fbf3df 55%,
-    #d1b06c 75%,
-    #a88448 100%
-  );
+  color: #c9a96a;
 
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  /* Soft luxury metal drop shadow */
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.04));
+
+  opacity: 0.98;
+  will-change: transform, top;
 
   letter-spacing: .12em;
   line-height: 1;

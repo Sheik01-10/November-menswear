@@ -82,10 +82,10 @@
 
 .privacy-section p {
   font-size: 16px;
-  line-height: 2;
+  line-height: 1.7;
   color: var(--text-secondary);
   margin-bottom: 24px;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .privacy-section ul {
@@ -95,13 +95,13 @@
 }
 
 .privacy-section ul li {
-  font-size: 15px;
-  line-height: 1.9;
+  font-size: 16px;
+  line-height: 1.7;
   color: var(--text-secondary);
   position: relative;
   padding-left: 25px;
   margin-bottom: 14px;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .privacy-section ul li::before {

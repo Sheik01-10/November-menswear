@@ -2,7 +2,7 @@
 .hero {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  height: 600px;
   overflow: hidden;
 
   display: flex;
@@ -16,6 +16,7 @@
   /* Pure white background */
   background-color: #ffffff;
   isolation: isolate;
+  transition: background-image 0.5s ease-in-out;
 }
 
 /* Premium noise and gradient overlay */
@@ -39,7 +40,7 @@
   top: 0;
   transform: translate3d(-50%, 50vh, 0) translateY(-50%) scale(1);
   font-family: "Cinzel", serif;
-  font-size: clamp(36px, 8vw, 120px);
+  font-size: clamp(30px, 6vw, 90px);
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -96,9 +97,9 @@ body.drawer-open .hero-bg-text {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: clamp(100px, 10vw, 150px);
-  height: clamp(100px, 10vw, 150px);
-  margin-bottom: 12px;
+  width: 150px;
+  height: 120px;
+  margin-bottom: 10px;
 }
 
 .hero-emblem {
@@ -113,7 +114,7 @@ body.drawer-open .hero-bg-text {
 /* Invisible spacer that reserves block height for the fixed header text on load */
 .hero-title-spacer {
   font-family: "Cinzel", serif;
-  font-size: clamp(36px, 8vw, 120px);
+  font-size: clamp(30px, 6vw, 90px);
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -132,7 +133,7 @@ body.drawer-open .hero-bg-text {
   width: 100%;
   max-width: 160px;
   gap: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .hero-divider-line {
@@ -162,7 +163,7 @@ body.drawer-open .hero-bg-text {
   letter-spacing: 0.35em;
   color: #111111;
   text-transform: uppercase;
-  margin: 0 0 14px 0;
+  margin: 0 0 8px 0;
   opacity: 0.95;
   padding-left: 0.35em; 
 }
@@ -172,7 +173,7 @@ body.drawer-open .hero-bg-text {
   font-size: clamp(18px, 2.5vw, 20px);
   font-weight: 400;
   color: #222222;
-  margin: 0 0 32px 0;
+  margin: 0 0 20px 0;
   letter-spacing: 0.2px;
 }
 
@@ -249,7 +250,7 @@ body.drawer-open .hero-bg-text {
 
 .hero-scroll-indicator {
   position: absolute;
-  bottom: 35px;
+  bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -319,9 +320,9 @@ body.drawer-open .hero-bg-text {
 
 .scroll-line {
   width: 1px;
-  height: 35px;
+  height: 20px;
   background: linear-gradient(to bottom, #c9a96a 0%, rgba(201, 169, 106, 0) 100%);
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 /* ==========================================
@@ -344,7 +345,8 @@ body.drawer-open .hero-bg-text {
 
 @media (max-width: 768px) {
   .hero {
-    min-height: 100svh;
+    height: 500px;
+    min-height: auto;
   }
 
   .hero-content {
@@ -352,35 +354,31 @@ body.drawer-open .hero-bg-text {
   }
 
   .hero-emblem-container {
-    width: 130px;
-    height: 130px;
+    width: 190px;
+    height: 140px;
     margin-top: 0px;
-    margin-bottom: 20px;
+    margin-bottom: 8px;
   }
 
   .hero-divider-container {
-    gap: 8px;
-    margin-bottom: 16px;
-    max-width: 120px;
+    gap: 6px;
+    margin-bottom: 10px;
+    max-width: 100px;
   }
 
   .hero-subtitle {
-    font-size: 11px;
-    letter-spacing: 0.3em;
-    padding-left: 0.3em;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    padding-left: 0.25em;
   }
 
   .hero-tagline {
-    font-size: 18px;
-    margin-bottom: 24px;
+    font-size: 16px;
+    margin-bottom: 16px;
   }
   
   .hero-scroll-indicator {
-    bottom: 20px;
-  }
-  
-  .scroll-line {
-    height: 25px;
+    display: none !important;
   }
 }
 
@@ -389,6 +387,7 @@ body.drawer-open .hero-bg-text {
     flex-direction: row;
     justify-content: center;
     width: 100%;
+    height: 10px;
     gap: 10px;
   }
 
