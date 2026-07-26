@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, CheckCircle2, Lock, ShieldCheck, Truck, CreditCard, Package, Sparkles } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Lock, ShieldCheck, Truck, CreditCard, Package, Sparkles, QrCode } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useProducts } from "../context/ProductContext";
 import { getOptimizedImageUrl } from "../utils/imageOptimizer";
@@ -307,6 +307,7 @@ export default function Checkout() {
           name: formData.fullName,
           email: formData.email,
           contact: formData.phone,
+          ...(paymentMethod === "upi" ? { method: "upi" } : {})
         },
         theme: {
           color: "#111111", // Luxe brand primary color
@@ -765,10 +766,41 @@ export default function Checkout() {
                       {paymentMethod === "online" && <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#111" }} />}
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 600, fontSize: 14, color: "#111", fontFamily: "var(--font-sans)" }}>Online Payment (UPI, Cards, Net Banking)</div>
+                      <div style={{ fontWeight: 600, fontSize: 14, color: "#111", fontFamily: "var(--font-sans)" }}>Online Payment (Cards, Net Banking, Wallets)</div>
                       <div style={{ fontSize: 11, color: "#888", marginTop: 2, fontFamily: "var(--font-sans)" }}>Pay securely via our Razorpay payment gateway</div>
                     </div>
                     <CreditCard size={18} style={{ color: paymentMethod === "online" ? "#111" : "#888" }} />
+                  </div>
+
+                  <div 
+                    className={`payment-option-card ${paymentMethod === "upi" ? "active" : ""}`}
+                    onClick={() => setPaymentMethod("upi")}
+                    style={{
+                      border: "1px solid",
+                      borderColor: paymentMethod === "upi" ? "#111" : "#ececec",
+                      borderRadius: 16,
+                      padding: 18,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 14,
+                      cursor: "pointer",
+                      transition: "all 0.25s ease",
+                      background: paymentMethod === "upi" ? "#fbfbfa" : "#fff"
+                    }}
+                  >
+                    <div style={{
+                      width: 18, height: 18, borderRadius: "50%", border: "2px solid",
+                      borderColor: paymentMethod === "upi" ? "#111" : "#b0b0b0",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      transition: "all 0.2s"
+                    }}>
+                      {paymentMethod === "upi" && <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#111" }} />}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 600, fontSize: 14, color: "#111", fontFamily: "var(--font-sans)" }}>UPI Payment (Google Pay, PhonePe, Paytm)</div>
+                      <div style={{ fontSize: 11, color: "#888", marginTop: 2, fontFamily: "var(--font-sans)" }}>Instant payment via UPI App or UPI ID</div>
+                    </div>
+                    <QrCode size={18} style={{ color: paymentMethod === "upi" ? "#111" : "#888" }} />
                   </div>
 
                   <div 
@@ -813,7 +845,7 @@ export default function Checkout() {
                   <span className="spinner-text">Processing Order...</span>
                 ) : (
                   <>
-                    <span>{paymentMethod === "online" ? "Continue to Payment" : "Place Order (COD)"}</span>
+                    <span>{paymentMethod === "cod" ? "Place Order (COD)" : "Continue to Payment"}</span>
                     <Lock size={16} />
                   </>
                 )}
