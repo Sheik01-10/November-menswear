@@ -64,7 +64,7 @@ export default function PrivacyPolicy() {
             <ul>
               <li><strong>Personal details</strong>: Your name, email address, phone number and account credentials when you register or order.</li>
               <li><strong>Delivery Information</strong>: Shipping address, billing details, city, state, postal code and any landmark details.</li>
-              <li><strong>Payment Information</strong>: Order transactions, payment methods chosen (COD or online) and Razorpay transaction signatures. We do not store credit card details directly; all online transactions are securely handled by our licensed payment processors.</li>
+              <li><strong>Payment Information</strong>: Order transactions, payment methods chosen (COD or online) and Cashfree transaction details. We do not store credit card details directly; all online transactions are securely handled by our licensed payment processors.</li>
               <li><strong>Device & Usage Data</strong>: IP addresses, browser types, page viewing history, search parameters and wishlist interactions.</li>
             </ul>
           </motion.section>
@@ -82,7 +82,7 @@ export default function PrivacyPolicy() {
             </p>
             <ul>
               <li>Processing and delivering your bespoke apparel orders, including shipping coordination and order tracking.</li>
-              <li>Securing and verifying online transactions via Razorpay.</li>
+              <li>Securing and verifying online transactions via Cashfree.</li>
               <li>Managing your THE NOVEMBER Client Account and order history database.</li>
               <li>Improving our website navigation, product placement and design layout.</li>
               <li>Providing premium customer support, responding to inquiries and sharing luxury updates if requested.</li>
@@ -118,7 +118,7 @@ export default function PrivacyPolicy() {
             </p>
             <ul>
               <li><strong>Delivery Partners</strong>: Courier companies to dispatch and transport your packages to your doorstep.</li>
-              <li><strong>Payment Gateways</strong>: Razorpay for encrypting and handling card/net-banking transactions.</li>
+              <li><strong>Payment Gateways</strong>: Cashfree for encrypting and handling card/net-banking transactions.</li>
               <li><strong>Authentication Services</strong>: Firebase Auth to safely manage user sign-ins and passwords.</li>
             </ul>
           </motion.section>

@@ -13,15 +13,15 @@ import "./Checkout.css";
 
 const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
 
-// Helper function to load Razorpay Script
-const loadRazorpayScript = () => {
+// Helper function to load Cashfree Script
+const loadCashfreeScript = () => {
   return new Promise((resolve) => {
-    if (window.Razorpay) {
+    if (window.Cashfree) {
       resolve(true);
       return;
     }
     const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.src = "https://sdk.cashfree.com/js/v3/cashfree.js";
     script.async = true;
     script.onload = () => resolve(true);
     script.onerror = () => resolve(false);
@@ -121,13 +121,60 @@ export default function Checkout() {
 
     return () => unsubscribe();
   }, []);
-
-  // Redirect to cart if cart is empty and not in success state
+  // Redirect to cart if cart is empty and not in success state (skip if verifying query redirect order)
   useEffect(() => {
-    if (cart.length === 0 && !orderSuccess) {
+    const queryParams = new URLSearchParams(window.location.search);
+    const cfOrderId = queryParams.get("cf_order_id");
+    if (cart.length === 0 && !orderSuccess && !cfOrderId) {
       navigate("/cart");
     }
   }, [cart, orderSuccess, navigate]);
+
+  // Handle Cashfree redirect verification
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const cfOrderId = queryParams.get("cf_order_id");
+
+    if (cfOrderId) {
+      const verifyRedirectedPayment = async () => {
+        setLoading(true);
+        setError("");
+        try {
+          const storedOrderData = sessionStorage.getItem("pending_order_data");
+          if (!storedOrderData) {
+            setError("No pending order data found. If money was deducted, please contact support.");
+            setLoading(false);
+            return;
+          }
+
+          const orderData = JSON.parse(storedOrderData);
+          const verifyPayload = {
+            orderId: cfOrderId,
+            orderData: orderData
+          };
+
+          const verificationRes = await axios.post(`${BACKEND}/api/payments/verify`, verifyPayload);
+          if (verificationRes.status === 201 || verificationRes.status === 200) {
+            const createdOrder = verificationRes.data.order;
+            setOrderSuccess(createdOrder);
+            clearCart();
+            sessionStorage.removeItem("pending_order_data");
+            // Clean up the URL query parameters so refreshing doesn't re-trigger verification
+            window.history.replaceState({}, document.title, window.location.pathname);
+          } else {
+            setError("Payment verification failed. Please contact customer support.");
+          }
+        } catch (err) {
+          console.error("Redirect Verification Error:", err);
+          setError(err.response?.data?.message || err.message || "Failed to verify transaction.");
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      verifyRedirectedPayment();
+    }
+  }, [clearCart]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -216,9 +263,8 @@ export default function Checkout() {
       }
       return;
     }
-
-    // 2. Handle Online Payment (Razorpay) Route
-    const scriptLoaded = await loadRazorpayScript();
+    // 2. Handle Online Payment (Cashfree) Route
+    const scriptLoaded = await loadCashfreeScript();
     if (!scriptLoaded) {
       setError("Failed to load payment gateway SDK. Please check your internet connection.");
       setLoading(false);
@@ -233,13 +279,15 @@ export default function Checkout() {
     }));
 
     try {
-      // 1. Create order on backend to get Razorpay Order ID (calculated securely)
+      // 1. Create order on backend to get Cashfree payment session ID (calculated securely)
       const orderRes = await axios.post(`${BACKEND}/api/payments/create-order`, {
         items: paymentItems,
-        email: formData.email
+        email: formData.email,
+        phone: formData.phone,
+        customerName: formData.fullName
       });
 
-      const { id: rzpOrderId, amount: rzpAmount, currency, keyId } = orderRes.data;
+      const { payment_session_id, order_id } = orderRes.data;
 
       // 2. Prepare items mapped for Order Model saving
       const orderItems = cart.map((item) => {
@@ -253,39 +301,46 @@ export default function Checkout() {
         };
       });
 
-      // 3. Setup Razorpay options
-      const options = {
-        key: keyId || import.meta.env.VITE_RAZORPAY_KEY_ID,
-        amount: rzpAmount,
+      const orderDataToSave = {
+        customerName: formData.fullName,
+        customerEmail: formData.email,
+        customerPhoto: customerPhoto,
+        phone: formData.phone,
+        address: formData.address,
+        city: formData.city,
+        state: formData.state,
+        pincode: formData.pincode,
+        landmark: formData.landmark,
+        items: orderItems,
+        amount: grandTotal,
+        shippingCharge: shippingTotal
+      };
 
-        currency: currency,
-        name: "THE NOVEMBER Menswear",
-        description: "Premium Luxury Clothing",
-        image: "https://november-menswear.web.app/logo.png", // or local fallback
-        order_id: rzpOrderId,
-        handler: async function (response) {
-          setLoading(true);
-          setError("");
+      // Save order details to sessionStorage to handle potential redirects securely
+      sessionStorage.setItem("pending_order_data", JSON.stringify(orderDataToSave));
+
+      // 3. Initialize Cashfree and trigger Checkout Modal
+      const cashfree = window.Cashfree({
+        mode: import.meta.env.VITE_CASHFREE_MODE || "production"
+      });
+
+      setLoading(true);
+
+      cashfree.checkout({
+        paymentSessionId: payment_session_id,
+        redirectTarget: "_modal"
+      }).then(async (result) => {
+        if (result.error) {
+          console.error("Cashfree Payment Error/Dismiss:", result.error);
+          setError(result.error.message || "Payment cancelled. You can retry when you are ready.");
+          setLoading(false);
+          sessionStorage.removeItem("pending_order_data");
+        } else {
+          // If modal succeeds or closes after attempt, verify the order
           try {
-            // Verify payment on backend
             const verifyPayload = {
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_signature: response.razorpay_signature,
-              orderData: {
-                customerName: formData.fullName,
-                customerEmail: formData.email,
-                customerPhoto: customerPhoto,
-                phone: formData.phone,
-                address: formData.address,
-                city: formData.city,
-                state: formData.state,
-                pincode: formData.pincode,
-                landmark: formData.landmark,
-                items: orderItems,
-                amount: grandTotal,
-                shippingCharge: shippingTotal
-              }
+              orderId: order_id,
+              orderData: orderDataToSave
             };
 
             const verificationRes = await axios.post(`${BACKEND}/api/payments/verify`, verifyPayload);
@@ -293,6 +348,7 @@ export default function Checkout() {
               const createdOrder = verificationRes.data.order;
               setOrderSuccess(createdOrder);
               clearCart();
+              sessionStorage.removeItem("pending_order_data");
             } else {
               setError("Payment verification failed. Please contact customer support.");
             }
@@ -302,31 +358,9 @@ export default function Checkout() {
           } finally {
             setLoading(false);
           }
-        },
-        prefill: {
-          name: formData.fullName,
-          email: formData.email,
-          contact: formData.phone,
-          ...(paymentMethod === "upi" ? { method: "upi" } : {})
-        },
-        theme: {
-          color: "#111111", // Luxe brand primary color
-        },
-        modal: {
-          ondismiss: function () {
-            setLoading(false);
-            setError("Payment cancelled. You can retry when you are ready.");
-          }
         }
-      };
-
-      const rzpInstance = new window.Razorpay(options);
-      rzpInstance.on("payment.failed", function (response) {
-        console.error("Razorpay Payment Failed:", response.error);
-        setError(`Payment Failed: ${response.error.description}`);
-        setLoading(false);
       });
-      rzpInstance.open();
+
     } catch (err) {
       console.error("Order Creation Error:", err);
       setError(err.response?.data?.message || err.message || "Could not initiate payment. Please try again.");
@@ -767,7 +801,7 @@ export default function Checkout() {
                     </div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontWeight: 600, fontSize: 14, color: "#111", fontFamily: "var(--font-sans)" }}>Online Payment (Cards, Net Banking, Wallets)</div>
-                      <div style={{ fontSize: 11, color: "#888", marginTop: 2, fontFamily: "var(--font-sans)" }}>Pay securely via our Razorpay payment gateway</div>
+                      <div style={{ fontSize: 11, color: "#888", marginTop: 2, fontFamily: "var(--font-sans)" }}>Pay securely via our Cashfree payment gateway</div>
                     </div>
                     <CreditCard size={18} style={{ color: paymentMethod === "online" ? "#111" : "#888" }} />
                   </div>
