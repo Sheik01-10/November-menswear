@@ -2,6 +2,7 @@ import { memo, useState } from "react";
 import "./Footer.css";
 import { Link } from "react-router-dom";
 import { CreditCard, Clock, Truck, MapPin, Phone, Smartphone, Mail } from "lucide-react";
+import PaymentIcons from "./PaymentIcons";
 
 function Footer() {
   const [openSections, setOpenSections] = useState({
@@ -266,6 +267,7 @@ function Footer() {
             © 2026 THE NOVEMBER.
             All Rights Reserved.
           </p>
+          <PaymentIcons />
         </div>
       </footer>
     </>
