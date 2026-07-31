@@ -2,6 +2,7 @@ import { memo, useState } from "react";
 import "./Footer.css";
 import { Link } from "react-router-dom";
 import { CreditCard, Clock, Truck, MapPin, Phone, Smartphone, Mail } from "lucide-react";
+import { FaInstagram } from "react-icons/fa";
 import PaymentIcons from "./PaymentIcons";
 
 function Footer() {
@@ -150,6 +151,15 @@ function Footer() {
                   <a href="mailto:team.thenovember@gmail.com">team.thenovember@gmail.com</a>
                 </span>
               </div>
+
+              <div className="support-item">
+                <span className="support-icon">
+                  <FaInstagram size={18} />
+                </span>
+                <span className="support-text">
+                  <a href="https://www.instagram.com/thenovember.in" target="_blank" rel="noopener noreferrer">@thenovember.in</a>
+                </span>
+              </div>
             </div>
           </div>
 
@@ -255,6 +265,15 @@ function Footer() {
                 </span>
                 <span className="support-text">
                   <a href="mailto:team.thenovember@gmail.com">team.thenovember@gmail.com</a>
+                </span>
+              </div>
+
+              <div className="support-item">
+                <span className="support-icon">
+                  <FaInstagram size={18} />
+                </span>
+                <span className="support-text">
+                  <a href="https://www.instagram.com/thenovember.in" target="_blank" rel="noopener noreferrer">@thenovember.in</a>
                 </span>
               </div>
             </div>
