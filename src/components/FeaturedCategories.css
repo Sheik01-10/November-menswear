@@ -24,7 +24,13 @@
   transform:
   translateY(40px);
 
-  transition:1s ease;
+  transition: transform 1s ease,
+    opacity 1s ease,
+    color 1s ease,
+    background-color 1s ease,
+    border-color 1s ease,
+    box-shadow 1s ease,
+    filter 1s ease;
 }
 
 /* grid */
@@ -96,7 +102,13 @@
   letter-spacing:2px;
   text-transform:uppercase;
 
-  transition:.35s ease;
+  transition: transform .35s ease,
+    opacity .35s ease,
+    color .35s ease,
+    background-color .35s ease,
+    border-color .35s ease,
+    box-shadow .35s ease,
+    filter .35s ease;
 }
 
 .curate-cat-card:hover

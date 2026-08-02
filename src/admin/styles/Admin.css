@@ -156,7 +156,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   color: #1d1d1f;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
   outline: none;
-  transition: .3s;
+  transition: transform .3s,
+    opacity .3s,
+    color .3s,
+    background-color .3s,
+    border-color .3s,
+    box-shadow .3s,
+    filter .3s;
 }
 
 .admin-form input:focus { box-shadow: inset 0 0 0 2px #000; }
@@ -256,7 +262,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   background: #fff;
   cursor: pointer;
   position: relative;
-  transition: .3s;
+  transition: transform .3s,
+    opacity .3s,
+    color .3s,
+    background-color .3s,
+    border-color .3s,
+    box-shadow .3s,
+    filter .3s;
   display: flex; align-items: center; justify-content: center;
 }
 
@@ -364,7 +376,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 26px;
-  transition: .35s;
+  transition: transform .35s,
+    opacity .35s,
+    color .35s,
+    background-color .35s,
+    border-color .35s,
+    box-shadow .35s,
+    filter .35s;
   box-shadow: var(--shadow-sm);
   cursor: default;
 }
@@ -492,7 +510,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   gap: 10px;
   font-size: 14px;
   font-weight: 500;
-  transition: .3s;
+  transition: transform .3s,
+    opacity .3s,
+    color .3s,
+    background-color .3s,
+    border-color .3s,
+    box-shadow .3s,
+    filter .3s;
   text-decoration: none;
 }
 
@@ -563,7 +587,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   letter-spacing: 2px;
   padding: 4px 8px;
   border-radius: 8px;
-  transition: .2s;
+  transition: transform .2s,
+    opacity .2s,
+    color .2s,
+    background-color .2s,
+    border-color .2s,
+    box-shadow .2s,
+    filter .2s;
 }
 
 .table-actions-btn:hover { background: #f0f0f0; color: #111; }
@@ -609,7 +639,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: .3s;
+  transition: transform .3s,
+    opacity .3s,
+    color .3s,
+    background-color .3s,
+    border-color .3s,
+    box-shadow .3s,
+    filter .3s;
 }
 
 .btn-primary:hover {
@@ -632,7 +668,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: .3s;
+  transition: transform .3s,
+    opacity .3s,
+    color .3s,
+    background-color .3s,
+    border-color .3s,
+    box-shadow .3s,
+    filter .3s;
 }
 
 .btn-secondary:hover { background: #f5f5f5; }
@@ -645,7 +687,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   cursor: pointer;
   padding: 6px 10px;
   border-radius: 8px;
-  transition: .2s;
+  transition: transform .2s,
+    opacity .2s,
+    color .2s,
+    background-color .2s,
+    border-color .2s,
+    box-shadow .2s,
+    filter .2s;
   font-size: 13px;
 }
 
@@ -659,7 +707,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   cursor: pointer;
   padding: 6px 10px;
   border-radius: 8px;
-  transition: .2s;
+  transition: transform .2s,
+    opacity .2s,
+    color .2s,
+    background-color .2s,
+    border-color .2s,
+    box-shadow .2s,
+    filter .2s;
   font-size: 13px;
   display: inline-flex;
   align-items: center;
@@ -799,7 +853,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   width: 36px; height: 36px;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: .2s;
+  transition: transform .2s,
+    opacity .2s,
+    color .2s,
+    background-color .2s,
+    border-color .2s,
+    box-shadow .2s,
+    filter .2s;
 }
 
 .modal-close:hover { background: #ececec; }
@@ -916,7 +976,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
-  transition: .3s;
+  transition: transform .3s,
+    opacity .3s,
+    color .3s,
+    background-color .3s,
+    border-color .3s,
+    box-shadow .3s,
+    filter .3s;
 }
 
 .banner-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
@@ -946,7 +1012,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   inset: 0;
   background: #ccc;
   border-radius: 30px;
-  transition: .3s;
+  transition: transform .3s,
+    opacity .3s,
+    color .3s,
+    background-color .3s,
+    border-color .3s,
+    box-shadow .3s,
+    filter .3s;
 }
 .toggle-slider:before {
   content: "";
@@ -955,7 +1027,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   left: 3px; bottom: 3px;
   background: white;
   border-radius: 50%;
-  transition: .3s;
+  transition: transform .3s,
+    opacity .3s,
+    color .3s,
+    background-color .3s,
+    border-color .3s,
+    box-shadow .3s,
+    filter .3s;
 }
 .toggle-switch input:checked + .toggle-slider { background: #111; }
 .toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
@@ -996,7 +1074,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   font-weight: 500;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: .2s;
+  transition: transform .2s,
+    opacity .2s,
+    color .2s,
+    background-color .2s,
+    border-color .2s,
+    box-shadow .2s,
+    filter .2s;
   border: none;
   background: none;
   width: 100%;
@@ -1154,7 +1238,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   justify-content: center;
   cursor: pointer;
   background: #fafafa;
-  transition: all 0.2s ease;
+  transition: transform 0.2s ease,
+    opacity 0.2s ease,
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
   padding: 16px;
   text-align: center;
 }
@@ -1453,7 +1543,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
-  transition: all 0.2s;
+  transition: transform 0.2s,
+    opacity 0.2s,
+    color 0.2s,
+    background-color 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s,
+    filter 0.2s;
 }
 
 .toast-close-btn:hover {
@@ -1572,7 +1668,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   font-size: 15px;
   font-weight: 500;
   background: transparent;
-  transition: all 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out,
+    opacity 0.2s ease-in-out,
+    color 0.2s ease-in-out,
+    background-color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out,
+    filter 0.2s ease-in-out;
   font-family: var(--font-sans);
 }
 
@@ -1600,7 +1702,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   justify-content: center;
   align-items: center;
   gap: 10px;
-  transition: all 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out,
+    opacity 0.2s ease-in-out,
+    color 0.2s ease-in-out,
+    background-color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out,
+    filter 0.2s ease-in-out;
   font-family: var(--font-sans);
 }
 
@@ -2097,7 +2205,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: transform 0.2s,
+    opacity 0.2s,
+    color 0.2s,
+    background-color 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s,
+    filter 0.2s;
   color: #555;
 }
 
@@ -2225,7 +2339,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: transform 0.2s,
+    opacity 0.2s,
+    color 0.2s,
+    background-color 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s,
+    filter 0.2s;
 }
 
 .btn-cropper-cancel:hover {
@@ -2242,7 +2362,13 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text-p
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: transform 0.2s,
+    opacity 0.2s,
+    color 0.2s,
+    background-color 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s,
+    filter 0.2s;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 

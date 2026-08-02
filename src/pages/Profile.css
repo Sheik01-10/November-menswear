@@ -124,7 +124,13 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease,
+    opacity 0.3s ease,
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    filter 0.3s ease;
 }
 
 .profile-logout-btn:hover {
@@ -227,7 +233,13 @@
   font-weight: 500;
   letter-spacing: 1px;
   text-transform: uppercase;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease,
+    opacity 0.3s ease,
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    filter 0.3s ease;
 }
 
 .shop-collection-btn:hover {
@@ -248,7 +260,13 @@
   border-radius: 20px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.01);
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    filter 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .order-card-item.expanded {
@@ -620,7 +638,13 @@
   font-size: 14.5px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease,
+    opacity 0.3s ease,
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    filter 0.3s ease;
   width: 100%;
   box-sizing: border-box;
 }
@@ -733,7 +757,13 @@
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  transition: all 0.25s ease;
+  transition: transform 0.25s ease,
+    opacity 0.25s ease,
+    color 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
   border: 2px solid #ffffff;
 }
 
@@ -848,7 +878,13 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease,
+    opacity 0.3s ease,
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    filter 0.3s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -899,7 +935,13 @@
   font-weight: 500;
   letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease,
+    opacity 0.3s ease,
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    filter 0.3s ease;
 }
 
 .add-address-trigger-btn:hover {
@@ -950,7 +992,13 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease,
+    opacity 0.3s ease,
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    filter 0.3s ease;
 }
 
 .add-address-btn:hover {
@@ -976,7 +1024,13 @@
   flex-direction: column;
   justify-content: space-between;
   position: relative;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease,
+    opacity 0.3s ease,
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    filter 0.3s ease;
   min-height: 220px;
   box-sizing: border-box;
 }
@@ -1135,7 +1189,13 @@
   background-color: #ffffff;
   border: 1px solid #d0d0d0;
   border-radius: 4px;
-  transition: all 0.2s ease;
+  transition: transform 0.2s ease,
+    opacity 0.2s ease,
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
 }
 
 .checkbox-container:hover input ~ .checkmark {
@@ -1188,7 +1248,13 @@
   font-weight: 500;
   letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: transform 0.25s ease,
+    opacity 0.25s ease,
+    color 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
 }
 
 .address-cancel-btn:hover {
@@ -1242,7 +1308,13 @@
   border-radius: 14px;
   background: #ffffff;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease,
+    opacity 0.3s ease,
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    filter 0.3s ease;
 }
 
 .faq-accordion-item:hover {
@@ -1382,7 +1454,13 @@
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: transform 0.25s ease,
+    opacity 0.25s ease,
+    color 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
 }
 
 .reset-inquiry-btn:hover {

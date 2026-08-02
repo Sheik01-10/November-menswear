@@ -55,6 +55,12 @@ export default function Profile() {
   const [loadingOrders, setLoadingOrders] = useState(true);
   const [authLoading, setAuthLoading] = useState(true);
   const [expandedOrder, setExpandedOrder] = useState(null);
+  
+  // Order Cancellation States
+  const [cancellingOrder, setCancellingOrder] = useState(null);
+  const [cancelReasonOption, setCancelReasonOption] = useState("Order placed by mistake");
+  const [cancelReasonText, setCancelReasonText] = useState("");
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   // Tab State
   const [activeTab, setActiveTab] = useState(() => {
@@ -167,6 +173,38 @@ export default function Profile() {
   const toggleOrderExpand = useCallback((orderId) => {
     setExpandedOrder((prev) => (prev === orderId ? null : orderId));
   }, []);
+
+  const handleInitiateCancel = useCallback((order) => {
+    setCancellingOrder(order);
+    setCancelReasonOption("Order placed by mistake");
+    setCancelReasonText("");
+    setShowCancelModal(true);
+  }, []);
+
+  const handleConfirmCancel = useCallback(async () => {
+    if (!cancellingOrder) return;
+    const finalReason = cancelReasonOption === "Other" ? cancelReasonText.trim() : cancelReasonOption;
+    if (cancelReasonOption === "Other" && !finalReason) {
+      toast.error("Please enter a reason for cancellation.");
+      return;
+    }
+
+    try {
+      const res = await axios.put(`${BACKEND}/api/orders/${cancellingOrder._id}`, {
+        status: "Cancelled",
+        cancellationReason: finalReason
+      });
+
+      setOrders(prev => prev.map(o => o._id === cancellingOrder._id ? res.data : o));
+      setShowCancelModal(false);
+      setCancellingOrder(null);
+      setCancelReasonText("");
+      toast.success(`Order ${cancellingOrder.orderId} cancelled successfully.`);
+    } catch (err) {
+      console.error("Error cancelling order:", err);
+      toast.error("Failed to cancel the order. Please try again.");
+    }
+  }, [cancellingOrder, cancelReasonOption, cancelReasonText]);
 
   const getStatusClass = useCallback((status) => {
     return {
@@ -689,6 +727,48 @@ export default function Profile() {
                                   ))}
                                 </div>
                               </div>
+                              
+                              {/* Order Action (Cancel) */}
+                              {(order.status === "Pending" || order.status === "Processing") && (
+                                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 24, paddingTop: 16, borderTop: "1px solid #eaeaea" }}>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleInitiateCancel(order)}
+                                    style={{
+                                      background: "transparent",
+                                      border: "1px solid #b91c1c",
+                                      color: "#b91c1c",
+                                      padding: "8px 20px",
+                                      borderRadius: "8px",
+                                      cursor: "pointer",
+                                      fontSize: "12px",
+                                      fontWeight: "600",
+                                      letterSpacing: "0.5px",
+                                      textTransform: "uppercase",
+                                      transition: "background-color 0.2s, color 0.2s"
+                                    }}
+                                    onMouseEnter={(e) => {
+                                      e.currentTarget.style.backgroundColor = "#b91c1c";
+                                      e.currentTarget.style.color = "#fff";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      e.currentTarget.style.backgroundColor = "transparent";
+                                      e.currentTarget.style.color = "#b91c1c";
+                                    }}
+                                  >
+                                    Cancel Order
+                                  </button>
+                                </div>
+                              )}
+
+                              {order.status === "Cancelled" && order.cancellationReason && (
+                                <div style={{ marginTop: 24, paddingTop: 16, borderTop: "1px solid #eaeaea" }}>
+                                  <h4 style={{ fontSize: "12px", fontWeight: "600", textTransform: "uppercase", letterSpacing: "1px", color: "#888", margin: "0 0 10px 0" }}>Cancellation Reason</h4>
+                                  <p style={{ fontSize: "13.5px", color: "#b91c1c", fontStyle: "italic", margin: 0 }}>
+                                    "{order.cancellationReason}"
+                                  </p>
+                                </div>
+                              )}
                             </div>
                           )}
                         </div>
@@ -1021,6 +1101,138 @@ export default function Profile() {
           </div>
         </div>
       </div>
+      {showCancelModal && cancellingOrder && (
+        <div 
+          className="modal-overlay" 
+          onClick={() => {
+            setShowCancelModal(false);
+            setCancellingOrder(null);
+            setCancelReasonText("");
+          }}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.5)",
+            backdropFilter: "blur(4px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 99999
+          }}
+        >
+          <div 
+            className="modal-box"
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: "#fff",
+              padding: "30px",
+              borderRadius: "20px",
+              width: "90%",
+              maxWidth: "460px",
+              boxShadow: "0 20px 50px rgba(0,0,0,0.15)",
+              color: "#000"
+            }}
+          >
+            <h3 style={{ fontSize: "20px", fontWeight: "600", marginBottom: "12px", fontFamily: "'Cinzel', serif", color: "#111" }}>
+              Cancel Order {cancellingOrder.orderId}
+            </h3>
+            <p style={{ fontSize: "13.5px", color: "#666", marginBottom: "20px" }}>
+              Please select a reason for cancelling this order. This action cannot be undone.
+            </p>
+            
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "20px" }}>
+              {[
+                "Order placed by mistake",
+                "Incorrect shipping address",
+                "Changed my mind",
+                "Found a better price elsewhere",
+                "Other"
+              ].map((reason) => (
+                <label 
+                  key={reason} 
+                  style={{ 
+                    display: "flex", 
+                    alignItems: "center", 
+                    gap: "10px", 
+                    fontSize: "14px", 
+                    color: "#333", 
+                    cursor: "pointer" 
+                  }}
+                >
+                  <input
+                    type="radio"
+                    name="cancelReason"
+                    value={reason}
+                    checked={cancelReasonOption === reason}
+                    onChange={(e) => setCancelReasonOption(e.target.value)}
+                    style={{ accentColor: "#111" }}
+                  />
+                  <span>{reason}</span>
+                </label>
+              ))}
+            </div>
+
+            {cancelReasonOption === "Other" && (
+              <textarea
+                placeholder="Please enter your reason for cancellation..."
+                value={cancelReasonText}
+                onChange={(e) => setCancelReasonText(e.target.value)}
+                style={{
+                  width: "100%",
+                  height: "80px",
+                  padding: "12px",
+                  borderRadius: "10px",
+                  border: "1px solid #ccc",
+                  fontSize: "13px",
+                  fontFamily: "inherit",
+                  resize: "none",
+                  marginBottom: "20px",
+                  boxSizing: "border-box"
+                }}
+              />
+            )}
+
+            <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowCancelModal(false);
+                  setCancellingOrder(null);
+                  setCancelReasonText("");
+                }}
+                style={{
+                  background: "transparent",
+                  border: "1px solid #ddd",
+                  padding: "10px 20px",
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                  fontSize: "13px",
+                  fontWeight: "500",
+                  color: "#555"
+                }}
+              >
+                Go Back
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmCancel}
+                style={{
+                  background: "#b91c1c",
+                  border: "none",
+                  color: "#fff",
+                  padding: "10px 24px",
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                  fontSize: "13px",
+                  fontWeight: "600"
+                }}
+              >
+                Confirm Cancellation
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <Footer />
     </>
   );

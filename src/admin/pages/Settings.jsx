@@ -224,7 +224,7 @@ export default function AdminSettings() {
                         background: ann.active ? "#fafafa" : "#f5f5f5",
                         border: "1px solid #ececec",
                         borderRadius: 12,
-                        transition: "all 0.2s ease"
+                        transition: "background-color 0.2s ease"
                       }}
                     >
                       {/* Reorder Buttons */}

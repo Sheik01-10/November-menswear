@@ -141,7 +141,7 @@ export default function AdminSupport() {
               fontSize: 13,
               fontWeight: 500,
               cursor: "pointer",
-              transition: ".2s"
+              transition: "background-color 0.2s, border-color 0.2s, color 0.2s"
             }}
           >
             {s}

@@ -20,7 +20,13 @@
 
     color:#111;
 
-    transition:.35s ease;
+    transition: transform .35s ease,
+    opacity .35s ease,
+    color .35s ease,
+    background-color .35s ease,
+    border-color .35s ease,
+    box-shadow .35s ease,
+    filter .35s ease;
 
     z-index:20;
 }

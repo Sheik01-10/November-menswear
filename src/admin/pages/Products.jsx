@@ -469,7 +469,7 @@ export default function AdminProducts() {
                             fontWeight: isSelected ? "600" : "400",
                             borderRadius: "4px",
                             cursor: "pointer",
-                            transition: "all 0.2s ease"
+                            transition: "background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease"
                           }}
                         >
                           {sz}

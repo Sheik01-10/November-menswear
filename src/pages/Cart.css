@@ -134,7 +134,13 @@
 
   box-shadow:var(--shadow);
 
-  transition:.4s;
+  transition: transform .4s,
+    opacity .4s,
+    color .4s,
+    background-color .4s,
+    border-color .4s,
+    box-shadow .4s,
+    filter .4s;
 
 }
 
@@ -246,7 +252,13 @@
 
   cursor:pointer;
 
-  transition:.3s;
+  transition: transform .3s,
+    opacity .3s,
+    color .3s,
+    background-color .3s,
+    border-color .3s,
+    box-shadow .3s,
+    filter .3s;
 
 }
 
@@ -296,7 +308,13 @@
 
   cursor:pointer;
 
-  transition:.3s;
+  transition: transform .3s,
+    opacity .3s,
+    color .3s,
+    background-color .3s,
+    border-color .3s,
+    box-shadow .3s,
+    filter .3s;
 
 }
 
@@ -396,7 +414,13 @@
 
   cursor:pointer;
 
-  transition:.35s;
+  transition: transform .35s,
+    opacity .35s,
+    color .35s,
+    background-color .35s,
+    border-color .35s,
+    box-shadow .35s,
+    filter .35s;
 
   font-size:15px;
 
@@ -460,7 +484,13 @@
 
   text-decoration:none;
 
-  transition:.35s;
+  transition: transform .35s,
+    opacity .35s,
+    color .35s,
+    background-color .35s,
+    border-color .35s,
+    box-shadow .35s,
+    filter .35s;
 
 }
 

@@ -108,7 +108,13 @@ body.drawer-open .lux-header {
 
   border: 1px solid #000;
 
-  transition: all .3s ease;
+  transition: transform .3s ease,
+    opacity .3s ease,
+    color .3s ease,
+    background-color .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease,
+    filter .3s ease;
 }
 
 .profile-avatar:hover {
@@ -194,7 +200,13 @@ body.drawer-open .lux-header {
 
   cursor: pointer;
 
-  transition: all .3s ease;
+  transition: transform .3s ease,
+    opacity .3s ease,
+    color .3s ease,
+    background-color .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease,
+    filter .3s ease;
 }
 
 .profile-dropdown a:hover,
@@ -280,7 +292,13 @@ body.drawer-open .lux-header {
   letter-spacing:2.2px;
 
   position:relative;
-  transition:.3s ease;
+  transition: transform .3s ease,
+    opacity .3s ease,
+    color .3s ease,
+    background-color .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease,
+    filter .3s ease;
 }
 
 .lux-nav a::after{
@@ -402,7 +420,13 @@ body.drawer-open .lux-header {
   justify-content:center;
 
   cursor:pointer;
-  transition:.3s ease;
+  transition: transform .3s ease,
+    opacity .3s ease,
+    color .3s ease,
+    background-color .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease,
+    filter .3s ease;
 }
 
 .icon-btn:hover{
@@ -494,7 +518,13 @@ body.drawer-open .lux-header {
     );
 
     transform:skewX(-20deg);
-    transition:1s;
+    transition: transform 1s,
+    opacity 1s,
+    color 1s,
+    background-color 1s,
+    border-color 1s,
+    box-shadow 1s,
+    filter 1s;
 }
 
 .profile-dropdown:hover::before{
@@ -579,7 +609,13 @@ body.drawer-open .lux-header {
     font-size:15px;
     font-weight:500;
 
-    transition:.3s ease;
+    transition: transform .3s ease,
+    opacity .3s ease,
+    color .3s ease,
+    background-color .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease,
+    filter .3s ease;
 }
 
 .profile-menu a span,
@@ -620,7 +656,13 @@ body.drawer-open .lux-header {
 
     cursor:pointer;
 
-    transition:.3s ease;
+    transition: transform .3s ease,
+    opacity .3s ease,
+    color .3s ease,
+    background-color .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease,
+    filter .3s ease;
 }
 
 .logout-btn:hover{
@@ -858,7 +900,13 @@ body.drawer-open .lux-header {
   cursor:pointer;
   box-shadow:none;
 
-  transition:.3s ease;
+  transition: transform .3s ease,
+    opacity .3s ease,
+    color .3s ease,
+    background-color .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease,
+    filter .3s ease;
 }
 
 .close-btn:hover{
@@ -887,7 +935,13 @@ body.drawer-open .lux-header {
   padding:14px 0;
   display:block;
 
-  transition:.25s ease;
+  transition: transform .25s ease,
+    opacity .25s ease,
+    color .25s ease,
+    background-color .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease,
+    filter .25s ease;
 }
 
 .drawer a:hover{
@@ -1009,7 +1063,13 @@ body.drawer-open .lux-header {
   justify-content: center;
   cursor: pointer;
   color: #111;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease,
+    opacity 0.3s ease,
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    filter 0.3s ease;
 }
 
 .search-close-btn:hover {
@@ -1120,7 +1180,13 @@ body.drawer-open .lux-header {
   letter-spacing: 1px;
   text-transform: uppercase;
   color: #444;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease,
+    opacity 0.3s ease,
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    filter 0.3s ease;
 }
 
 .popular-tag-btn:hover {
@@ -1143,7 +1209,13 @@ body.drawer-open .lux-header {
   padding: 12px;
   border-radius: 16px;
   cursor: pointer;
-  transition: all 0.35s ease;
+  transition: transform 0.35s ease,
+    opacity 0.35s ease,
+    color 0.35s ease,
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    filter 0.35s ease;
   border: 1px solid transparent;
 }
 
@@ -1215,7 +1287,13 @@ body.drawer-open .lux-header {
   text-transform: uppercase;
   cursor: pointer;
   margin-top: 10px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease,
+    opacity 0.3s ease,
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    filter 0.3s ease;
   text-align: center;
 }
 

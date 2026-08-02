@@ -52,7 +52,13 @@
     var(--text-secondary);
   max-width: 1200px;
   margin: auto;
-  transition: .5s ease;
+  transition: transform .5s ease,
+    opacity .5s ease,
+    color .5s ease,
+    background-color .5s ease,
+    border-color .5s ease,
+    box-shadow .5s ease,
+    filter .5s ease;
 }
 
 .story-dots {
@@ -69,7 +75,13 @@
   background:
     rgba(0,0,0,.15);
   cursor: pointer;
-  transition: .3s;
+  transition: transform .3s,
+    opacity .3s,
+    color .3s,
+    background-color .3s,
+    border-color .3s,
+    box-shadow .3s,
+    filter .3s;
 }
 
 .dot.active {

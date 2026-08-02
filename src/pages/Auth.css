@@ -170,7 +170,13 @@
 
   font-size:15px;
 
-  transition:.3s ease;
+  transition: transform .3s ease,
+    opacity .3s ease,
+    color .3s ease,
+    background-color .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease,
+    filter .3s ease;
 }
 
 .input-group input:focus{
@@ -233,7 +239,13 @@
 
   font-size:14px;
 
-  transition:.3s ease;
+  transition: transform .3s ease,
+    opacity .3s ease,
+    color .3s ease,
+    background-color .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease,
+    filter .3s ease;
 }
 
 .forgot-wrap a:hover{
@@ -260,7 +272,13 @@
 
   cursor:pointer;
 
-  transition:.35s ease;
+  transition: transform .35s ease,
+    opacity .35s ease,
+    color .35s ease,
+    background-color .35s ease,
+    border-color .35s ease,
+    box-shadow .35s ease,
+    filter .35s ease;
 }
 
 .auth-btn:hover{
@@ -288,7 +306,13 @@
 
   cursor:pointer;
 
-  transition:.3s ease;
+  transition: transform .3s ease,
+    opacity .3s ease,
+    color .3s ease,
+    background-color .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease,
+    filter .3s ease;
 }
 
 .google-btn:hover{

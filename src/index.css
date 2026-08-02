@@ -66,8 +66,33 @@ body {
 .product-card,
 .curate-cat-card,
 .luxury-card,
-.announcement-track {
+.announcement-track,
+.cart-card,
+.wishlist-btn,
+.floating-whatsapp,
+.about-image img,
+.value-card,
+.btn-back-collection,
+.main-gallery-arrow,
+.view-all-btn,
+.luxury-btn,
+.drawer-overlay,
+.search-overlay-backdrop,
+.dot,
+.story-dots .dot {
   transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* GPU promotion for elements with custom base transforms (e.g. translation positions or keyframe offsets) */
+.drawer,
+.custom-prev,
+.custom-next,
+.search-container-box,
+.profile-dropdown,
+.mobile-profile-dropdown {
+  will-change: transform, opacity;
   backface-visibility: hidden;
   perspective: 1000px;
 }

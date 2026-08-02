@@ -55,7 +55,13 @@
   align-items: center;
   justify-content: center;
 
-  transition: all .35s ease;
+  transition: transform .35s ease,
+    opacity .35s ease,
+    color .35s ease,
+    background-color .35s ease,
+    border-color .35s ease,
+    box-shadow .35s ease,
+    filter .35s ease;
 }
 
 .custom-prev {
@@ -220,7 +226,13 @@
   background: rgba(0,0,0,0.02);
   backdrop-filter: blur(12px);
 
-  transition: all .35s ease;
+  transition: transform .35s ease,
+    opacity .35s ease,
+    color .35s ease,
+    background-color .35s ease,
+    border-color .35s ease,
+    box-shadow .35s ease,
+    filter .35s ease;
 }
 
 .view-all-btn:hover {

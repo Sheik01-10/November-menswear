@@ -787,7 +787,7 @@ export default function Checkout() {
                       alignItems: "center",
                       gap: 14,
                       cursor: "pointer",
-                      transition: "all 0.25s ease",
+                      transition: "background-color 0.25s ease, border-color 0.25s ease",
                       background: paymentMethod === "online" ? "#fbfbfa" : "#fff"
                     }}
                   >
@@ -795,7 +795,7 @@ export default function Checkout() {
                       width: 18, height: 18, borderRadius: "50%", border: "2px solid",
                       borderColor: paymentMethod === "online" ? "#111" : "#b0b0b0",
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      transition: "all 0.2s"
+                      transition: "border-color 0.2s"
                     }}>
                       {paymentMethod === "online" && <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#111" }} />}
                     </div>
@@ -818,7 +818,7 @@ export default function Checkout() {
                       alignItems: "center",
                       gap: 14,
                       cursor: "pointer",
-                      transition: "all 0.25s ease",
+                      transition: "background-color 0.25s ease, border-color 0.25s ease",
                       background: paymentMethod === "upi" ? "#fbfbfa" : "#fff"
                     }}
                   >
@@ -826,7 +826,7 @@ export default function Checkout() {
                       width: 18, height: 18, borderRadius: "50%", border: "2px solid",
                       borderColor: paymentMethod === "upi" ? "#111" : "#b0b0b0",
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      transition: "all 0.2s"
+                      transition: "border-color 0.2s"
                     }}>
                       {paymentMethod === "upi" && <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#111" }} />}
                     </div>
@@ -849,7 +849,7 @@ export default function Checkout() {
                       alignItems: "center",
                       gap: 14,
                       cursor: "pointer",
-                      transition: "all 0.25s ease",
+                      transition: "background-color 0.25s ease, border-color 0.25s ease",
                       background: paymentMethod === "cod" ? "#fbfbfa" : "#fff"
                     }}
                   >
@@ -857,7 +857,7 @@ export default function Checkout() {
                       width: 18, height: 18, borderRadius: "50%", border: "2px solid",
                       borderColor: paymentMethod === "cod" ? "#111" : "#b0b0b0",
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      transition: "all 0.2s"
+                      transition: "border-color 0.2s"
                     }}>
                       {paymentMethod === "cod" && <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#111" }} />}
                     </div>

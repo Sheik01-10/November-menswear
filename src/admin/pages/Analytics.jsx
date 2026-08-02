@@ -219,7 +219,7 @@ export default function AdminAnalytics() {
     borderRadius: 14,
     fontSize: 13,
     cursor: "pointer",
-    transition: "all 0.3s ease",
+    transition: "background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease",
     display: "flex",
     alignItems: "center",
     gap: 8,
@@ -271,7 +271,7 @@ export default function AdminAnalytics() {
               background: socketConnected ? "#dcfce7" : "#fee2e2",
               color: socketConnected ? "#15803d" : "#b91c1c",
               border: `1px solid ${socketConnected ? "#bbf7d0" : "#fecaca"}`,
-              transition: "all 0.3s ease"
+              transition: "background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease"
             }}>
               <span style={{
                 display: "inline-block",
@@ -476,7 +476,7 @@ export default function AdminAnalytics() {
                         style={{
                           border: "none", background: trendMode === "daily" ? "#fff" : "transparent",
                           color: trendMode === "daily" ? "#111" : "#777", fontWeight: 600,
-                          padding: "6px 12px", borderRadius: 8, fontSize: 12, cursor: "pointer", transition: "0.2s"
+                          padding: "6px 12px", borderRadius: 8, fontSize: 12, cursor: "pointer", transition: "background-color 0.2s, color 0.2s"
                         }}
                       >
                         Daily (30d)
@@ -486,7 +486,7 @@ export default function AdminAnalytics() {
                         style={{
                           border: "none", background: trendMode === "hourly" ? "#fff" : "transparent",
                           color: trendMode === "hourly" ? "#111" : "#777", fontWeight: 600,
-                          padding: "6px 12px", borderRadius: 8, fontSize: 12, cursor: "pointer", transition: "0.2s"
+                          padding: "6px 12px", borderRadius: 8, fontSize: 12, cursor: "pointer", transition: "background-color 0.2s, color 0.2s"
                         }}
                       >
                         Hourly (24h)

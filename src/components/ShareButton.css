@@ -20,7 +20,13 @@
 
     color: #111;
 
-    transition: .35s ease;
+    transition: transform .35s ease,
+    opacity .35s ease,
+    color .35s ease,
+    background-color .35s ease,
+    border-color .35s ease,
+    box-shadow .35s ease,
+    filter .35s ease;
 
     z-index: 20;
 }
@@ -45,7 +51,13 @@
     letter-spacing: 2px;
     text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    color 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    background-color 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-color 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    filter 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .btn-share-detail:hover {
@@ -201,7 +213,13 @@
     background: rgba(255, 255, 255, 0.6);
     border: 1px solid rgba(0, 0, 0, 0.05);
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: transform 0.25s ease,
+    opacity 0.25s ease,
+    color 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
 }
 
 .share-option-item:hover {

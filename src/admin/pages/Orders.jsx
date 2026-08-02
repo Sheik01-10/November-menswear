@@ -122,7 +122,7 @@ export default function AdminOrders() {
               borderColor: statusFilter === s ? "#111" : "#ececec",
               background: statusFilter === s ? "#111" : "#fff",
               color: statusFilter === s ? "#fff" : "#555",
-              fontSize: 13, fontWeight: 500, cursor: "pointer", transition: ".2s"
+              fontSize: 13, fontWeight: 500, cursor: "pointer", transition: "background-color 0.2s, border-color 0.2s, color 0.2s"
             }}
           >
             {s}
@@ -181,7 +181,25 @@ export default function AdminOrders() {
                         {o.paymentStatus || "Unpaid"}
                       </span>
                     </td>
-                    <td><span className={`status-badge ${getStatusClass(o.status)}`}>{o.status}</span></td>
+                    <td>
+                      <span className={`status-badge ${getStatusClass(o.status)}`}>{o.status}</span>
+                      {o.status === "Cancelled" && o.cancellationReason && (
+                        <div 
+                          style={{ 
+                            fontSize: 11, 
+                            color: "#b91c1c", 
+                            marginTop: 4, 
+                            maxWidth: 120, 
+                            whiteSpace: "nowrap", 
+                            overflow: "hidden", 
+                            textOverflow: "ellipsis" 
+                          }} 
+                          title={`Cancellation Reason: ${o.cancellationReason}`}
+                        >
+                          Reason: {o.cancellationReason}
+                        </div>
+                      )}
+                    </td>
                     <td style={{ color: "#888" }}>
                       {new Date(o.date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                     </td>
@@ -253,6 +271,13 @@ export default function AdminOrders() {
                 </select>
               </div>
             </div>
+
+            {selectedOrder.status === "Cancelled" && selectedOrder.cancellationReason && (
+              <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: "14px 18px", marginBottom: 20 }}>
+                <p style={{ fontSize: 11, color: "#b91c1c", marginBottom: 6, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Cancellation Reason</p>
+                <p style={{ fontSize: 13.5, margin: 0, color: "#991b1b", fontStyle: "italic" }}>"{selectedOrder.cancellationReason}"</p>
+              </div>
+            )}
 
             {/* Shipping Details */}
             {selectedOrder.address && (

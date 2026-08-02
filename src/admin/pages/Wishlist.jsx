@@ -98,7 +98,7 @@ export default function AdminWishlist() {
                     padding: "10px 14px", borderRadius: 14, cursor: "pointer",
                     background: isActive ? "#f8f5f0" : "transparent",
                     border: "1px solid", borderColor: isActive ? "#ececec" : "transparent",
-                    transition: ".2s"
+                    transition: "background-color 0.2s, border-color 0.2s"
                   }}
                 >
                   <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0 }}>
