@@ -7,7 +7,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import BackButton from "../components/BackButton";
 import FloatingWhatsApp from "../components/FloatingWhatsApp";
-import { ChevronRight, ShieldCheck, Truck, RefreshCw } from "lucide-react";
+import { ChevronRight, ShieldCheck, Truck, RefreshCw, AlertTriangle, X } from "lucide-react";
 import toast from "react-hot-toast";
 import ShareButton from "../components/ShareButton";
 import { auth } from "../firebase/firebase";
@@ -172,7 +172,57 @@ export default function ProductDetails() {
     if (!product || isOutOfStock) return;
 
     if (product.sizes && product.sizes.length > 0 && !selectedSize) {
-      toast.error("Please select a size");
+      toast.custom((t) => (
+        <div
+          style={{
+            background: '#fff5f5',
+            border: '1px solid #fecaca',
+            padding: '12px 16px',
+            borderRadius: '6px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            maxWidth: '350px',
+            width: '100%',
+            pointerEvents: 'auto',
+            zIndex: 99999,
+            marginTop: '110px',
+            marginRight: '20px',
+            opacity: t.visible ? 1 : 0,
+            transform: t.visible ? 'translateY(0)' : 'translateY(-10px)',
+            transition: 'opacity 0.2s ease-out, transform 0.2s ease-out'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', color: '#dc2626' }}>
+            <AlertTriangle size={16} />
+          </div>
+          <div style={{ color: '#991b1b', fontSize: '13.5px', fontWeight: '500', flex: 1, fontFamily: 'Cinzel, serif', lineHeight: '1.4' }}>
+            Please select a size before proceeding.
+          </div>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#fca5a5',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '2px',
+              marginLeft: '8px',
+              transition: 'color 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#dc2626'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#fca5a5'}
+          >
+            <X size={14} />
+          </button>
+        </div>
+      ), {
+        position: 'top-right',
+        duration: 4000
+      });
       return;
     }
 
@@ -189,7 +239,57 @@ export default function ProductDetails() {
     if (!product || isOutOfStock) return;
 
     if (product.sizes && product.sizes.length > 0 && !selectedSize) {
-      toast.error("Please select a size");
+      toast.custom((t) => (
+        <div
+          style={{
+            background: '#fff5f5',
+            border: '1px solid #fecaca',
+            padding: '12px 16px',
+            borderRadius: '6px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            maxWidth: '350px',
+            width: '100%',
+            pointerEvents: 'auto',
+            zIndex: 99999,
+            marginTop: '110px',
+            marginRight: '20px',
+            opacity: t.visible ? 1 : 0,
+            transform: t.visible ? 'translateY(0)' : 'translateY(-10px)',
+            transition: 'opacity 0.2s ease-out, transform 0.2s ease-out'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', color: '#dc2626' }}>
+            <AlertTriangle size={16} />
+          </div>
+          <div style={{ color: '#991b1b', fontSize: '13.5px', fontWeight: '500', flex: 1, fontFamily: 'Cinzel, serif', lineHeight: '1.4' }}>
+            Please select a size before proceeding.
+          </div>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#fca5a5',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '2px',
+              marginLeft: '8px',
+              transition: 'color 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#dc2626'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#fca5a5'}
+          >
+            <X size={14} />
+          </button>
+        </div>
+      ), {
+        position: 'top-right',
+        duration: 4000
+      });
       return;
     }
 
