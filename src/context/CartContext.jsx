@@ -168,10 +168,18 @@ export function CartProvider({ children }) {
       threshold = 999;
     }
     if (totalPrice >= threshold) return 0;
-    return cart.reduce((sum, item) => {
-      const charge = item.deliveryCharge !== undefined ? item.deliveryCharge : 150;
+    
+    const calculatedShipping = cart.reduce((sum, item) => {
+      const charge = item.deliveryCharge !== undefined && item.deliveryCharge !== null ? item.deliveryCharge : 150;
       return sum + charge * item.quantity;
     }, 0);
+
+    // If calculated shipping is 0 but the totalPrice is below the free shipping threshold,
+    // we fall back to a default standard delivery charge of 150.
+    if (calculatedShipping === 0 && cart.length > 0) {
+      return 150;
+    }
+    return calculatedShipping;
   }, [cart, totalPrice, settings]);
 
   // ==========================

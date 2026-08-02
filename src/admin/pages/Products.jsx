@@ -10,7 +10,7 @@ const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostna
 const EMPTY_FORM = {
   name: "", category: "shirts", price: "", comparePrice: "",
   pct: "", front: "", back: "", description: "", inStock: true, isBestseller: false,
-  sizes: [], stockQuantity: 0, deliveryCharge: 0
+  sizes: [], stockQuantity: 0, deliveryCharge: 150
 };
 
 export default function AdminProducts() {
@@ -235,7 +235,7 @@ export default function AdminProducts() {
       pct: p.pct || "", front: p.front, back: p.back, description: p.description || "",
       inStock: p.inStock, isBestseller: p.isBestseller,
       sizes: p.sizes || [], stockQuantity: p.stockQuantity || 0,
-      deliveryCharge: p.deliveryCharge || 0
+      deliveryCharge: p.deliveryCharge !== undefined && p.deliveryCharge !== null ? p.deliveryCharge : 150
     });
     setModal(true);
   };
@@ -254,7 +254,7 @@ export default function AdminProducts() {
         comparePrice: Number(form.comparePrice),
         stockQuantity: Number(form.stockQuantity || 0),
         inStock: Number(form.stockQuantity || 0) > 0,
-        deliveryCharge: Number(form.deliveryCharge || 0)
+        deliveryCharge: form.deliveryCharge !== "" && form.deliveryCharge !== undefined && form.deliveryCharge !== null ? Number(form.deliveryCharge) : 150
       };
       if (editing) {
         await axios.put(`${BACKEND}/api/products/${editing._id}`, payload);
