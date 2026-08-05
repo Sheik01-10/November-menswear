@@ -5,12 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
 
-import {
-  onAuthStateChanged,
-  signOut,
-} from "firebase/auth";
 
-import { auth } from "../firebase/firebase";
 
 import {
   Search,
@@ -65,23 +60,27 @@ export default function Header() {
 
 
   useEffect(() => {
-  const unsubscribe =
-    onAuthStateChanged(
-      auth,
-      (currentUser) => {
-        setUser(
-          currentUser
-        );
-      }
-    );
+    let unsubscribe;
 
-  return () =>
-    unsubscribe();
-}, []);
+    Promise.all([
+      import("../firebase/firebase"),
+      import("firebase/auth")
+    ]).then(([{ auth }, { onAuthStateChanged }]) => {
+      unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+      });
+    });
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, []);
 
 
   const handleLogout = useCallback(async () => {
     try {
+      const { auth } = await import("../firebase/firebase");
+      const { signOut } = await import("firebase/auth");
       await signOut(auth);
 
       localStorage.removeItem(
@@ -350,9 +349,11 @@ export default function Header() {
       className="center-logo"
     >
       <img
-        src="/logo.png"
+        src="/logo.webp"
         alt="The November"
         className="center-logo-img"
+        width="100"
+        height="80"
       />
     </Link>
 
@@ -409,7 +410,7 @@ export default function Header() {
     <img
       src={
         user.photoURL ||
-        "/default-avatar.png"
+        "/default-avatar.svg"
       }
       alt="Profile"
       className="profile-avatar"
@@ -428,7 +429,7 @@ export default function Header() {
 
           <div className="profile-avatar-wrapper">
             <img
-              src={user.photoURL || "/default-avatar.png"}
+              src={user.photoURL || "/default-avatar.svg"}
               alt="Profile"
               className="profile-large-avatar"
             />
@@ -579,7 +580,7 @@ export default function Header() {
     <img
       src={
         user.photoURL ||
-        "/default-avatar.png"
+        "/default-avatar.svg"
       }
       alt="Profile"
       className="profile-avatar"

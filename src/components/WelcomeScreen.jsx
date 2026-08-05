@@ -128,10 +128,12 @@ const WelcomeScreen = ({ name, isNew, onComplete }) => {
         {/* Emblem Container */}
         <div className="splash-emblem-container" ref={emblemWrapperRef}>
           <img
-            src="/logo.png"
+            src="/logo.webp"
             alt="THE NOVEMBER Emblem"
             className="logo-emblem"
             ref={logoEmblemRef}
+            width="170"
+            height="170"
           />
         </div>
 

@@ -85,7 +85,6 @@ body.drawer-open .lux-header {
   justify-content:space-between;
 
   position:relative;
-  transition: height .28s ease, padding .28s ease;
 }
 
 .sticky-header .lux-header-inner{

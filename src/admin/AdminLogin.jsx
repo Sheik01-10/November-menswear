@@ -29,9 +29,11 @@ export default function AdminLogin() {
   <div className="admin-card">
 
     <img
-      src="/logo.png"
+      src="/logo.webp"
       alt="The November"
       className="brand-logo"
+      width="120"
+      height="96"
     />
 
     <h1 className="brand-name">

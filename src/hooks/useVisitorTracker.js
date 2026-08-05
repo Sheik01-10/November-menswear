@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
 
 // Helper to generate a simple unique identifier
 const generateUUID = (prefix) => {
@@ -43,17 +42,31 @@ export default function useVisitorTracker() {
 
     // 4. Tracking function
     const trackPageview = async (actionText = null) => {
-      try {
-        await axios.post(`${BACKEND}/api/analytics/track`, {
-          sessionId,
-          deviceId,
-          path: location.pathname + location.search,
-          referrer: document.referrer || "",
-          action: actionText,
-          userGender
-        });
-      } catch (err) {
-        console.error("Visitor tracking logging failed:", err);
+      const runTracking = async () => {
+        try {
+          await fetch(`${BACKEND}/api/analytics/track`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              sessionId,
+              deviceId,
+              path: location.pathname + location.search,
+              referrer: document.referrer || "",
+              action: actionText,
+              userGender
+            })
+          });
+        } catch (err) {
+          console.error("Visitor tracking logging failed:", err);
+        }
+      };
+
+      if (typeof window.requestIdleCallback === "function") {
+        window.requestIdleCallback(() => runTracking());
+      } else {
+        setTimeout(runTracking, 1000);
       }
     };
 

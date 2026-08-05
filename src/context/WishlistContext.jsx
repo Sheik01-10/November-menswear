@@ -7,14 +7,6 @@ import {
   useMemo,
 } from "react";
 
-import { auth } from "../firebase/firebase";
-
-import {
-  addToWishlist,
-  removeFromWishlist,
-  wishlistListener,
-} from "../firebase/wishlist";
-
 const WishlistContext = createContext();
 
 export function WishlistProvider({ children }) {
@@ -23,29 +15,32 @@ export function WishlistProvider({ children }) {
 
   useEffect(() => {
     let unsubscribeFirestore;
+    let unsubscribeAuth;
 
-    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
-      if (!user) {
-        setWishlist([]);
-        setLoading(false);
-        return;
-      }
-
-      unsubscribeFirestore = wishlistListener(
-        user.uid,
-        (items) => {
-          setWishlist(items);
+    Promise.all([
+      import("../firebase/firebase"),
+      import("../firebase/wishlist")
+    ]).then(([{ auth }, { wishlistListener }]) => {
+      unsubscribeAuth = auth.onAuthStateChanged((user) => {
+        if (!user) {
+          setWishlist([]);
           setLoading(false);
+          return;
         }
-      );
+
+        unsubscribeFirestore = wishlistListener(
+          user.uid,
+          (items) => {
+            setWishlist(items);
+            setLoading(false);
+          }
+        );
+      });
     });
 
     return () => {
-      unsubscribeAuth();
-
-      if (unsubscribeFirestore) {
-        unsubscribeFirestore();
-      }
+      if (unsubscribeAuth) unsubscribeAuth();
+      if (unsubscribeFirestore) unsubscribeFirestore();
     };
   }, []);
 
@@ -54,6 +49,8 @@ export function WishlistProvider({ children }) {
   }, [wishlist]);
 
   const toggleWishlist = useCallback(async (product) => {
+    const { auth } = await import("../firebase/firebase");
+    const { addToWishlist, removeFromWishlist } = await import("../firebase/wishlist");
     const user = auth.currentUser;
 
     if (!user) {

@@ -116,7 +116,7 @@ export default function Profile() {
           uid: user.uid,
           name: user.displayName || "Valued Client",
           email: user.email,
-          photo: user.photoURL || "/default-avatar.png",
+          photo: user.photoURL || "/default-avatar.svg",
         };
         localStorage.setItem("user", JSON.stringify(userData));
         setCurrentUser(userData);
@@ -447,11 +447,11 @@ export default function Profile() {
               <div className="profile-avatar-section">
                 <div className="profile-avatar-ring">
                   <img
-                    src={profilePhoto || currentUser?.photo || "/default-avatar.png"}
+                    src={profilePhoto || currentUser?.photo || "/default-avatar.svg"}
                     alt={currentUser?.name}
                     className="profile-display-photo"
                     onError={(e) => {
-                      e.target.src = "/default-avatar.png";
+                      e.target.src = "/default-avatar.svg";
                     }}
                   />
                 </div>
@@ -529,11 +529,11 @@ export default function Profile() {
                   <div className="settings-avatar-edit-box">
                     <div className="settings-avatar-wrapper">
                       <img
-                        src={profilePhoto || "/default-avatar.png"}
+                        src={profilePhoto || "/default-avatar.svg"}
                         alt="Profile Avatar"
                         className="settings-display-photo"
                         onError={(e) => {
-                          e.target.src = "/default-avatar.png";
+                          e.target.src = "/default-avatar.svg";
                         }}
                       />
                       <label htmlFor="avatar-file-input" className="avatar-upload-trigger" title="Upload New Photo">
@@ -713,7 +713,7 @@ export default function Profile() {
                                         className="details-item-img"
                                         loading="lazy"
                                         onError={(e) => {
-                                          e.target.src = "/default-avatar.png";
+                                          e.target.src = "/default-avatar.svg";
                                         }}
                                       />
                                       <div className="details-item-main">

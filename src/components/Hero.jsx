@@ -241,9 +241,11 @@ export default function Hero() {
         {/* Logo Emblem */}
         <div className="hero-emblem-container">
           <img
-            src="/logo.png"
+            src="/logo.webp"
             alt="The November Logo"
             className="hero-emblem"
+            width="150"
+            height="120"
           />
         </div>
 

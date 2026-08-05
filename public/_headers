@@ -1,0 +1,15 @@
+# Aggressively cache Vite-compiled assets (uses content hashes)
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache local woff2 fonts aggressively
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache local optimized images aggressively
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Do not cache index.html so updates are immediately visible
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate

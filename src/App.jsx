@@ -9,17 +9,16 @@ import { ProductProvider } from "./context/ProductContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import { CartProvider } from "./context/CartContext";
 
-// Splash
-import SplashScreen from "./components/SplashScreen";
-
 // Components
 import Header from "./components/Header";
 import Hero from "./components/Hero";
-import FeaturedCategories from "./components/FeaturedCategories";
-import Bestsellers from "./components/Bestsellers";
-import LuxuryCollections from "./components/LuxuryCollections";
-import BrandStory from "./components/BrandStory";
-import Footer from "./components/Footer";
+
+// Lazy below-the-fold components
+const FeaturedCategories = lazy(() => import("./components/FeaturedCategories"));
+const Bestsellers = lazy(() => import("./components/Bestsellers"));
+const LuxuryCollections = lazy(() => import("./components/LuxuryCollections"));
+const BrandStory = lazy(() => import("./components/BrandStory"));
+const Footer = lazy(() => import("./components/Footer"));
 
 // Lazy Pages
 const About = lazy(() => import("./components/About"));
@@ -61,11 +60,13 @@ function Home() {
 
       <main>
         <Hero />
-        <FeaturedCategories />
-        <Bestsellers />
-        <LuxuryCollections />
-        <BrandStory />
-        <Footer />
+        <Suspense fallback={null}>
+          <FeaturedCategories />
+          <Bestsellers />
+          <LuxuryCollections />
+          <BrandStory />
+          <Footer />
+        </Suspense>
       </main>
     </>
   );
@@ -94,36 +95,29 @@ const LoadingFallback = () => (
 ========================== */
 
 function App() {
-
-  const shouldShowSplash = () => {
-    const nav =
-      performance.getEntriesByType(
-        "navigation"
-      )[0];
-
-    const isReload =
-      nav?.type === "reload";
-
-    const firstVisit =
-      !sessionStorage.getItem(
-        "appLoaded"
-      );
-
-    return (
-      firstVisit || isReload
-    );
-  };
-
-  const [showSplash, setShowSplash] =
-    useState(shouldShowSplash);
-  const [splashUnmounted, setSplashUnmounted] =
-    useState(!shouldShowSplash());
-
-  const handleSplashComplete = () => {
-    setShowSplash(false);
-    sessionStorage.setItem("appLoaded", "true");
-    setSplashUnmounted(true);
-  };
+  useEffect(() => {
+    // Wait for critical resources, then hold the splash screen for 3 seconds before transition
+    Promise.all([
+      document.fonts.ready
+    ]).then(() => {
+      setTimeout(() => {
+        const splash = document.getElementById("splash-screen");
+        if (splash) {
+          splash.classList.add("fade-out");
+          
+          const handleTransitionEnd = () => {
+            splash.remove();
+            sessionStorage.setItem("appLoaded", "true");
+          };
+          
+          splash.addEventListener("transitionend", handleTransitionEnd, { once: true });
+          
+          // Fallback safety timeout
+          setTimeout(handleTransitionEnd, 600);
+        }
+      }, 2000); // 3-second duration
+    });
+  }, []);
 
   return (
     <ProductProvider>
@@ -132,10 +126,6 @@ function App() {
       <BrowserRouter>
         <AnalyticsTracker />
         <Toaster position="bottom-right" reverseOrder={false} />
-
-        {!splashUnmounted && (
-          <SplashScreen onComplete={handleSplashComplete} />
-        )}
 
         <Suspense fallback={<LoadingFallback />}>
           <Routes>

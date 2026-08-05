@@ -193,7 +193,7 @@ export default function AdminSupport() {
                           src={`https://i.pravatar.cc/60?u=${m.email}`}
                           alt={m.name}
                           onError={(e) => {
-                            e.target.src = "/default-avatar.png";
+                            e.target.src = "/default-avatar.svg";
                           }}
                           style={{ width: 32, height: 32, borderRadius: "50%" }}
                         />

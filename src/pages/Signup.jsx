@@ -259,9 +259,11 @@ export default function Signup() {
       <div className="auth-card">
         <div className="auth-logo-wrap">
           <img
-            src="/logo.png"
+            src="/logo.webp"
             alt="The November"
             className="auth-logo"
+            width="120"
+            height="96"
           />
         </div>
 

@@ -9,15 +9,248 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Jost:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="preload" href="/logo-emblem.svg" as="image" type="image/svg+xml" crossorigin="anonymous" />
-    <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" crossorigin="anonymous" />
+    
+    <!-- Zero-flash inline script to check session state before browser renders body -->
+    <script>
+      (function() {
+        const nav = performance.getEntriesByType("navigation")[0];
+        const isReload = nav && nav.type === "reload";
+        const firstVisit = !sessionStorage.getItem("appLoaded");
+        if (!firstVisit && !isReload) {
+          document.documentElement.classList.add("app-already-loaded");
+        }
+      })();
+    </script>
+    
+    <!-- Preload critical fonts, logo, and above-the-fold hero image -->
+    <link rel="preload" href="/fonts/cinzel-500-normal.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="/fonts/jost-700-normal.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
     <link rel="preload" href="/fonts/ethnocentric.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="/logo.webp" as="image" type="image/webp" />
+    <link rel="preload" href="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=1600&auto=format&fm=webp&q=80" as="image" />
+    
     <title>THE NOVEMBER</title>
+    
+    <!-- Inline Critical Splash Screen CSS -->
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background-color: #ffffff;
+        color: #000000;
+        font-family: 'Jost', sans-serif;
+        overflow-x: hidden;
+      }
+      .splash-screen {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        background: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        z-index: 99999;
+        will-change: transform, opacity;
+      }
+      .splash-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        max-width: 100%;
+        padding: 10px;
+        text-align: center;
+      }
+      .splash-emblem-container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: clamp(120px, 16vw, 170px);
+        height: clamp(120px, 16vw, 170px);
+        margin-bottom: 18px;
+        will-change: transform, opacity;
+      }
+      .logo-emblem {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 4px 12px rgba(0,0,0,.03)) drop-shadow(0 2px 4px rgba(201,169,106,.15));
+      }
+      .splash-wordmark {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: nowrap;
+        margin-bottom: 16px;
+      }
+      .splash-char {
+        font-family: "Cinzel", serif;
+        font-size: clamp(22px,4vw,42px);
+        font-weight: 500;
+        display: inline-block;
+        will-change: transform, opacity;
+        color: #c9a96a;
+        filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.04));
+        letter-spacing: .12em;
+        line-height: 1;
+      }
+      .splash-char-space {
+        width: 12px;
+      }
+      .splash-tagline-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        will-change: transform, opacity;
+      }
+      .splash-divider-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 110px;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .splash-divider-line {
+        flex: 1;
+        height: 1px;
+        background: #c9a96a;
+      }
+      .splash-divider-diamond {
+        font-size: 7px;
+        color: #c9a96a;
+      }
+      .splash-tagline-text {
+        font-family: "Jost", sans-serif;
+        font-size: clamp(10px,1vw,11px);
+        font-weight: 700;
+        letter-spacing: .35em;
+        text-transform: uppercase;
+        color: #111;
+        white-space: nowrap;
+      }
+      @media (max-width: 768px) {
+        .splash-emblem-container {
+          width: 120px;
+          height: 120px;
+          margin-bottom: 16px;
+        }
+        .splash-wordmark {
+          margin-bottom: 14px;
+        }
+        .splash-char {
+          font-size: 36px;
+          letter-spacing: 0.08em;
+        }
+        .splash-divider-container {
+          width: 90px;
+        }
+        .splash-tagline-text {
+          font-size: 10px;
+          letter-spacing: 0.25em;
+        }
+      }
+      .app-already-loaded #splash-screen {
+        display: none !important;
+      }
+      @keyframes splashEmblemFadeIn {
+        from {
+          opacity: 0;
+          transform: scale(1.15);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      @keyframes splashCharFadeIn {
+        from {
+          opacity: 0;
+          transform: translate3d(0, 15px, 0) scale(0.92);
+        }
+        to {
+          opacity: 1;
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+      }
+      @keyframes splashTaglineFadeIn {
+        from {
+          opacity: 0;
+          transform: translate3d(0, 12px, 0);
+        }
+        to {
+          opacity: 1;
+          transform: translate3d(0, 0, 0);
+        }
+      }
+      .splash-emblem-container {
+        opacity: 0;
+        animation: splashEmblemFadeIn 1.2s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+        animation-delay: 0.15s;
+      }
+      .splash-char {
+        opacity: 0;
+        animation: splashCharFadeIn 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+      }
+      .splash-tagline-wrapper {
+        opacity: 0;
+        animation: splashTaglineFadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        animation-delay: 1.0s;
+      }
+      .splash-screen.fade-out {
+        opacity: 0;
+        transform: translate3d(0, -15px, 0);
+        pointer-events: none;
+        transition: opacity 0.45s ease-in-out, transform 0.45s ease-in-out;
+      }
+    </style>
   </head>
   <body>
+    <!-- Instant Splash Screen render in raw HTML before JS loading -->
+    <div id="splash-screen" class="splash-screen">
+      <div class="splash-container">
+        <div class="splash-emblem-container">
+          <img
+            src="/logo.webp"
+            alt="THE NOVEMBER Emblem"
+            class="logo-emblem"
+          />
+        </div>
+        <h1 class="splash-wordmark">
+          <span class="splash-char" style="animation-delay: 0.5s;">T</span>
+          <span class="splash-char" style="animation-delay: 0.54s;">H</span>
+          <span class="splash-char" style="animation-delay: 0.58s;">E</span>
+          <span class="splash-char-space">&nbsp;</span>
+          <span class="splash-char" style="animation-delay: 0.62s;">N</span>
+          <span class="splash-char" style="animation-delay: 0.66s;">O</span>
+          <span class="splash-char" style="animation-delay: 0.7s;">V</span>
+          <span class="splash-char" style="animation-delay: 0.74s;">E</span>
+          <span class="splash-char" style="animation-delay: 0.78s;">M</span>
+          <span class="splash-char" style="animation-delay: 0.82s;">B</span>
+          <span class="splash-char" style="animation-delay: 0.86s;">E</span>
+          <span class="splash-char" style="animation-delay: 0.9s;">R</span>
+        </h1>
+        <div class="splash-tagline-wrapper">
+          <div class="splash-divider-container">
+            <div class="splash-divider-line"></div>
+            <div class="splash-divider-diamond">♦</div>
+            <div class="splash-divider-line"></div>
+          </div>
+          <p class="splash-tagline-text">
+            Crafted for Elegance
+          </p>
+        </div>
+      </div>
+    </div>
+    
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
