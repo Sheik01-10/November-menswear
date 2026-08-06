@@ -40,8 +40,9 @@ export default function Checkout() {
     phone: "",
     email: "",
     address: "",
+    district: "",
     city: "",
-    state: "Tamil Nadu",
+    state: "",
     pincode: "",
     landmark: "",
   });
@@ -49,6 +50,78 @@ export default function Checkout() {
   const [customerPhoto, setCustomerPhoto] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [pincodeLoading, setPincodeLoading] = useState(false);
+  const [pincodeError, setPincodeError] = useState("");
+  const [lastFetchedPin, setLastFetchedPin] = useState("");
+
+  // Debounce and fetch PIN code details when exactly 6 digits are entered
+  useEffect(() => {
+    const pin = formData.pincode;
+    if (pin.length === 6) {
+      if (pin === lastFetchedPin) {
+        return;
+      }
+      const timer = setTimeout(() => {
+        const fetchPincodeDetails = async () => {
+          setPincodeLoading(true);
+          setPincodeError("");
+          try {
+            const response = await axios.get(`https://api.postalpincode.in/pincode/${pin}`);
+            const data = response.data;
+            if (data && data[0] && data[0].Status === "Success") {
+              const postOffices = data[0].PostOffice;
+              if (postOffices && postOffices.length > 0) {
+                const firstOffice = postOffices[0];
+                const fetchedDistrict = firstOffice.District || "";
+                const fetchedState = firstOffice.State || "";
+                const fetchedCity = (firstOffice.Block && firstOffice.Block !== "N/A") ? firstOffice.Block : fetchedDistrict;
+                
+                setFormData((prev) => ({
+                  ...prev,
+                  district: fetchedDistrict,
+                  city: fetchedCity,
+                  state: fetchedState,
+                }));
+                setLastFetchedPin(pin);
+                setPincodeError("");
+              } else {
+                setFormData((prev) => ({
+                  ...prev,
+                  district: "",
+                  city: "",
+                  state: "",
+                }));
+                setPincodeError("Invalid PIN Code");
+              }
+            } else {
+              setFormData((prev) => ({
+                ...prev,
+                district: "",
+                city: "",
+                state: "",
+              }));
+              setPincodeError("Invalid PIN Code");
+            }
+          } catch (err) {
+            console.error("Error fetching pincode details:", err);
+            setFormData((prev) => ({
+              ...prev,
+              district: "",
+              city: "",
+              state: "",
+            }));
+            setPincodeError("Invalid PIN Code");
+          } finally {
+            setPincodeLoading(false);
+          }
+        };
+
+        fetchPincodeDetails();
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [formData.pincode, lastFetchedPin]);
   const [orderSuccess, setOrderSuccess] = useState(null); // Stores successful order data
   const [paymentMethod, setPaymentMethod] = useState("online");
 
@@ -91,11 +164,13 @@ export default function Checkout() {
                   email: user.email || "",
                   phone: defaultAddr.phone || "",
                   address: defaultAddr.street || "",
+                  district: defaultAddr.district || defaultAddr.city || "",
                   city: defaultAddr.city || "",
                   state: defaultAddr.state || "Tamil Nadu",
                   pincode: defaultAddr.pincode || "",
                   landmark: defaultAddr.landmark || "",
                 });
+                setLastFetchedPin(defaultAddr.pincode || "");
               } else {
                 setFormData((prev) => ({
                   ...prev,
@@ -178,12 +253,31 @@ export default function Checkout() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: (name === "pincode" || name === "phone")
-        ? value.replace(/\D/g, "")
-        : value
-    }));
+    const sanitizedValue = (name === "pincode" || name === "phone")
+      ? value.replace(/\D/g, "")
+      : value;
+
+    setFormData((prev) => {
+      const nextData = {
+        ...prev,
+        [name]: sanitizedValue
+      };
+
+      // If user is editing pincode and it is less than 6 digits, clear autofilled fields
+      if (name === "pincode" && sanitizedValue.length < 6) {
+        nextData.district = "";
+        nextData.city = "";
+        nextData.state = "";
+      }
+
+      return nextData;
+    });
+
+    if (name === "pincode" && sanitizedValue.length < 6) {
+      setPincodeError("");
+      setLastFetchedPin("");
+    }
+
     setError("");
   };
 
@@ -192,8 +286,9 @@ export default function Checkout() {
     if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email)) return "Valid Email is required";
     if (!formData.phone.trim() || formData.phone.length < 10) return "Valid 10-digit Phone number is required";
     if (!formData.address.trim()) return "Shipping Address is required";
-    if (!formData.city.trim()) return "City is required";
-    if (!formData.state.trim()) return "State is required";
+    if (!formData.district || !formData.district.trim()) return "District is required";
+    if (!formData.city || !formData.city.trim()) return "City is required";
+    if (!formData.state || !formData.state.trim()) return "State is required";
     if (!formData.pincode.trim() || formData.pincode.length !== 6) return "Valid 6-digit Pincode is required";
     return null;
   };
@@ -579,11 +674,13 @@ export default function Checkout() {
                           email: auth.currentUser?.email || "",
                           phone: "",
                           address: "",
+                          district: "",
                           city: "",
-                          state: "Tamil Nadu",
+                          state: "",
                           pincode: "",
                           landmark: "",
                         });
+                        setLastFetchedPin("");
                       } else {
                         const selectedAddr = savedAddresses.find(a => a._id === addrId);
                         if (selectedAddr) {
@@ -592,11 +689,13 @@ export default function Checkout() {
                             email: auth.currentUser?.email || "",
                             phone: selectedAddr.phone,
                             address: selectedAddr.street,
+                            district: selectedAddr.district || selectedAddr.city || "",
                             city: selectedAddr.city,
-                            state: selectedAddr.state || "Tamil Nadu",
+                            state: selectedAddr.state || "",
                             pincode: selectedAddr.pincode,
                             landmark: selectedAddr.landmark || "",
                           });
+                          setLastFetchedPin(selectedAddr.pincode || "");
                         }
                       }
                     }}
@@ -680,72 +779,6 @@ export default function Checkout() {
 
               <div className="form-row-2">
                 <div className="checkout-form-group">
-                  <select
-                    id="city"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
-                    required
-                    style={{
-                      width: "100%",
-                      height: "52px",
-                      border: "none",
-                      borderBottom: "1px solid #e5e5e5",
-                      background: "transparent",
-                      fontFamily: '"Jost", sans-serif',
-                      fontSize: "15px",
-                      color: "#111",
-                      padding: "20px 0 4px 0",
-                      outline: "none",
-                      cursor: "pointer"
-                    }}
-                  >
-                    <option value="" disabled style={{ color: "#888" }}>Select District / City</option>
-                    <option value="Chennai">Chennai</option>
-                    <option value="Coimbatore">Coimbatore</option>
-                    <option value="Madurai">Madurai</option>
-                    <option value="Tiruchirappalli">Tiruchirappalli</option>
-                    <option value="Salem">Salem</option>
-                    <option value="Tirunelveli">Tirunelveli</option>
-                    <option value="Vellore">Vellore</option>
-                    <option value="Erode">Erode</option>
-                    <option value="Thoothukudi">Thoothukudi</option>
-                    <option value="Thanjavur">Thanjavur</option>
-                  </select>
-                  {/* Floating label simulation for select */}
-                  {formData.city && (
-                    <span style={{
-                      position: "absolute",
-                      left: "0px",
-                      top: "0px",
-                      fontSize: "11px",
-                      fontWeight: "500",
-                      color: "#111",
-                      textTransform: "uppercase",
-                      letterSpacing: "1.5px"
-                    }}>
-                      City / District
-                    </span>
-                  )}
-                </div>
-                <div className="checkout-form-group">
-                  <input
-                    type="text"
-                    id="state"
-                    name="state"
-                    value={formData.state}
-                    onChange={handleChange}
-                    placeholder=" "
-                    required
-                    readOnly
-                    style={{ color: "#666" }}
-                  />
-                  <label htmlFor="state">State (Tamil Nadu Only)</label>
-                </div>
-              </div>
-
-              <div className="form-row-2">
-                <div className="checkout-form-group">
                   <input
                     type="text"
                     id="pincode"
@@ -757,6 +790,31 @@ export default function Checkout() {
                     required
                   />
                   <label htmlFor="pincode">Pincode (6 digits)</label>
+                  {pincodeLoading && (
+                    <span className="pincode-status-loading" style={{
+                      position: "absolute",
+                      right: "10px",
+                      top: "20px",
+                      fontSize: "12px",
+                      color: "#c8a96a",
+                      fontFamily: '"Jost", sans-serif'
+                    }}>
+                      Fetching...
+                    </span>
+                  )}
+                  {pincodeError && (
+                    <span className="pincode-status-error" style={{
+                      position: "absolute",
+                      left: "0",
+                      bottom: "-18px",
+                      fontSize: "11px",
+                      color: "#d93025",
+                      fontWeight: "500",
+                      fontFamily: '"Jost", sans-serif'
+                    }}>
+                      {pincodeError}
+                    </span>
+                  )}
                 </div>
                 <div className="checkout-form-group">
                   <input
@@ -769,6 +827,52 @@ export default function Checkout() {
                   />
                   <label htmlFor="landmark">Landmark (Optional)</label>
                 </div>
+              </div>
+
+              <div className="form-row-2">
+                <div className="checkout-form-group">
+                  <input
+                    type="text"
+                    id="district"
+                    name="district"
+                    value={formData.district || ""}
+                    placeholder=" "
+                    required
+                    readOnly
+                    style={{ color: "#666" }}
+                  />
+                  <label htmlFor="district">District</label>
+                </div>
+                <div className="checkout-form-group">
+                  <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    value={formData.city || ""}
+                    placeholder=" "
+                    required
+                    readOnly
+                    style={{ color: "#666" }}
+                  />
+                  <label htmlFor="city">City</label>
+                </div>
+              </div>
+
+              <div className="form-row-2">
+                <div className="checkout-form-group">
+                  <input
+                    type="text"
+                    id="state"
+                    name="state"
+                    value={formData.state || ""}
+                    placeholder=" "
+                    required
+                    readOnly
+                    style={{ color: "#666" }}
+                  />
+                  <label htmlFor="state">State</label>
+                </div>
+                <div></div>
               </div>
 
               {/* Payment Method Selector */}
