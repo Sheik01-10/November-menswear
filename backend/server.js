@@ -39,7 +39,9 @@ connectDB();
 // Configure CORS with credentials support
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://novemberxix.duckdns.org"
+  "https://novemberxix.duckdns.org",
+  "https://thenovember.in",
+  "http://thenovember.in"
 ];
 
 app.use(cors({
@@ -67,7 +69,7 @@ app.use(express.json({
 // Better Auth API route handler
 const { toNodeHandler } = require("better-auth/node");
 const mongoose = require("mongoose");
-app.all("/api/auth/*splat", (req, res, next) => {
+app.all(/^\/api\/auth\/(.*)/, (req, res, next) => {
   if (mongoose.connection.readyState === 2) {
     mongoose.connection.once("connected", () => {
       const { getAuthInstance } = require("./config/auth");
