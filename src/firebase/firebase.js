@@ -1,17 +1,26 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-const firebaseConfig = {
-  apiKey: "AIzaSyBqjX_DLK6pjtqO1z4cGTdRn31nRxoSdtI",
-  authDomain: "thenovember-81625.firebaseapp.com",
-  projectId: "thenovember-81625",
-  storageBucket: "thenovember-81625.firebasestorage.app",
-  messagingSenderId: "144933344510",
-  appId: "1:144933344510:web:e9e782befef61a75c701af"
+import { authClient } from "../lib/auth-client";
+import { onAuthStateChanged } from "./better-auth-compat";
+
+export const auth = {
+  get currentUser() {
+    const sessionAtom = authClient.$store?.atoms?.session;
+    const storeVal = sessionAtom ? sessionAtom.get() : null;
+    const user = storeVal?.data?.user;
+    if (user) {
+      return {
+        uid: user.id,
+        displayName: user.name,
+        email: user.email,
+        photoURL: user.image,
+        emailVerified: user.emailVerified,
+        providerId: "google"
+      };
+    }
+    return null;
+  },
+  onAuthStateChanged(callback) {
+    return onAuthStateChanged(this, callback);
+  }
 };
 
-const app = initializeApp(firebaseConfig);
-
-export const auth = getAuth(app);
-
-export const db = getFirestore(app);
+export const db = {};

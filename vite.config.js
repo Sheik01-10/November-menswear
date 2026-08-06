@@ -4,6 +4,11 @@ import viteCompression from 'vite-plugin-compression'
 
 // https://vite.dev/config/
 export default defineConfig({
+  resolve: {
+    alias: {
+      "firebase/auth": "/src/firebase/better-auth-compat.js"
+    }
+  },
   plugins: [
     react(),
     viteCompression({
