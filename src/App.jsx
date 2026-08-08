@@ -40,6 +40,8 @@ import axios from "axios";
 import { Navigate as RouterNavigate } from "react-router-dom";
 import { authClient } from "./lib/auth-client";
 
+const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
+
 axios.defaults.withCredentials = true;
 
 // Intercept axios requests to send tab-scoped session token
@@ -53,15 +55,16 @@ axios.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-// Helper route guards using sessionStorage
+// Helper route guards using sessionStorage and custom getMe endpoint
 function AdminRoute({ children }) {
   const [checking, setChecking] = useState(true);
   const [redirectPath, setRedirectPath] = useState(null);
 
   useEffect(() => {
-    authClient.getSession().then(({ data }) => {
-      if (data?.user) {
-        const role = data.user.role || (data.user.isAdmin ? "admin" : "customer");
+    axios.get(`${BACKEND}/api/users/me`).then((res) => {
+      const user = res.data?.user;
+      if (user) {
+        const role = user.role || (user.isAdmin ? "admin" : "customer");
         if (role === "admin") {
           sessionStorage.setItem("role", "admin");
           sessionStorage.setItem("isAdmin", "true");
@@ -115,9 +118,10 @@ function StaffRoute({ children }) {
   const [redirectPath, setRedirectPath] = useState(null);
 
   useEffect(() => {
-    authClient.getSession().then(({ data }) => {
-      if (data?.user) {
-        const role = data.user.role || (data.user.isAdmin ? "admin" : "customer");
+    axios.get(`${BACKEND}/api/users/me`).then((res) => {
+      const user = res.data?.user;
+      if (user) {
+        const role = user.role || (user.isAdmin ? "admin" : "customer");
         if (role === "staff") {
           sessionStorage.setItem("role", "staff");
           sessionStorage.setItem("isStaff", "true");
