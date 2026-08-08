@@ -31,8 +31,9 @@ export default function AdminLogin() {
         return;
       }
 
-      if (data?.session?.token) {
-        sessionStorage.setItem("sessionToken", data.session.token);
+      const token = data?.token || data?.session?.token || data?.session?.sessionToken;
+      if (token) {
+        sessionStorage.setItem("sessionToken", token);
       }
 
       // Record login in database and fetch role
