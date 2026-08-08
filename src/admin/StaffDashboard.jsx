@@ -17,7 +17,7 @@ export default function StaffDashboard() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const isStaff = localStorage.getItem("isStaff") === "true";
+  const isStaff = sessionStorage.getItem("isStaff") === "true";
 
   useEffect(() => {
     if (!isStaff) return;
@@ -52,8 +52,9 @@ export default function StaffDashboard() {
     } finally {
       // Complete client sign-out
       await authClient.signOut();
-      localStorage.removeItem("isStaff");
-      localStorage.removeItem("role");
+      sessionStorage.removeItem("isStaff");
+      sessionStorage.removeItem("role");
+      sessionStorage.removeItem("sessionToken");
       navigate("/admin-login");
     }
   };

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { authClient } from "../lib/auth-client";
 import "./styles/Admin.css";
 
 import Sidebar from "./components/Sidebar";
@@ -16,19 +18,30 @@ import AdminSettings from "./pages/Settings";
 import AdminSupport from "./pages/Support";
 import AdminStaff from "./pages/Staff";
 
+const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
+
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const isAdmin = localStorage.getItem("isAdmin");
+  const isAdmin = sessionStorage.getItem("isAdmin") === "true";
 
   if (!isAdmin) {
     return <Navigate to="/admin-login" replace />;
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem("isAdmin");
-    navigate("/admin-login");
+  const handleLogout = async () => {
+    try {
+      await axios.post(`${BACKEND}/api/users/logout-success`, {}, { withCredentials: true });
+    } catch (e) {
+      console.error("Logout status record failed:", e);
+    } finally {
+      await authClient.signOut();
+      sessionStorage.removeItem("isAdmin");
+      sessionStorage.removeItem("role");
+      sessionStorage.removeItem("sessionToken");
+      navigate("/admin-login");
+    }
   };
 
   return (

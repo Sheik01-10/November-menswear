@@ -42,7 +42,18 @@ import { authClient } from "./lib/auth-client";
 
 axios.defaults.withCredentials = true;
 
-// Helper route guards
+// Intercept axios requests to send tab-scoped session token
+axios.interceptors.request.use((config) => {
+  const token = sessionStorage.getItem("sessionToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
+// Helper route guards using sessionStorage
 function AdminRoute({ children }) {
   const [checking, setChecking] = useState(true);
   const [redirectPath, setRedirectPath] = useState(null);
@@ -52,13 +63,13 @@ function AdminRoute({ children }) {
       if (data?.user) {
         const role = data.user.role || (data.user.isAdmin ? "admin" : "customer");
         if (role === "admin") {
-          localStorage.setItem("role", "admin");
-          localStorage.setItem("isAdmin", "true");
-          localStorage.setItem("isStaff", "false");
+          sessionStorage.setItem("role", "admin");
+          sessionStorage.setItem("isAdmin", "true");
+          sessionStorage.setItem("isStaff", "false");
         } else if (role === "staff") {
-          localStorage.setItem("role", "staff");
-          localStorage.setItem("isAdmin", "false");
-          localStorage.setItem("isStaff", "true");
+          sessionStorage.setItem("role", "staff");
+          sessionStorage.setItem("isAdmin", "false");
+          sessionStorage.setItem("isStaff", "true");
           setRedirectPath("/staff-dashboard");
         } else {
           setRedirectPath("/admin-login");
@@ -108,13 +119,13 @@ function StaffRoute({ children }) {
       if (data?.user) {
         const role = data.user.role || (data.user.isAdmin ? "admin" : "customer");
         if (role === "staff") {
-          localStorage.setItem("role", "staff");
-          localStorage.setItem("isStaff", "true");
-          localStorage.setItem("isAdmin", "false");
+          sessionStorage.setItem("role", "staff");
+          sessionStorage.setItem("isStaff", "true");
+          sessionStorage.setItem("isAdmin", "false");
         } else if (role === "admin") {
-          localStorage.setItem("role", "admin");
-          localStorage.setItem("isStaff", "false");
-          localStorage.setItem("isAdmin", "true");
+          sessionStorage.setItem("role", "admin");
+          sessionStorage.setItem("isStaff", "false");
+          sessionStorage.setItem("isAdmin", "true");
           setRedirectPath("/admin-dashboard");
         } else {
           setRedirectPath("/admin-login");

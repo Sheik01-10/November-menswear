@@ -25,6 +25,10 @@ export default function AdminLogin() {
         return;
       }
 
+      if (data?.session?.token) {
+        sessionStorage.setItem("sessionToken", data.session.token);
+      }
+
       // Record login in database and fetch role
       const res = await axios.post(`${BACKEND}/api/users/login-success`, {}, {
         withCredentials: true
@@ -33,15 +37,16 @@ export default function AdminLogin() {
       const { role } = res.data;
 
       if (role === "admin") {
-        localStorage.setItem("isAdmin", "true");
-        localStorage.setItem("role", "admin");
+        sessionStorage.setItem("isAdmin", "true");
+        sessionStorage.setItem("role", "admin");
         navigate("/admin-dashboard");
       } else if (role === "staff") {
-        localStorage.setItem("isStaff", "true");
-        localStorage.setItem("role", "staff");
+        sessionStorage.setItem("isStaff", "true");
+        sessionStorage.setItem("role", "staff");
         navigate("/staff-dashboard");
       } else {
         await authClient.signOut();
+        sessionStorage.removeItem("sessionToken");
         alert("Access Denied: Authorized Personnel Only");
       }
     } catch (err) {
