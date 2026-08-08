@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, ShoppingBag, FolderTree, Package,
-  Users, Heart, Image, BarChart3, Settings, LogOut, X, MessageSquare
+  Users, Heart, Image, BarChart3, Settings, LogOut, X, MessageSquare, UserCheck
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -14,6 +14,7 @@ const menus = [
   { name: "Banner",           path: "/admin-dashboard/banner",     icon: <Image size={20} /> },
   { name: "Analytics",        path: "/admin-dashboard/analytics",  icon: <BarChart3 size={20} /> },
   { name: "Support Messages", path: "/admin-dashboard/support",    icon: <MessageSquare size={20} /> },
+  { name: "Staff Management", path: "/admin-dashboard/staff",      icon: <UserCheck size={20} /> },
   { name: "Settings",         path: "/admin-dashboard/settings",   icon: <Settings size={20} /> },
 ];
 

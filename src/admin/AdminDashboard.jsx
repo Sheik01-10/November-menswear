@@ -14,6 +14,7 @@ import AdminBanner from "./pages/Banner";
 import AdminAnalytics from "./pages/Analytics";
 import AdminSettings from "./pages/Settings";
 import AdminSupport from "./pages/Support";
+import AdminStaff from "./pages/Staff";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -58,6 +59,7 @@ export default function AdminDashboard() {
             <Route path="analytics" element={<AdminAnalytics />} />
             <Route path="support" element={<AdminSupport />} />
             <Route path="settings" element={<AdminSettings />} />
+            <Route path="staff" element={<AdminStaff />} />
           </Routes>
         </div>
       </div>

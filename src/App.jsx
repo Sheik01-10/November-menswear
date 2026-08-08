@@ -36,11 +36,48 @@ const Checkout = lazy(() => import("./pages/Checkout"));
 const Profile = lazy(() => import("./pages/Profile"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 import { Toaster } from "react-hot-toast";
+import axios from "axios";
+import { Navigate as RouterNavigate } from "react-router-dom";
 
+axios.defaults.withCredentials = true;
+
+// Helper route guards
+function AdminRoute({ children }) {
+  const role = localStorage.getItem("role");
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
+  
+  if (!role && !isAdmin) {
+    return <RouterNavigate to="/admin-login" replace />;
+  }
+  if (role === "staff") {
+    return <RouterNavigate to="/staff-dashboard" replace />;
+  }
+  if (role !== "admin" && !isAdmin) {
+    return <RouterNavigate to="/admin-login" replace />;
+  }
+  return children;
+}
+
+function StaffRoute({ children }) {
+  const role = localStorage.getItem("role");
+  const isStaff = localStorage.getItem("isStaff") === "true";
+  
+  if (!role && !isStaff) {
+    return <RouterNavigate to="/admin-login" replace />;
+  }
+  if (role === "admin") {
+    return <RouterNavigate to="/admin-dashboard" replace />;
+  }
+  if (role !== "staff" && !isStaff) {
+    return <RouterNavigate to="/admin-login" replace />;
+  }
+  return children;
+}
 
 // Admin Pages
 const AdminLogin = lazy(() => import("./admin/AdminLogin"));
 const AdminDashboard = lazy(() => import("./admin/AdminDashboard"));
+const StaffDashboard = lazy(() => import("./admin/StaffDashboard"));
 import useVisitorTracker from "./hooks/useVisitorTracker";
 
 function AnalyticsTracker() {
@@ -197,7 +234,20 @@ function App() {
 
             <Route
               path="/admin-dashboard/*"
-              element={<AdminDashboard />}
+              element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              }
+            />
+
+            <Route
+              path="/staff-dashboard/*"
+              element={
+                <StaffRoute>
+                  <StaffDashboard />
+                </StaffRoute>
+              }
             />
             
             <Route
