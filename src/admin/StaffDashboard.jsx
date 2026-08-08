@@ -51,7 +51,11 @@ export default function StaffDashboard() {
       console.error("Error logging out from backend:", err);
     } finally {
       // Complete client sign-out
-      await authClient.signOut();
+      await authClient.signOut({
+        fetchOptions: {
+          credentials: "omit"
+        }
+      });
       sessionStorage.removeItem("isStaff");
       sessionStorage.removeItem("role");
       sessionStorage.removeItem("sessionToken");

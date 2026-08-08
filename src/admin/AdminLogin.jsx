@@ -18,7 +18,13 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      const { data, error } = await authClient.signIn.email({ email, password });
+      const { data, error } = await authClient.signIn.email({
+        email,
+        password,
+        fetchOptions: {
+          credentials: "omit"
+        }
+      });
       if (error) {
         alert(error.message || "Invalid Credentials");
         setLoading(false);

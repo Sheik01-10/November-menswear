@@ -36,7 +36,11 @@ export default function AdminDashboard() {
     } catch (e) {
       console.error("Logout status record failed:", e);
     } finally {
-      await authClient.signOut();
+      await authClient.signOut({
+        fetchOptions: {
+          credentials: "omit"
+        }
+      });
       sessionStorage.removeItem("isAdmin");
       sessionStorage.removeItem("role");
       sessionStorage.removeItem("sessionToken");
