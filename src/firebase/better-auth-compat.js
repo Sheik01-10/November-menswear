@@ -66,7 +66,30 @@ export const createUserWithEmailAndPassword = async (authInstance, email, passwo
   const { data, error } = await authClient.signUp.email({ email, password, name });
   if (error) {
     const err = new Error(error.message || "Failed to sign up");
-    err.code = "auth/email-already-in-use";
+    const code = error.code || "";
+    const msg = (error.message || "").toLowerCase();
+    
+    if (
+      code === "USER_ALREADY_EXISTS" ||
+      code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL" ||
+      msg.includes("already exists") ||
+      msg.includes("already registered")
+    ) {
+      err.code = "auth/email-already-in-use";
+    } else if (
+      code === "PASSWORD_TOO_SHORT" ||
+      code === "PASSWORD_TOO_LONG" ||
+      msg.includes("password")
+    ) {
+      err.code = "auth/weak-password";
+    } else if (
+      code === "INVALID_EMAIL" ||
+      msg.includes("email")
+    ) {
+      err.code = "auth/invalid-email";
+    } else {
+      err.code = code || "auth/unknown-error";
+    }
     throw err;
   }
   return { user: mapUser(data.user) };
