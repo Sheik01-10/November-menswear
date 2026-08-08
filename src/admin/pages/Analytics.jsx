@@ -58,17 +58,14 @@ function KPIAnalyticsCard({ title, value, sub, icon, color, subColor = "#22c55e"
 export default function AdminAnalytics() {
   const [activeTab, setActiveTab] = useState("sales");
   const [salesData, setSalesData] = useState(null);
-  const [visitorData, setVisitorData] = useState(null);
+  const [visitorData, setVisitorData] = useState(null); // Used to store district insights data
   const [loadingSales, setLoadingSales] = useState(true);
   const [loadingVisitor, setLoadingVisitor] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
 
-  // Visitor-specific state
-  const [trendMode, setTrendMode] = useState("daily"); // daily or hourly
-  const [searchQuery, setSearchQuery] = useState("");
-  const [expandedSessionId, setExpandedSessionId] = useState(null);
-  const [liveTicker, setLiveTicker] = useState([]);
+  // District analytics specific state
+  const [dateRange, setDateRange] = useState("all");
   
   const socketRef = useRef(null);
 
@@ -80,28 +77,13 @@ export default function AdminAnalytics() {
       .finally(() => setLoadingSales(false));
   };
 
-  const fetchVisitorData = (showLoader = false) => {
+  const fetchVisitorData = (showLoader = false, range = dateRange) => {
     if (showLoader) setLoadingVisitor(true);
-    axios.get(`${BACKEND}/api/analytics/visitors`)
+    axios.get(`${BACKEND}/api/analytics/visitors?range=${range}`)
       .then(res => {
         setVisitorData(res.data);
-        // Pre-populate live ticker with recent page actions if empty
-        if (liveTicker.length === 0 && res.data.sessions) {
-          const recentActions = res.data.sessions
-            .slice(0, 5)
-            .map(s => ({
-              sessionId: s.sessionId,
-              district: s.district,
-              state: s.state,
-              deviceType: s.deviceType,
-              gender: s.gender,
-              lastAction: s.lastAction,
-              updatedAt: s.updatedAt
-            }));
-          setLiveTicker(recentActions);
-        }
       })
-      .catch(err => console.error("Visitor data fetch error:", err))
+      .catch(err => console.error("District data fetch error:", err))
       .finally(() => {
         setLoadingVisitor(false);
         setRefreshing(false);
@@ -112,7 +94,7 @@ export default function AdminAnalytics() {
     fetchSalesData(true);
     fetchVisitorData(true);
 
-    // Setup Socket Connection for Live Traffic Updates
+    // Setup Socket Connection for Live Updates
     socketRef.current = io(BACKEND);
     
     socketRef.current.on("connect", () => {
@@ -125,31 +107,10 @@ export default function AdminAnalytics() {
 
     socketRef.current.on("order_changed", () => {
       fetchSalesData(false);
-    });
-
-    socketRef.current.on("visitor_activity", (session) => {
-      // Prepend the activity to the live ticker
-      setLiveTicker(prev => {
-        const filtered = prev.filter(x => x.sessionId !== session.sessionId);
-        return [
-          {
-            sessionId: session.sessionId,
-            district: session.district,
-            state: session.state,
-            deviceType: session.deviceType,
-            gender: session.gender,
-            lastAction: session.lastAction,
-            updatedAt: session.updatedAt
-          },
-          ...filtered
-        ].slice(0, 8); // Keep last 8 actions
-      });
-
-      // Fetch fresh aggregated traffic stats in the background to update charts, KPIs, and logs in real-time
       fetchVisitorData(false);
     });
 
-    // Auto-refresh traffic stats every 2 minutes
+    // Auto-refresh stats every 2 minutes
     const autoRefreshInterval = setInterval(() => {
       fetchVisitorData(false);
     }, 120000);
@@ -160,55 +121,7 @@ export default function AdminAnalytics() {
     };
   }, []);
 
-  const triggerReseed = async () => {
-    setRefreshing(true);
-    try {
-      const res = await axios.post(`${BACKEND}/api/analytics/seed-visitors`);
-      if (res.data.success) {
-        toast.success("Visitor data reseeded successfully!");
-        fetchVisitorData(true);
-      }
-    } catch (err) {
-      toast.error("Failed to seed visitor data.");
-      console.error(err);
-      setRefreshing(false);
-    }
-  };
-
-  const triggerClear = async () => {
-    if (!window.confirm("Are you sure you want to reset all traffic analytics to 0? This cannot be undone.")) return;
-    setRefreshing(true);
-    try {
-      const res = await axios.post(`${BACKEND}/api/analytics/clear-visitors`);
-      if (res.data.success) {
-        toast.success("Visitor data cleared! Starting from 0.");
-        setLiveTicker([]);
-        fetchVisitorData(true);
-      }
-    } catch (err) {
-      toast.error("Failed to clear visitor data.");
-      console.error(err);
-      setRefreshing(false);
-    }
-  };
-
-
   const formatINR = (v) => `₹${Number(v).toLocaleString("en-IN")}`;
-  
-  const formatDuration = (seconds) => {
-    if (seconds < 60) return `${seconds}s`;
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m}m ${s}s`;
-  };
-
-  const getDeviceIcon = (type) => {
-    switch (type) {
-      case "Mobile": return <Smartphone size={16} />;
-      case "Tablet": return <Tablet size={16} />;
-      default: return <Monitor size={16} />;
-    }
-  };
 
   const tabButtonStyle = (isActive) => ({
     border: "none",
@@ -225,28 +138,6 @@ export default function AdminAnalytics() {
     gap: 8,
     boxShadow: isActive ? "0 4px 12px rgba(0,0,0,0.15)" : "none"
   });
-
-  const getRelativeTime = (timeStr) => {
-    const d = new Date(timeStr);
-    const seconds = Math.floor((Date.now() - d.getTime()) / 1000);
-    if (seconds < 5) return "just now";
-    if (seconds < 60) return `${seconds}s ago`;
-    const m = Math.floor(seconds / 60);
-    if (m < 60) return `${m}m ago`;
-    const h = Math.floor(m / 60);
-    return `${h}h ago`;
-  };
-
-  // Filtered Sessions
-  const filteredSessions = visitorData?.sessions.filter(s => {
-    const q = searchQuery.toLowerCase();
-    return (
-      s.ip?.toLowerCase().includes(q) ||
-      s.state?.toLowerCase().includes(q) ||
-      s.district?.toLowerCase().includes(q) ||
-      s.lastAction?.toLowerCase().includes(q)
-    );
-  }) || [];
 
   return (
     <div className="admin-page-content" style={{ paddingBottom: 60 }}>
@@ -284,26 +175,12 @@ export default function AdminAnalytics() {
               {socketConnected ? "Live Connected" : "Live Disconnected"}
             </span>
           </div>
-          <p style={{ color: "#666", fontSize: 14, margin: "6px 0 0 0" }}>Real-time shop sales & website traffic intelligence dashboard</p>
+          <p style={{ color: "#666", fontSize: 14, margin: "6px 0 0 0" }}>Real-time shop sales & customer order location intelligence dashboard</p>
         </div>
 
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           {refreshing && <span style={{ fontSize: 12, color: "#888" }} className="live-pulse">Updating...</span>}
           
-          <button
-            onClick={triggerClear}
-            className="btn-danger"
-            style={{
-              height: 44, padding: "0 18px", borderRadius: 14, fontSize: 13, display: "flex",
-              alignItems: "center", gap: 8, fontWeight: 600, border: "1px solid #fee2e2"
-            }}
-            disabled={refreshing}
-            title="Clear all traffic data and start from 0"
-          >
-            <AlertCircle size={14} />
-            Reset to 0
-          </button>
-
           {/* TAB SELECTOR */}
           <div style={{ display: "flex", background: "#f1f1f1", padding: 4, borderRadius: 18 }}>
             <button
@@ -317,8 +194,8 @@ export default function AdminAnalytics() {
               onClick={() => setActiveTab("visitors")}
               style={tabButtonStyle(activeTab === "visitors")}
             >
-              <Globe size={15} />
-              Traffic Insights
+              <MapPin size={15} />
+              District Insights
             </button>
           </div>
         </div>
@@ -404,488 +281,191 @@ export default function AdminAnalytics() {
             </>
           )}
         </>
-      )}
-
-      {/* ========================================================================= */}
-      {/* TAB 2: VISITOR TRAFFIC INSIGHTS */}
+      )}      {/* ========================================================================= */}
+      {/* TAB 2: CUSTOMER ORDER DISTRICT INSIGHTS */}
       {/* ========================================================================= */}
       {activeTab === "visitors" && (
         <>
           {loadingVisitor ? (
             <div className="loading-state" style={{ minHeight: 400, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-              <p style={{ color: "#888" }}>Aggregating site traffic metrics...</p>
+              <p style={{ color: "#888" }}>Calculating customer district insights...</p>
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
               
-              {/* Visitor KPIs */}
+              {/* Date Filter & Title */}
+              <div style={{
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+                flexWrap: "wrap", gap: 16, background: "#fff", border: "1px solid #ececec",
+                borderRadius: 24, padding: "20px 24px", boxShadow: "0 4px 16px rgba(0,0,0,0.03)"
+              }}>
+                <div>
+                  <h3 style={{ fontSize: 18, fontWeight: 800, margin: 0, fontFamily: "var(--font-sans)", letterSpacing: "-0.5px" }}>
+                    Customer Order District Insights
+                  </h3>
+                  <p style={{ color: "#666", fontSize: 13, margin: "4px 0 0 0" }}>
+                    Geographic distribution of actual customer orders based on shipping address
+                  </p>
+                </div>
+                
+                <div style={{ display: "flex", background: "#f1f1f1", padding: 3, borderRadius: 12 }}>
+                  {[
+                    { value: "today", label: "Today" },
+                    { value: "7days", label: "Last 7 Days" },
+                    { value: "30days", label: "Last 30 Days" },
+                    { value: "year", label: "This Year" },
+                    { value: "all", label: "All Time" }
+                  ].map((r) => (
+                    <button
+                      key={r.value}
+                      onClick={() => {
+                        setDateRange(r.value);
+                        fetchVisitorData(true, r.value);
+                      }}
+                      style={{
+                        border: "none",
+                        background: dateRange === r.value ? "#111" : "transparent",
+                        color: dateRange === r.value ? "#fff" : "#666",
+                        fontWeight: 600,
+                        padding: "8px 16px",
+                        borderRadius: 10,
+                        fontSize: 12,
+                        cursor: "pointer",
+                        transition: "background-color 0.2s, color 0.2s"
+                      }}
+                    >
+                      {r.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+ 
+              {/* KPIs */}
               <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
                 <KPIAnalyticsCard
-                  title="Unique Visitors (30d)"
-                  value={visitorData?.kpis?.uniqueVisitors?.toLocaleString("en-IN")}
-                  sub="Unique device instances logged"
-                  icon={<Users size={18} />}
+                  title="Total Orders"
+                  value={visitorData?.totalOrders || 0}
+                  sub="Count of all valid orders"
+                  icon={<ShoppingBag size={18} />}
                   color="#111"
                   subColor="#888"
                 />
                 <KPIAnalyticsCard
-                  title="Total Pageviews"
-                  value={visitorData?.kpis?.totalPageviews?.toLocaleString("en-IN")}
-                  sub={`${(visitorData?.kpis?.totalPageviews / (visitorData?.kpis?.uniqueVisitors || 1)).toFixed(1)} pages per session avg`}
-                  icon={<Eye size={18} />}
+                  title="Districts Covered"
+                  value={visitorData?.districtsCovered || 0}
+                  sub="Unique delivery locations"
+                  icon={<MapPin size={18} />}
                   color="#c5a880"
                   subColor="#888"
                 />
                 <KPIAnalyticsCard
-                  title="Active Online Now"
-                  value={visitorData?.kpis?.activeOnline}
-                  sub="Active users in last 5 mins"
-                  icon={<Activity size={18} />}
-                  color="#22c55e"
-                  subColor="#22c55e"
-                  pulse={true}
-                />
-                <KPIAnalyticsCard
-                  title="Avg. Session Time"
-                  value={formatDuration(visitorData?.kpis?.avgDuration)}
-                  sub="Time spent exploring shop"
-                  icon={<Clock size={18} />}
-                  color="#3b82f6"
+                  title="Top District"
+                  value={visitorData?.topDistrict || "N/A"}
+                  sub="District with highest orders"
+                  icon={<Globe size={18} />}
+                  color="#2563eb"
                   subColor="#888"
                 />
                 <KPIAnalyticsCard
-                  title="Bounce Rate"
-                  value={`${visitorData?.kpis?.bounceRate}%`}
-                  sub="Left after viewing 1 page"
-                  icon={<Percent size={18} />}
-                  color="#ef4444"
-                  subColor="#ef4444"
+                  title="Top District Orders"
+                  value={visitorData?.topDistrictOrders || 0}
+                  sub={`Total orders in ${visitorData?.topDistrict || "top district"}`}
+                  icon={<Activity size={18} />}
+                  color="#059669"
+                  subColor="#888"
                 />
               </div>
-
-              {/* 2. REAL-TIME ACTIVITY FEED & TREND CHART */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: 24, alignItems: "stretch" }}>
+ 
+              {/* Chart and Distribution Table */}
+              <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: 24, alignItems: "start" }}>
                 
-                {/* Traffic Trend Chart */}
-                <div style={{ background: "#fff", border: "1px solid #ececec", borderRadius: 24, padding: 24, boxShadow: "0 4px 16px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-                    <h3 style={{ fontSize: 16, fontWeight: 700, margin: 0 }}>Traffic Volume Trend</h3>
-                    <div style={{ display: "flex", background: "#f5f5f5", padding: 3, borderRadius: 10 }}>
-                      <button
-                        onClick={() => setTrendMode("daily")}
-                        style={{
-                          border: "none", background: trendMode === "daily" ? "#fff" : "transparent",
-                          color: trendMode === "daily" ? "#111" : "#777", fontWeight: 600,
-                          padding: "6px 12px", borderRadius: 8, fontSize: 12, cursor: "pointer", transition: "background-color 0.2s, color 0.2s"
-                        }}
-                      >
-                        Daily (30d)
-                      </button>
-                      <button
-                        onClick={() => setTrendMode("hourly")}
-                        style={{
-                          border: "none", background: trendMode === "hourly" ? "#fff" : "transparent",
-                          color: trendMode === "hourly" ? "#111" : "#777", fontWeight: 600,
-                          padding: "6px 12px", borderRadius: 8, fontSize: 12, cursor: "pointer", transition: "background-color 0.2s, color 0.2s"
-                        }}
-                      >
-                        Hourly (24h)
-                      </button>
-                    </div>
-                  </div>
-
-                  <ResponsiveContainer width="100%" height={260}>
-                    <AreaChart
-                      data={trendMode === "daily" ? visitorData?.trends?.daily : visitorData?.trends?.hourly}
-                      margin={{ top: 5, right: 10, left: -20, bottom: 5 }}
-                    >
-                      <defs>
-                        <linearGradient id="colorPageviews" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#c5a880" stopOpacity={0.25}/>
-                          <stop offset="95%" stopColor="#c5a880" stopOpacity={0}/>
-                        </linearGradient>
-                        <linearGradient id="colorUnique" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#111111" stopOpacity={0.15}/>
-                          <stop offset="95%" stopColor="#111111" stopOpacity={0}/>
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" vertical={false} />
-                      <XAxis dataKey="name" tick={{ fontSize: 11, fill: "#888" }} tickLine={false} axisLine={false} />
-                      <YAxis tick={{ fontSize: 11, fill: "#888" }} tickLine={false} axisLine={false} />
-                      <Tooltip />
-                      <Legend iconSize={8} iconType="circle" wrapperStyle={{ fontSize: 11, marginTop: 10 }} />
-                      <Area name="Total Pageviews" type="monotone" dataKey="pageviews" stroke="#c5a880" strokeWidth={2} fillOpacity={1} fill="url(#colorPageviews)" />
-                      <Area name="Unique Visitors" type="monotone" dataKey="visitors" stroke="#111111" strokeWidth={2} fillOpacity={1} fill="url(#colorUnique)" />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </div>
-
-                {/* Real-time Activity Feed */}
+                {/* Horizontal Bar Chart: District -> Orders */}
                 <div style={{
                   background: "#fff", border: "1px solid #ececec", borderRadius: 24, padding: 24,
-                  boxShadow: "0 4px 16px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column"
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column", minHeight: 380
                 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-                    <h3 style={{ fontSize: 16, fontWeight: 700, margin: 0 }}>Live Activity Feed</h3>
-                    <span style={{ fontSize: 11, background: "#dcfce7", color: "#15803d", padding: "3px 8px", borderRadius: 20, fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}>
-                      <span style={{ display: "inline-block", width: 6, height: 6, borderRadius: "50%", background: "#22c55e", animation: "pulse 1.2s infinite" }} />
-                      Live Feed
-                    </span>
-                  </div>
-
-                  {/* Scrollable Live Ticker */}
-                  <div className="activity-scroll-feed" style={{
-                    flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 12,
-                    maxHeight: 275, paddingRight: 4
-                  }}>
-                    {liveTicker.length === 0 ? (
-                      <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "#999", fontSize: 13 }}>
-                        Waiting for user activity...
-                      </div>
-                    ) : (
-                      liveTicker.map((item, idx) => (
-                        <div
-                          key={`${item.sessionId}-${idx}`}
-                          style={{
-                            borderBottom: idx === liveTicker.length - 1 ? "none" : "1px solid #f9f9f9",
-                            paddingBottom: 10, display: "flex", gap: 10, alignItems: "flex-start",
-                            animation: idx === 0 ? "fadeInDown 0.4s ease" : "none"
-                          }}
+                  <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>District vs Number of Orders</h3>
+                  
+                  {(!visitorData?.distribution || visitorData.distribution.length === 0) ? (
+                    <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "#888", fontSize: 14 }}>
+                      No orders found for the selected date range.
+                    </div>
+                  ) : (
+                    <div style={{ width: "100%", overflowX: "auto" }}>
+                      <ResponsiveContainer width="100%" height={Math.max(300, visitorData.distribution.length * 40)}>
+                        <BarChart
+                          data={visitorData.distribution}
+                          layout="vertical"
+                          margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
                         >
-                          <div style={{
-                            background: item.gender === "Female" ? "#fce7f3" : "#f1f1f1",
-                            color: item.gender === "Female" ? "#db2777" : "#111",
-                            padding: 6, borderRadius: 10, fontSize: 10, fontWeight: 700,
-                            width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center"
-                          }}>
-                            {item.gender === "Female" ? "F" : "M"}
-                          </div>
-                          
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                              <span style={{ fontWeight: 600, fontSize: 12, color: "#111" }}>
-                                {item.district}, {item.state}
-                              </span>
-                              <span style={{ fontSize: 10, color: "#aaa" }}>
-                                {getRelativeTime(item.updatedAt)}
-                              </span>
-                            </div>
-                            <p style={{ fontSize: 11, color: "#555", margin: "2px 0 0 0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                              {item.lastAction}
-                            </p>
-                            <span style={{ fontSize: 9, color: "#999", display: "flex", alignItems: "center", gap: 4, marginTop: 4 }}>
-                              {getDeviceIcon(item.deviceType)} {item.deviceType}
-                            </span>
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-
-              </div>
-
-              {/* 3. DEMOGRAPHICS & TRAFFIC SOURCES & DEVICE SPLIT */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 24 }}>
-                
-                {/* Gender Breakdown (Doughnut) */}
-                <div style={{ background: "#fff", border: "1px solid #ececec", borderRadius: 24, padding: 24, boxShadow: "0 4px 16px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column" }}>
-                  <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>Gender Demographics</h3>
-                  <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", minHeight: 180 }}>
-                    <ResponsiveContainer width="100%" height={160}>
-                      <PieChart>
-                        <Pie
-                          data={visitorData?.demographics}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={50}
-                          outerRadius={70}
-                          paddingAngle={3}
-                          dataKey="value"
-                        >
-                          <Cell fill="#111111" /> {/* Male */}
-                          <Cell fill="#c5a880" /> {/* Female */}
-                        </Pie>
-                        <Tooltip formatter={(v) => [`${((v / (visitorData?.kpis?.uniqueVisitors || 1)) * 100).toFixed(0)}%`, "Visitors"]} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                    {/* Centered Stats Text */}
-                    <div style={{ position: "absolute", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                      <span style={{ fontSize: 22, fontWeight: 800 }}>
-                        {((visitorData?.demographics?.[0]?.value / (visitorData?.kpis?.uniqueVisitors || 1)) * 100).toFixed(0)}%
-                      </span>
-                      <span style={{ fontSize: 10, color: "#888", fontWeight: 500 }}>MALE</span>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" horizontal={false} />
+                          <XAxis type="number" tick={{ fontSize: 11, fill: "#888" }} tickLine={false} axisLine={false} />
+                          <YAxis type="category" dataKey="district" tick={{ fontSize: 12, fill: "#111", fontWeight: 500 }} tickLine={false} axisLine={false} width={120} />
+                          <Tooltip formatter={(value) => [value, "Orders"]} />
+                          <Bar dataKey="orders" fill="#111" radius={[0, 6, 6, 0]} barSize={16}>
+                            {visitorData.distribution.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={index === 0 ? "#a38144" : "#111"} />
+                            ))}
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
                     </div>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "center", gap: 24, marginTop: 12 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12 }}>
-                      <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: "#111" }} />
-                      <span>Male ({visitorData?.demographics?.[0]?.value})</span>
+                  )}
+                </div>
+ 
+                {/* Percentage Distribution Table */}
+                <div style={{
+                  background: "#fff", border: "1px solid #ececec", borderRadius: 24, padding: 24,
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column", minHeight: 380
+                }}>
+                  <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>District Order Distribution</h3>
+                  
+                  {(!visitorData?.distribution || visitorData.distribution.length === 0) ? (
+                    <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "#888", fontSize: 14 }}>
+                      No orders found for the selected date range.
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12 }}>
-                      <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: "#c5a880" }} />
-                      <span>Female ({visitorData?.demographics?.[1]?.value})</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Traffic Sources */}
-                <div style={{ background: "#fff", border: "1px solid #ececec", borderRadius: 24, padding: 24, boxShadow: "0 4px 16px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column" }}>
-                  <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>Traffic Acquisition</h3>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 14, justifyContent: "center", flex: 1 }}>
-                    {visitorData?.sources?.map((item) => {
-                      const percentage = Math.round((item.value / (visitorData?.kpis?.uniqueVisitors || 1)) * 100);
-                      let barColor = "#111";
-                      if (item.name === "Organic Search") barColor = "#c5a880";
-                      else if (item.name === "Social Media") barColor = "#3b82f6";
-                      else if (item.name === "Referral") barColor = "#888";
-
-                      return (
-                        <div key={item.name}>
-                          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, fontWeight: 500, marginBottom: 4 }}>
-                            <span>{item.name}</span>
-                            <span style={{ color: "#888" }}>{item.value} ({percentage}%)</span>
-                          </div>
-                          <div style={{ height: 6, width: "100%", background: "#f0f0f0", borderRadius: 10, overflow: "hidden" }}>
-                            <div style={{ height: "100%", width: `${percentage}%`, background: barColor, borderRadius: 10 }} />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Device Breakdown */}
-                <div style={{ background: "#fff", border: "1px solid #ececec", borderRadius: 24, padding: 24, boxShadow: "0 4px 16px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column" }}>
-                  <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>Device Distribution</h3>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 16, justifyContent: "center", flex: 1 }}>
-                    {visitorData?.devices?.map((item) => {
-                      const pct = Math.round((item.value / (visitorData?.kpis?.uniqueVisitors || 1)) * 100);
-                      return (
-                        <div key={item.name} style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                          <div style={{
-                            background: "#f8f8f8", border: "1px solid #ececec", width: 36, height: 36,
-                            borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", color: "#111"
-                          }}>
-                            {getDeviceIcon(item.name)}
-                          </div>
-                          <div style={{ flex: 1 }}>
-                            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, fontWeight: 500 }}>
-                              <span>{item.name}</span>
-                              <span style={{ color: "#888" }}>{pct}%</span>
-                            </div>
-                            <div style={{ height: 4, width: "100%", background: "#f0f0f0", borderRadius: 10, overflow: "hidden", marginTop: 4 }}>
-                              <div style={{ height: "100%", width: `${pct}%`, background: "#111", borderRadius: 10 }} />
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-              </div>
-
-              {/* 4. GEOGRAPHIC DISTRIBUTION (STATES & DISTRICTS) */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
-                
-                {/* States Chart */}
-                <div style={{ background: "#fff", border: "1px solid #ececec", borderRadius: 24, padding: 24, boxShadow: "0 4px 16px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column" }}>
-                  <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>Visitor Traffic by State</h3>
-                  <ResponsiveContainer width="100%" height={240}>
-                    <BarChart
-                      data={visitorData?.locations?.states}
-                      layout="vertical"
-                      margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" horizontal={false} />
-                      <XAxis type="number" tick={{ fontSize: 11, fill: "#888" }} tickLine={false} axisLine={false} />
-                      <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: "#111", fontWeight: 500 }} tickLine={false} axisLine={false} width={80} />
-                      <Tooltip />
-                      <Bar dataKey="value" fill="#111" radius={[0, 6, 6, 0]} barSize={12} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-
-                {/* Top Districts Table */}
-                <div style={{ background: "#fff", border: "1px solid #ececec", borderRadius: 24, padding: 24, boxShadow: "0 4px 16px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column" }}>
-                  <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>Top District/City Locations</h3>
-                  <div style={{ overflowY: "auto", flex: 1, maxHeight: 240 }}>
-                    <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-                      <thead>
-                        <tr style={{ borderBottom: "1px solid #f0f0f0", color: "#888", textAlign: "left" }}>
-                          <th style={{ padding: "8px 12px 12px 12px", fontWeight: 600 }}>District/City</th>
-                          <th style={{ padding: "8px 12px 12px 12px", fontWeight: 600 }}>State</th>
-                          <th style={{ padding: "8px 12px 12px 12px", fontWeight: 600, textAlign: "right" }}>Sessions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {visitorData?.locations?.districts?.map((loc, idx) => (
-                          <tr key={`${loc.district}-${idx}`} style={{ borderBottom: "1px solid #f9f9f9" }}>
-                            <td style={{ padding: "10px 12px", fontWeight: 600, color: "#111", display: "flex", alignItems: "center", gap: 6 }}>
-                              <MapPin size={12} style={{ color: "#a38144" }} />
-                              {loc.district}
-                            </td>
-                            <td style={{ padding: "10px 12px", color: "#666" }}>{loc.state}</td>
-                            <td style={{ padding: "10px 12px", fontWeight: 700, color: "#111", textAlign: "right" }}>{loc.value}</td>
+                  ) : (
+                    <div style={{ overflowY: "auto", maxHeight: 450 }}>
+                      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                        <thead>
+                          <tr style={{ borderBottom: "1px solid #f0f0f0", color: "#888", textAlign: "left" }}>
+                            <th style={{ padding: "8px 12px 12px 12px", fontWeight: 600 }}>District</th>
+                            <th style={{ padding: "8px 12px 12px 12px", fontWeight: 600, textAlign: "right" }}>Orders</th>
+                            <th style={{ padding: "8px 12px 12px 12px", fontWeight: 600, textAlign: "right" }}>Share</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody>
+                          {visitorData.distribution.map((item, idx) => (
+                            <tr key={`${item.district}-${idx}`} style={{ borderBottom: "1px solid #f9f9f9" }}>
+                              <td style={{ padding: "12px", fontWeight: 600, color: "#111", display: "flex", alignItems: "center", gap: 8 }}>
+                                <MapPin size={14} style={{ color: idx === 0 ? "#a38144" : "#888" }} />
+                                {item.district}
+                              </td>
+                              <td style={{ padding: "12px", fontWeight: 700, color: "#111", textAlign: "right" }}>
+                                {item.orders} {item.orders === 1 ? "order" : "orders"}
+                              </td>
+                              <td style={{ padding: "12px", fontWeight: 500, color: "#666", textAlign: "right" }}>
+                                <span style={{
+                                  background: idx === 0 ? "#a3814415" : "#f5f5f5",
+                                  color: idx === 0 ? "#a38144" : "#555",
+                                  padding: "4px 8px",
+                                  borderRadius: 8,
+                                  fontWeight: 600,
+                                  fontSize: 11
+                                }}>
+                                  {item.percentage}%
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 </div>
-
+ 
               </div>
-
-              {/* 5. VISITOR SESSION EXPLORER */}
-              <div style={{ background: "#fff", border: "1px solid #ececec", borderRadius: 24, padding: 24, boxShadow: "0 4px 16px rgba(0,0,0,0.03)" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
-                  <div>
-                    <h3 style={{ fontSize: 16, fontWeight: 700, margin: 0 }}>Visitor Sessions Explorer</h3>
-                    <p style={{ fontSize: 12, color: "#888", margin: "2px 0 0 0" }}>Review detailed user activity log, locations and browser states</p>
-                  </div>
-
-                  {/* Search Bar */}
-                  <div style={{
-                    display: "flex", alignItems: "center", gap: 10, background: "#f8f8f8",
-                    border: "1px solid #ececec", borderRadius: 12, padding: "0 14px", width: "100%", maxWidth: 300, height: 40
-                  }}>
-                    <Search size={15} style={{ color: "#888" }} />
-                    <input
-                      type="text"
-                      placeholder="Search state, city, IP or action..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      style={{ border: "none", background: "none", outline: "none", fontSize: 12, width: "100%", height: "100%" }}
-                    />
-                  </div>
-                </div>
-
-                {/* Session Explorer Table */}
-                <div style={{ overflowX: "auto" }}>
-                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-                    <thead>
-                      <tr style={{ borderBottom: "1px solid #ececec", color: "#888", textAlign: "left", background: "#fbfbfb" }}>
-                        <th style={{ padding: "14px 16px", fontWeight: 600 }}>Visitor IP</th>
-                        <th style={{ padding: "14px 16px", fontWeight: 600 }}>Location</th>
-                        <th style={{ padding: "14px 16px", fontWeight: 600 }}>Gender</th>
-                        <th style={{ padding: "14px 16px", fontWeight: 600 }}>Device</th>
-                        <th style={{ padding: "14px 16px", fontWeight: 600 }}>Last Action</th>
-                        <th style={{ padding: "14px 16px", fontWeight: 600 }}>Duration</th>
-                        <th style={{ padding: "14px 16px", fontWeight: 600 }}>Last Active</th>
-                        <th style={{ padding: "14px 16px", fontWeight: 600 }}>Pages</th>
-                        <th style={{ padding: "14px 16px", width: 50 }}></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredSessions.length === 0 ? (
-                        <tr>
-                          <td colSpan="9" style={{ padding: 40, textAlign: "center", color: "#888" }}>
-                            No visitor sessions found matching "{searchQuery}"
-                          </td>
-                        </tr>
-                      ) : (
-                        filteredSessions.map((session) => {
-                          const isExpanded = expandedSessionId === session.sessionId;
-                          
-                          // Determine status
-                          const isSessionActive = new Date(session.updatedAt).getTime() > Date.now() - 5 * 60 * 1000;
-
-                          return (
-                            <>
-                              <tr
-                                key={session.sessionId}
-                                style={{
-                                  borderBottom: "1px solid #f5f5f5", cursor: "pointer",
-                                  background: isExpanded ? "#fafafa" : "transparent"
-                                }}
-                                onClick={() => setExpandedSessionId(isExpanded ? null : session.sessionId)}
-                              >
-                                <td style={{ padding: "16px 16px", fontWeight: 600, color: "#111" }}>
-                                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                    <span style={{
-                                      width: 8, height: 8, borderRadius: "50%",
-                                      background: isSessionActive ? "#22c55e" : "#cbd5e1"
-                                    }} title={isSessionActive ? "Active" : "Idle"} />
-                                    {session.ip || "Guest IP"}
-                                  </div>
-                                </td>
-                                <td style={{ padding: "16px 16px", color: "#111" }}>
-                                  <strong>{session.district}</strong>, {session.state}
-                                </td>
-                                <td style={{ padding: "16px 16px" }}>
-                                  <span style={{
-                                    fontSize: 11, background: session.gender === "Female" ? "#fce7f3" : "#f1f5f9",
-                                    color: session.gender === "Female" ? "#db2777" : "#334155",
-                                    padding: "3px 8px", borderRadius: 8, fontWeight: 600
-                                  }}>
-                                    {session.gender}
-                                  </span>
-                                </td>
-                                <td style={{ padding: "16px 16px", color: "#555" }}>
-                                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                    {getDeviceIcon(session.deviceType)}
-                                    <span style={{ fontSize: 12 }}>{session.deviceType}</span>
-                                  </div>
-                                </td>
-                                <td style={{ padding: "16px 16px", color: "#111", fontWeight: 500 }}>
-                                  {session.lastAction}
-                                </td>
-                                <td style={{ padding: "16px 16px", color: "#666" }}>
-                                  {formatDuration(session.duration)}
-                                </td>
-                                <td style={{ padding: "16px 16px", color: "#888" }}>
-                                  {getRelativeTime(session.updatedAt)}
-                                </td>
-                                <td style={{ padding: "16px 16px", fontWeight: 700, color: "#111" }}>
-                                  {session.pagesVisited?.length || 1}
-                                </td>
-                                <td style={{ padding: "16px 16px", textAlign: "right" }}>
-                                  {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                                </td>
-                              </tr>
-
-                              {/* Expanded Rows showing Navigation History */}
-                              {isExpanded && (
-                                <tr key={`${session.sessionId}-expanded`} style={{ background: "#fbfbfb", borderBottom: "1px solid #ececec" }}>
-                                  <td colSpan="9" style={{ padding: "16px 24px" }}>
-                                    <div style={{ borderLeft: "2px solid #c5a880", paddingLeft: 16, marginLeft: 10 }}>
-                                      <h4 style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", color: "#888", letterSpacing: 0.5, marginBottom: 12 }}>
-                                        User Navigation Path Traversal
-                                      </h4>
-                                      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                                        {session.pagesVisited?.map((page, pidx) => (
-                                          <div key={pidx} style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 12 }}>
-                                            <span style={{
-                                              color: "#c5a880", background: "#f9f6f0", width: 20, height: 20,
-                                              borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
-                                              fontWeight: 700, fontSize: 10
-                                            }}>
-                                              {pidx + 1}
-                                            </span>
-                                            <span style={{ fontWeight: 600, color: "#111", fontFamily: "monospace", background: "#f0f0f0", padding: "2px 6px", borderRadius: 4 }}>
-                                              {page.path}
-                                            </span>
-                                            <span style={{ color: "#888" }}>
-                                              at {new Date(page.timestamp).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
-                                            </span>
-                                          </div>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                              )}
-                            </>
-                          );
-                        })
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-
-              </div>
-
+ 
             </div>
           )}
         </>
