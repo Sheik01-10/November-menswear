@@ -38,39 +38,120 @@ const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 import { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { Navigate as RouterNavigate } from "react-router-dom";
+import { authClient } from "./lib/auth-client";
 
 axios.defaults.withCredentials = true;
 
 // Helper route guards
 function AdminRoute({ children }) {
-  const role = localStorage.getItem("role");
-  const isAdmin = localStorage.getItem("isAdmin") === "true";
-  
-  if (!role && !isAdmin) {
-    return <RouterNavigate to="/admin-login" replace />;
+  const [checking, setChecking] = useState(true);
+  const [redirectPath, setRedirectPath] = useState(null);
+
+  useEffect(() => {
+    authClient.getSession().then(({ data }) => {
+      if (data?.user) {
+        const role = data.user.role || (data.user.isAdmin ? "admin" : "customer");
+        if (role === "admin") {
+          localStorage.setItem("role", "admin");
+          localStorage.setItem("isAdmin", "true");
+          localStorage.setItem("isStaff", "false");
+        } else if (role === "staff") {
+          localStorage.setItem("role", "staff");
+          localStorage.setItem("isAdmin", "false");
+          localStorage.setItem("isStaff", "true");
+          setRedirectPath("/staff-dashboard");
+        } else {
+          setRedirectPath("/admin-login");
+        }
+      } else {
+        setRedirectPath("/admin-login");
+      }
+      setChecking(false);
+    }).catch(() => {
+      setRedirectPath("/admin-login");
+      setChecking(false);
+    });
+  }, []);
+
+  if (checking) {
+    return (
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        background: "#000",
+        color: "#fff",
+        fontFamily: "'Jost', sans-serif",
+        letterSpacing: "3px",
+        fontSize: "12px",
+        textTransform: "uppercase"
+      }}>
+        Verifying Admin Session...
+      </div>
+    );
   }
-  if (role === "staff") {
-    return <RouterNavigate to="/staff-dashboard" replace />;
+
+  if (redirectPath) {
+    return <RouterNavigate to={redirectPath} replace />;
   }
-  if (role !== "admin" && !isAdmin) {
-    return <RouterNavigate to="/admin-login" replace />;
-  }
+
   return children;
 }
 
 function StaffRoute({ children }) {
-  const role = localStorage.getItem("role");
-  const isStaff = localStorage.getItem("isStaff") === "true";
-  
-  if (!role && !isStaff) {
-    return <RouterNavigate to="/admin-login" replace />;
+  const [checking, setChecking] = useState(true);
+  const [redirectPath, setRedirectPath] = useState(null);
+
+  useEffect(() => {
+    authClient.getSession().then(({ data }) => {
+      if (data?.user) {
+        const role = data.user.role || (data.user.isAdmin ? "admin" : "customer");
+        if (role === "staff") {
+          localStorage.setItem("role", "staff");
+          localStorage.setItem("isStaff", "true");
+          localStorage.setItem("isAdmin", "false");
+        } else if (role === "admin") {
+          localStorage.setItem("role", "admin");
+          localStorage.setItem("isStaff", "false");
+          localStorage.setItem("isAdmin", "true");
+          setRedirectPath("/admin-dashboard");
+        } else {
+          setRedirectPath("/admin-login");
+        }
+      } else {
+        setRedirectPath("/admin-login");
+      }
+      setChecking(false);
+    }).catch(() => {
+      setRedirectPath("/admin-login");
+      setChecking(false);
+    });
+  }, []);
+
+  if (checking) {
+    return (
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        background: "#000",
+        color: "#fff",
+        fontFamily: "'Jost', sans-serif",
+        letterSpacing: "3px",
+        fontSize: "12px",
+        textTransform: "uppercase"
+      }}>
+        Verifying Staff Session...
+      </div>
+    );
   }
-  if (role === "admin") {
-    return <RouterNavigate to="/admin-dashboard" replace />;
+
+  if (redirectPath) {
+    return <RouterNavigate to={redirectPath} replace />;
   }
-  if (role !== "staff" && !isStaff) {
-    return <RouterNavigate to="/admin-login" replace />;
-  }
+
   return children;
 }
 
