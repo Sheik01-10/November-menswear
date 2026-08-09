@@ -384,7 +384,7 @@ export default function Header() {
 </Link>
 
           <Link
-  to="/profile?tab=orders"
+  to="/cart"
   className="icon-btn cart-btn"
 >
   <ShoppingBag size={22} />
@@ -541,7 +541,7 @@ export default function Header() {
 
               {/* CART */}
               <Link
-  to="/profile?tab=orders"
+  to="/cart"
   className="icon-btn cart-btn"
 >
   <ShoppingBag size={22} />
