@@ -8,7 +8,7 @@ import ImageCropperModal from "../components/ImageCropperModal";
 const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
 
 const EMPTY_FORM = {
-  name: "", category: "shirts", price: "", comparePrice: "",
+  name: "", category: "shirts", price: "", comparePrice: "", purchasePrice: "",
   pct: "", front: "", back: "", description: "", inStock: true, isBestseller: false,
   sizes: [], stockQuantity: 0, deliveryCharge: 150
 };
@@ -232,6 +232,7 @@ export default function AdminProducts() {
     setEditing(p);
     setForm({
       name: p.name, category: p.category, price: p.price, comparePrice: p.comparePrice || "",
+      purchasePrice: p.purchasePrice !== undefined && p.purchasePrice !== null ? p.purchasePrice : "",
       pct: p.pct || "", front: p.front, back: p.back, description: p.description || "",
       inStock: p.inStock, isBestseller: p.isBestseller,
       sizes: p.sizes || [], stockQuantity: p.stockQuantity || 0,
@@ -252,6 +253,7 @@ export default function AdminProducts() {
         ...form,
         price: Number(form.price),
         comparePrice: Number(form.comparePrice),
+        purchasePrice: Number(form.purchasePrice || 0),
         stockQuantity: Number(form.stockQuantity || 0),
         inStock: Number(form.stockQuantity || 0) > 0,
         deliveryCharge: form.deliveryCharge !== "" && form.deliveryCharge !== undefined && form.deliveryCharge !== null ? Number(form.deliveryCharge) : 150
@@ -340,7 +342,14 @@ export default function AdminProducts() {
                       </div>
                     </td>
                     <td style={{ textTransform: "capitalize", color: "#555" }}>{p.category}</td>
-                    <td style={{ fontWeight: 600 }}>₹{Number(p.price).toLocaleString("en-IN")}</td>
+                    <td style={{ fontWeight: 600 }}>
+                      <div style={{ display: "flex", flexDirection: "column" }}>
+                        <span style={{ color: "var(--text-primary)" }}>₹{Number(p.price).toLocaleString("en-IN")}</span>
+                        <span style={{ fontSize: "11px", color: "#888", fontWeight: "normal" }} title="Purchase price/cost">
+                          Cost: ₹{Number(p.purchasePrice || 0).toLocaleString("en-IN")}
+                        </span>
+                      </div>
+                    </td>
                     <td style={{ color: "#888", textDecoration: "line-through" }}>
                       {p.comparePrice ? `₹${Number(p.comparePrice).toLocaleString("en-IN")}` : "—"}
                     </td>
@@ -408,8 +417,12 @@ export default function AdminProducts() {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label>Price (₹) *</label>
+                  <label>Selling Price (₹) *</label>
                   <input required type="number" value={form.price} onChange={e => setForm({...form, price: e.target.value})} placeholder="1280" />
+                </div>
+                <div className="form-group">
+                  <label>Purchase Price (₹) *</label>
+                  <input required type="number" value={form.purchasePrice} onChange={e => setForm({...form, purchasePrice: e.target.value})} placeholder="800" />
                 </div>
                 <div className="form-group">
                   <label>Compare Price (₹)</label>

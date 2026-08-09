@@ -6,7 +6,7 @@ import {
 } from "recharts";
 import {
   IndianRupee, ShoppingCart, Package, Users,
-  TrendingUp, ArrowRight, Plus
+  TrendingUp, ArrowRight, Plus, Coins, CreditCard
 } from "lucide-react";
 import { io } from "socket.io-client";
 
@@ -113,32 +113,57 @@ export default function DashboardHome() {
         </div>
       </div>
 
-      {/* KPI CARDS */}
-      <div className="stats-grid">
-        <StatCard
-          title="Total Revenue"
-          value={formatINR(stats?.totalRevenue)}
-          icon={<IndianRupee size={22} />}
-          growth={12.5}
-        />
-        <StatCard
-          title="Total Orders"
-          value={stats?.totalOrders?.toLocaleString("en-IN") || "0"}
-          icon={<ShoppingCart size={22} />}
-          growth={8.3}
-        />
-        <StatCard
-          title="Total Products"
-          value={stats?.totalProducts?.toLocaleString("en-IN") || "0"}
-          icon={<Package size={22} />}
-          growth={5.1}
-        />
-        <StatCard
-          title="Total Customers"
-          value={stats?.totalCustomers?.toLocaleString("en-IN") || "0"}
-          icon={<Users size={22} />}
-          growth={11.7}
-        />
+      {/* FINANCIAL OVERVIEW */}
+      <div className="dashboard-section" style={{ marginTop: "8px" }}>
+        <h3 style={{ fontSize: "16px", fontWeight: "600", color: "var(--text-secondary)", marginBottom: "14px" }}>Financial Overview</h3>
+        <div className="stats-grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px", marginBottom: "26px" }}>
+          <StatCard
+            title="Sales Amount"
+            value={formatINR(stats?.totalSales || stats?.totalRevenue)}
+            icon={<IndianRupee size={22} />}
+            growth={12.5}
+            label="total order value"
+          />
+          <StatCard
+            title="Purchase Cost"
+            value={formatINR(stats?.totalPurchaseCost)}
+            icon={<CreditCard size={22} style={{ color: "#ef4444" }} />}
+            growth={7.2}
+            label="total cost of goods"
+          />
+          <StatCard
+            title="Net Profit"
+            value={formatINR(stats?.totalProfit)}
+            icon={<Coins size={22} style={{ color: "#22c55e" }} />}
+            growth={18.4}
+            label="net earnings"
+          />
+        </div>
+      </div>
+
+      {/* STORE OPERATIONS */}
+      <div className="dashboard-section">
+        <h3 style={{ fontSize: "16px", fontWeight: "600", color: "var(--text-secondary)", marginBottom: "14px" }}>Store Operations</h3>
+        <div className="stats-grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px", marginBottom: "26px" }}>
+          <StatCard
+            title="Total Orders"
+            value={stats?.totalOrders?.toLocaleString("en-IN") || "0"}
+            icon={<ShoppingCart size={22} />}
+            growth={8.3}
+          />
+          <StatCard
+            title="Total Products"
+            value={stats?.totalProducts?.toLocaleString("en-IN") || "0"}
+            icon={<Package size={22} />}
+            growth={5.1}
+          />
+          <StatCard
+            title="Total Customers"
+            value={stats?.totalCustomers?.toLocaleString("en-IN") || "0"}
+            icon={<Users size={22} />}
+            growth={11.7}
+          />
+        </div>
       </div>
 
       {/* CHART + QUICK ACTIONS */}
