@@ -468,7 +468,7 @@ export default function Topbar({ toggleSidebar, logout }) {
             <div className="profile-dropdown-menu">
               <div style={{ padding: "12px 16px", borderBottom: "1px solid #f5f5f5", display: "flex", flexDirection: "column" }}>
                 <span style={{ fontSize: "14px", fontWeight: "600", color: "#111" }}>Super Admin</span>
-                <span style={{ fontSize: "11px", color: "#888", marginTop: "2px" }}>admin@novemberxix.com</span>
+                <span style={{ fontSize: "11px", color: "#888", marginTop: "2px" }}>admin@thenovember.in</span>
               </div>
               <button 
                 onClick={() => { setProfileDropdownOpen(false); navigate("/admin-dashboard/settings"); }}
