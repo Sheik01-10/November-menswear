@@ -418,7 +418,24 @@ export default function AdminProducts() {
                 </div>
                 <div className="form-group">
                   <label>Selling Price (₹) *</label>
-                  <input required type="number" value={form.price} onChange={e => setForm({...form, price: e.target.value})} placeholder="1280" />
+                  <input 
+                    required 
+                    type="number" 
+                    value={form.price} 
+                    onChange={e => {
+                      const priceVal = e.target.value;
+                      const compareVal = form.comparePrice;
+                      let calculatedPct = form.pct;
+                      if (compareVal && Number(compareVal) > Number(priceVal)) {
+                        const discount = Math.round(((Number(compareVal) - Number(priceVal)) / Number(compareVal)) * 100);
+                        calculatedPct = `-${discount}%`;
+                      } else {
+                        calculatedPct = "";
+                      }
+                      setForm({ ...form, price: priceVal, pct: calculatedPct });
+                    }} 
+                    placeholder="1280" 
+                  />
                 </div>
                 <div className="form-group">
                   <label>Purchase Price (₹) *</label>
@@ -426,7 +443,23 @@ export default function AdminProducts() {
                 </div>
                 <div className="form-group">
                   <label>Compare Price (₹)</label>
-                  <input type="number" value={form.comparePrice} onChange={e => setForm({...form, comparePrice: e.target.value})} placeholder="1506" />
+                  <input 
+                    type="number" 
+                    value={form.comparePrice} 
+                    onChange={e => {
+                      const compareVal = e.target.value;
+                      const priceVal = form.price;
+                      let calculatedPct = form.pct;
+                      if (compareVal && Number(compareVal) > Number(priceVal)) {
+                        const discount = Math.round(((Number(compareVal) - Number(priceVal)) / Number(compareVal)) * 100);
+                        calculatedPct = `-${discount}%`;
+                      } else {
+                        calculatedPct = "";
+                      }
+                      setForm({ ...form, comparePrice: compareVal, pct: calculatedPct });
+                    }} 
+                    placeholder="1506" 
+                  />
                 </div>
                 <div className="form-group">
                   <label>Discount %</label>
