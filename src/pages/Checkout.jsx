@@ -66,7 +66,7 @@ export default function Checkout() {
           setPincodeLoading(true);
           setPincodeError("");
           try {
-            const response = await axios.get(`https://api.postalpincode.in/pincode/${pin}`);
+            const response = await axios.get(`${BACKEND}/api/pincode/${pin}`);
             const data = response.data;
             if (data && data[0] && data[0].Status === "Success") {
               const postOffices = data[0].PostOffice;
