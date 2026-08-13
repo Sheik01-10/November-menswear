@@ -85,32 +85,14 @@ export default function Checkout() {
                 setLastFetchedPin(pin);
                 setPincodeError("");
               } else {
-                setFormData((prev) => ({
-                  ...prev,
-                  district: "",
-                  city: "",
-                  state: "",
-                }));
-                setPincodeError("Invalid PIN Code");
+                setPincodeError("PIN Code not found. Please enter details manually.");
               }
             } else {
-              setFormData((prev) => ({
-                ...prev,
-                district: "",
-                city: "",
-                state: "",
-              }));
-              setPincodeError("Invalid PIN Code");
+              setPincodeError("Could not verify PIN Code. Please enter details manually.");
             }
           } catch (err) {
             console.error("Error fetching pincode details:", err);
-            setFormData((prev) => ({
-              ...prev,
-              district: "",
-              city: "",
-              state: "",
-            }));
-            setPincodeError("Invalid PIN Code");
+            setPincodeError("Network error. Please enter details manually.");
           } finally {
             setPincodeLoading(false);
           }
@@ -838,10 +820,9 @@ export default function Checkout() {
                     id="district"
                     name="district"
                     value={formData.district || ""}
+                    onChange={handleChange}
                     placeholder=" "
                     required
-                    readOnly
-                    style={{ color: "#666" }}
                   />
                   <label htmlFor="district">District</label>
                 </div>
@@ -851,10 +832,9 @@ export default function Checkout() {
                     id="city"
                     name="city"
                     value={formData.city || ""}
+                    onChange={handleChange}
                     placeholder=" "
                     required
-                    readOnly
-                    style={{ color: "#666" }}
                   />
                   <label htmlFor="city">City</label>
                 </div>
@@ -867,10 +847,9 @@ export default function Checkout() {
                     id="state"
                     name="state"
                     value={formData.state || ""}
+                    onChange={handleChange}
                     placeholder=" "
                     required
-                    readOnly
-                    style={{ color: "#666" }}
                   />
                   <label htmlFor="state">State</label>
                 </div>

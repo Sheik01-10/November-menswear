@@ -227,7 +227,7 @@ export default function ProductDetails() {
     }
 
     if (qtyInCart >= stock) {
-      toast.error(`Cannot add more. Only ${stock} items available in stock.`);
+      toast.error("Cannot add more. Maximum available stock reached.");
       return;
     }
 
@@ -294,7 +294,7 @@ export default function ProductDetails() {
     }
 
     if (qtyInCart >= stock) {
-      toast.error(`Cannot add more. Only ${stock} items available in stock.`);
+      toast.error("Cannot add more. Maximum available stock reached.");
       return;
     }
 
@@ -447,11 +447,9 @@ export default function ProductDetails() {
 
               <div className="stock-container">
                 {isOutOfStock ? (
-                  <span className="stock-alert out-of-stock">Sold Out</span>
-                ) : isLowStock ? (
-                  <span className="stock-alert low-stock">Only {remainingStock} left in stock - Order Soon</span>
+                  <span className="stock-alert out-of-stock">OUT OF STOCK</span>
                 ) : (
-                  <span className="stock-alert in-stock">In Stock ({stock} available)</span>
+                  <span className="stock-alert in-stock">IN STOCK</span>
                 )}
               </div>
 
@@ -495,7 +493,7 @@ export default function ProductDetails() {
                     onClick={handleAddToBag}
                     style={{ flex: 1 }}
                   >
-                    {isOutOfStock ? "SOLD OUT" : remainingStock <= 0 ? "MAX QUANTITY ADDED" : "ADD TO BAG"}
+                    {isOutOfStock ? "OUT OF STOCK" : remainingStock <= 0 ? "MAX QUANTITY ADDED" : "ADD TO BAG"}
                   </button>
                   <button 
                     className={`btn-buy-now ${isOutOfStock || remainingStock <= 0 ? "disabled" : ""}`}
@@ -503,7 +501,7 @@ export default function ProductDetails() {
                     onClick={handleBuyNow}
                     style={{ flex: 1 }}
                   >
-                    {isOutOfStock ? "SOLD OUT" : remainingStock <= 0 ? "MAX QUANTITY ADDED" : "BUY NOW"}
+                    {isOutOfStock ? "OUT OF STOCK" : remainingStock <= 0 ? "MAX QUANTITY ADDED" : "BUY NOW"}
                   </button>
                 </div>
                 <div style={{ display: "flex", justifyContent: "flex-end" }}>
