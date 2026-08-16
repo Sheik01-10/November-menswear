@@ -331,7 +331,7 @@ export default function StockDetails() {
       <div className="admin-page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px", flexWrap: "wrap", gap: "16px" }}>
         <div>
           <h1 style={{ fontFamily: "var(--font-sans)", fontWeight: 800, fontSize: "32px", letterSpacing: "-0.5px", color: "var(--black)" }}>Stock Details</h1>
-          <p style={{ color: "var(--text-secondary)", fontSize: "14px", marginTop: "4px" }}>Real-time inventory statistics, valuation, and movements.</p>
+          <p style={{ color: "var(--text-secondary)", fontSize: "14px", marginTop: "4px" }}>Real-time inventory statistics, valuation and movements.</p>
         </div>
         <div style={{ display: "flex", gap: "12px" }}>
           <button 
