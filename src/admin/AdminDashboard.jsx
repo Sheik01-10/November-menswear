@@ -17,6 +17,7 @@ import AdminAnalytics from "./pages/Analytics";
 import AdminSettings from "./pages/Settings";
 import AdminSupport from "./pages/Support";
 import AdminStaff from "./pages/Staff";
+import AdminStockDetails from "./pages/StockDetails";
 
 const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`;
 
@@ -70,6 +71,7 @@ export default function AdminDashboard() {
             <Route path="products" element={<AdminProducts />} />
             <Route path="categories" element={<AdminCategories />} />
             <Route path="orders" element={<AdminOrders />} />
+            <Route path="stock" element={<AdminStockDetails />} />
             <Route path="customers" element={<AdminCustomers />} />
             <Route path="wishlist" element={<AdminWishlist />} />
             <Route path="banner" element={<AdminBanner />} />

@@ -10,7 +10,7 @@ const BACKEND = import.meta.env.VITE_API_URL || `http://${window.location.hostna
 const EMPTY_FORM = {
   name: "", category: "shirts", price: "", comparePrice: "", purchasePrice: "",
   pct: "", front: "", back: "", description: "", inStock: true, isBestseller: false,
-  sizes: [], stockQuantity: 0, deliveryCharge: 150
+  sizes: [], stockQuantity: 0, deliveryCharge: 150, sizesStock: [], sku: ""
 };
 
 export default function AdminProducts() {
@@ -236,7 +236,9 @@ export default function AdminProducts() {
       pct: p.pct || "", front: p.front, back: p.back, description: p.description || "",
       inStock: p.inStock, isBestseller: p.isBestseller,
       sizes: p.sizes || [], stockQuantity: p.stockQuantity || 0,
-      deliveryCharge: p.deliveryCharge !== undefined && p.deliveryCharge !== null ? p.deliveryCharge : 150
+      deliveryCharge: p.deliveryCharge !== undefined && p.deliveryCharge !== null ? p.deliveryCharge : 150,
+      sku: p.sku || "",
+      sizesStock: p.sizesStock || []
     });
     setModal(true);
   };
@@ -249,13 +251,33 @@ export default function AdminProducts() {
     }
     setSaving(true);
     try {
+      // Calculate total stockQuantity from sizesStock if sizes exist
+      let calculatedStockQty = Number(form.stockQuantity || 0);
+      let sizesStockPayload = form.sizesStock || [];
+      if (form.sizes && form.sizes.length > 0) {
+        sizesStockPayload = form.sizes.map(sz => {
+          const existing = (form.sizesStock || []).find(s => s.size === sz);
+          const initVal = existing ? Number(existing.initial || 0) : 0;
+          const addVal = existing ? Number(existing.added || 0) : 0;
+          const balVal = existing ? Number(existing.balance || 0) : 0;
+          return {
+            size: sz,
+            initial: initVal,
+            added: addVal,
+            balance: balVal === 0 && initVal > 0 && addVal === 0 ? initVal : balVal
+          };
+        });
+        calculatedStockQty = sizesStockPayload.reduce((acc, curr) => acc + (curr.balance || 0), 0);
+      }
+
       const payload = {
         ...form,
+        sizesStock: sizesStockPayload,
         price: Number(form.price),
         comparePrice: Number(form.comparePrice),
         purchasePrice: Number(form.purchasePrice || 0),
-        stockQuantity: Number(form.stockQuantity || 0),
-        inStock: Number(form.stockQuantity || 0) > 0,
+        stockQuantity: calculatedStockQty,
+        inStock: calculatedStockQty > 0,
         deliveryCharge: form.deliveryCharge !== "" && form.deliveryCharge !== undefined && form.deliveryCharge !== null ? Number(form.deliveryCharge) : 150
       };
       if (editing) {
@@ -465,19 +487,71 @@ export default function AdminProducts() {
                   <label>Discount %</label>
                   <input value={form.pct} onChange={e => setForm({...form, pct: e.target.value})} placeholder="-15%" />
                 </div>
-                <div className="form-group">
-                  <label>Stock Quantity</label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={form.stockQuantity}
-                    onChange={e => {
-                      const val = parseInt(e.target.value) || 0;
-                      setForm({ ...form, stockQuantity: val, inStock: val > 0 });
-                    }}
-                    placeholder="e.g. 10"
-                  />
-                </div>
+                 <div className="form-group">
+                   <label>SKU (Stock Keeping Unit)</label>
+                   <input
+                     type="text"
+                     value={form.sku || ""}
+                     onChange={e => setForm({ ...form, sku: e.target.value })}
+                     placeholder="e.g. NOV-BLK-SHR-M"
+                   />
+                 </div>
+                 {(!form.sizes || form.sizes.length === 0) ? (
+                   <div className="form-group">
+                     <label>Stock Quantity (Initial)</label>
+                     <input
+                       type="number"
+                       min="0"
+                       value={form.stockQuantity}
+                       onChange={e => {
+                         const val = parseInt(e.target.value) || 0;
+                         setForm({ ...form, stockQuantity: val, initialStock: val, inStock: val > 0 });
+                       }}
+                       placeholder="e.g. 10"
+                     />
+                   </div>
+                 ) : (
+                   <div className="form-group full" style={{ backgroundColor: "#f9f9fb", padding: "16px", borderRadius: "12px", border: "1px solid #ececec", marginBottom: "8px" }}>
+                     <label style={{ fontWeight: 600, display: "block", marginBottom: "12px", color: "#111" }}>Initial Stock by Size</label>
+                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))", gap: "12px" }}>
+                       {form.sizes.map(sz => {
+                         const szStock = (form.sizesStock || []).find(s => s.size === sz) || { initial: 0, added: 0, balance: 0 };
+                         const currentVal = szStock.initial !== undefined ? szStock.initial : (szStock.balance || 0);
+                         return (
+                           <div key={sz} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                             <span style={{ fontSize: "12px", fontWeight: "600", color: "#555" }}>Size {sz}</span>
+                             <input
+                               type="number"
+                               min="0"
+                               value={currentVal}
+                               onChange={e => {
+                                 const val = parseInt(e.target.value) || 0;
+                                 const sizesStock = [...(form.sizesStock || [])];
+                                 const idx = sizesStock.findIndex(s => s.size === sz);
+                                 if (idx > -1) {
+                                   sizesStock[idx] = {
+                                     ...sizesStock[idx],
+                                     initial: val,
+                                     balance: val + (sizesStock[idx].added || 0)
+                                   };
+                                 } else {
+                                   sizesStock.push({ size: sz, initial: val, added: 0, balance: val });
+                                 }
+                                 
+                                 const total = sizesStock.reduce((acc, curr) => acc + (curr.balance || 0), 0);
+                                 setForm({ ...form, sizesStock, stockQuantity: total });
+                               }}
+                               style={{ padding: "8px 12px", borderRadius: "6px", border: "1px solid #ddd", fontSize: "13px" }}
+                             />
+                           </div>
+                         );
+                       })}
+                     </div>
+                     <div style={{ marginTop: "12px", fontSize: "12px", color: "#666" }}>
+                       Total Calculated Stock: <strong>{form.stockQuantity}</strong> units
+                     </div>
+                   </div>
+                 )}
                 <div className="form-group">
                   <label>Delivery Charge (₹)</label>
                   <input
@@ -502,10 +576,21 @@ export default function AdminProducts() {
                           type="button"
                           onClick={() => {
                             const sizes = form.sizes || [];
-                            const newSizes = sizes.includes(sz)
-                              ? sizes.filter(s => s !== sz)
-                              : [...sizes, sz];
-                            setForm({ ...form, sizes: newSizes });
+                            let newSizes;
+                            let newSizesStock = [...(form.sizesStock || [])];
+                            
+                            if (sizes.includes(sz)) {
+                              newSizes = sizes.filter(s => s !== sz);
+                              newSizesStock = newSizesStock.filter(s => s.size !== sz);
+                            } else {
+                              newSizes = [...sizes, sz];
+                              if (!newSizesStock.some(s => s.size === sz)) {
+                                newSizesStock.push({ size: sz, initial: 0, added: 0, balance: 0 });
+                              }
+                            }
+                            
+                            const total = newSizesStock.reduce((acc, curr) => acc + (curr.balance || 0), 0);
+                            setForm({ ...form, sizes: newSizes, sizesStock: newSizesStock, stockQuantity: total });
                           }}
                           style={{
                             padding: "8px 16px",

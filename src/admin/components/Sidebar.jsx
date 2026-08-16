@@ -1,5 +1,5 @@
 import {
-  LayoutDashboard, ShoppingBag, FolderTree, Package,
+  LayoutDashboard, ShoppingBag, FolderTree, Package, Boxes,
   Users, Heart, Image, BarChart3, Settings, LogOut, X, MessageSquare, UserCheck
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
@@ -9,6 +9,7 @@ const menus = [
   { name: "Products",         path: "/admin-dashboard/products",   icon: <ShoppingBag size={20} /> },
   { name: "Categories",       path: "/admin-dashboard/categories", icon: <FolderTree size={20} /> },
   { name: "Orders",           path: "/admin-dashboard/orders",     icon: <Package size={20} /> },
+  { name: "Stock Details",    path: "/admin-dashboard/stock",      icon: <Boxes size={20} /> },
   { name: "Customers",        path: "/admin-dashboard/customers",  icon: <Users size={20} /> },
   { name: "Wishlist",         path: "/admin-dashboard/wishlist",   icon: <Heart size={20} /> },
   { name: "Banner",           path: "/admin-dashboard/banner",     icon: <Image size={20} /> },

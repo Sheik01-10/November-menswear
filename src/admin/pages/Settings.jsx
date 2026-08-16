@@ -14,7 +14,8 @@ export default function AdminSettings() {
     announcementBarText: "",
     announcementBarActive: true,
     announcements: [],
-    freeShippingThreshold: 999
+    freeShippingThreshold: 999,
+    lowStockThreshold: 5
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -29,7 +30,8 @@ export default function AdminSettings() {
       const res = await axios.get(`${BACKEND}/api/settings`);
       setForm({
         ...res.data,
-        announcements: res.data.announcements || []
+        announcements: res.data.announcements || [],
+        lowStockThreshold: res.data.lowStockThreshold !== undefined ? res.data.lowStockThreshold : 5
       });
     } catch (e) {
       console.error(e);
@@ -187,10 +189,14 @@ export default function AdminSettings() {
               <input value={form.announcementBarText} onChange={e => setForm({...form, announcementBarText: e.target.value})} />
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
               <div className="form-group">
                 <label>Free Shipping Threshold (₹)</label>
                 <input type="number" value={form.freeShippingThreshold} onChange={e => setForm({...form, freeShippingThreshold: Number(e.target.value)})} />
+              </div>
+              <div className="form-group">
+                <label>Low Stock Threshold</label>
+                <input type="number" min="0" value={form.lowStockThreshold} onChange={e => setForm({...form, lowStockThreshold: Number(e.target.value)})} />
               </div>
               <div className="form-group checkbox" style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, marginTop: 24 }}>
                 <input

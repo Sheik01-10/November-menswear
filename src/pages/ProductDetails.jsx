@@ -158,7 +158,16 @@ export default function ProductDetails() {
   }, []);
 
   const discountPct = product ? (product.pct || "") : "";
-  const stock = product && product.stockQuantity !== undefined ? product.stockQuantity : 0;
+  const getSelectedSizeStock = () => {
+    if (!product) return 0;
+    if (!selectedSize) return product.stockQuantity || 0;
+    if (product.sizesStock && product.sizesStock.length > 0) {
+      const szStock = product.sizesStock.find(s => s.size === selectedSize);
+      return szStock ? (szStock.balance !== undefined ? szStock.balance : szStock.initial) : 0;
+    }
+    return product.stockQuantity || 0;
+  };
+  const stock = getSelectedSizeStock();
   const isOutOfStock = product ? (stock === 0 || !product.inStock) : true;
   const isLowStock = product ? (stock > 0 && stock <= 5) : false;
 
@@ -467,7 +476,13 @@ export default function ProductDetails() {
                       ? ["28", "30", "32", "34", "36", "38", "40", "42", "44"]
                       : ["S", "M", "L", "XL", "XXL"]
                     ).map((size) => {
-                      const isAvailable = product.sizes.includes(size);
+                      const isOption = product.sizes.includes(size);
+                      let isStocked = true;
+                      if (product.sizesStock && product.sizesStock.length > 0) {
+                        const szStock = product.sizesStock.find(s => s.size === size);
+                        isStocked = szStock ? (szStock.balance > 0) : false;
+                      }
+                      const isAvailable = isOption && isStocked;
                       const isSelected = selectedSize === size;
                       return (
                         <button
