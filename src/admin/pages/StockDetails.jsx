@@ -3,7 +3,7 @@ import axios from "axios";
 import {
   Boxes, RefreshCw, Download, Search, Filter, ArrowUpDown,
   Plus, AlertTriangle, CheckCircle2, ChevronDown, ChevronUp,
-  History, LayoutGrid, DollarSign, Layers, ArrowRightLeft, X, Edit
+  History, LayoutGrid, DollarSign, Layers, ArrowRightLeft, X, Edit, Trash2
 } from "lucide-react";
 import { io } from "socket.io-client";
 
@@ -247,6 +247,20 @@ export default function StockDetails() {
       alert(err.response?.data?.message || "Failed to adjust stock");
     } finally {
       setAdjustSaving(false);
+    }
+  };
+
+  // Delete Stock Movement log entry
+  const handleDeleteMovement = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this stock movement log? This will also revert the stock levels for the associated product.")) {
+      return;
+    }
+    
+    try {
+      await axios.delete(`${BACKEND}/api/stock/movements/${id}`);
+      await Promise.all([fetchSummary(), fetchInventory(), fetchMovements()]);
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to delete stock movement");
     }
   };
 
@@ -717,19 +731,20 @@ export default function StockDetails() {
                   <th style={{ padding: "16px 24px", color: "var(--text-secondary)", fontWeight: "600", textAlign: "center" }}>Updated Stock</th>
                   <th style={{ padding: "16px 24px", color: "var(--text-secondary)", fontWeight: "600" }}>Reason</th>
                   <th style={{ padding: "16px 24px", color: "var(--text-secondary)", fontWeight: "600" }}>Updated By</th>
+                  <th style={{ padding: "16px 24px", color: "var(--text-secondary)", fontWeight: "600", textAlign: "right" }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {loadingMovements ? (
                   <tr>
-                    <td colSpan="10" style={{ padding: "40px", textAlign: "center", color: "var(--text-secondary)" }}>
+                    <td colSpan="11" style={{ padding: "40px", textAlign: "center", color: "var(--text-secondary)" }}>
                       <RefreshCw size={24} className="spin-animation" style={{ display: "inline-block", marginRight: "10px" }} />
                       Loading movements history...
                     </td>
                   </tr>
                 ) : movements.length === 0 ? (
                   <tr>
-                    <td colSpan="10" style={{ padding: "40px", textAlign: "center", color: "var(--text-secondary)" }}>
+                    <td colSpan="11" style={{ padding: "40px", textAlign: "center", color: "var(--text-secondary)" }}>
                       No stock movement history found.
                     </td>
                   </tr>
@@ -751,6 +766,15 @@ export default function StockDetails() {
                       <td style={{ padding: "14px 24px", textAlign: "center", fontWeight: "600" }}>{m.updatedStock}</td>
                       <td style={{ padding: "14px 24px", color: "#555" }}>{m.reason || "N/A"}</td>
                       <td style={{ padding: "14px 24px", color: "#111", fontWeight: "500" }}>{m.updatedBy}</td>
+                      <td style={{ padding: "14px 24px", textAlign: "right" }}>
+                        <button 
+                          onClick={() => handleDeleteMovement(m._id)}
+                          style={{ padding: "6px 10px", background: "none", border: "none", cursor: "pointer", color: "#dc2626", borderRadius: "6px", display: "inline-flex", alignItems: "center", justifyContent: "center", transition: "background-color 0.2s" }}
+                          title="Delete movement log and recalculate stock"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </td>
                     </tr>
                   ))
                 )}
