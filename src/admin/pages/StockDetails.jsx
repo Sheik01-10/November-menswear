@@ -872,6 +872,9 @@ export default function StockDetails() {
                     required
                     style={{ width: "100%", height: "44px", padding: "0 14px", borderRadius: "8px", border: "1px solid #ddd", fontSize: "14px" }}
                   />
+                  <small style={{ display: "block", marginTop: "4px", color: "var(--text-secondary)", fontSize: "11px" }}>
+                    Enter a negative number (e.g., -5) to decrease stock.
+                  </small>
                 </div>
               </div>
 
